@@ -25,9 +25,8 @@ public class LexicalAnalyser {
     public LexicalAnalyser(SourceManager sourceManager) {
         this.sourceManager = sourceManager;
 
-        for (String word : words) {
+        for (String word : words)
             reservedWords.put(word, "rw_" + word);
-        }
 
         updateCurrentCharacter();
     }
@@ -145,19 +144,19 @@ public class LexicalAnalyser {
         } else if(is('+')){
             updateLexeme();
             updateCurrentCharacter();
-            return plus();
+            return addition();
         } else if(is('-')){
             updateLexeme();
             updateCurrentCharacter();
-            return minus();
+            return substraction();
         } else if(is('*')){
             updateLexeme();
             updateCurrentCharacter();
-            return times();
+            return multiplication();
         } else if(is('/')) {
             updateLexeme();
             updateCurrentCharacter();
-            return divide();
+            return division();
         } else if(is('(')) {
             updateLexeme();
             updateCurrentCharacter();
@@ -370,8 +369,8 @@ public class LexicalAnalyser {
         }
 
         exceptions.add(new InvalidUnicodeException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
-//        updateCurrentCharacter();
-        return nextToken();
+//        return nextToken();
+        return stringLiteralInitial();
     }
     private Token stringLiteralFinal(){
         return new Token("stringLiteral", lexeme, getLineNumber());
@@ -462,40 +461,40 @@ public class LexicalAnalyser {
     }
 
 
-    private Token plus(){
+    private Token addition(){
         if(is('+')){
             updateLexeme();
             updateCurrentCharacter();
             return increment();
         }
 
-        return new Token("plus" , lexeme, getLineNumber());
+        return new Token("addition" , lexeme, getLineNumber());
     }
     private Token increment(){
         return new Token("increment" , lexeme, getLineNumber());
     }
 
 
-    private Token minus() {
+    private Token substraction() {
         if(is('-')){
             updateLexeme();
             updateCurrentCharacter();
             return decrement();
         }
 
-        return new Token("minus" , lexeme, getLineNumber());
+        return new Token("substraction" , lexeme, getLineNumber());
     }
     private Token decrement(){
         return new Token("decrement" , lexeme, getLineNumber());
     }
 
 
-    private Token times(){
-        return new Token("times" , lexeme, getLineNumber());
+    private Token multiplication(){
+        return new Token("multiplication" , lexeme, getLineNumber());
     }
 
 
-    private Token divide(){
+    private Token division(){
         if(is('/')){
             updateLexeme();
             updateCurrentCharacter();
@@ -508,7 +507,7 @@ public class LexicalAnalyser {
             return multiLineCommentInitial();
         }
 
-        return new Token("divide" , lexeme, getLineNumber());
+        return new Token("division" , lexeme, getLineNumber());
     }
 
     private Token singleLineComment(){
@@ -537,7 +536,6 @@ public class LexicalAnalyser {
         updateCurrentCharacter();
         return multiLineCommentInitial();
     }
-
     private Token multiLineComment2(){
         if(is(SourceManager.END_OF_FILE)) {
             exceptions.add(new UnclosedMultiLineCommentException("/", lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));

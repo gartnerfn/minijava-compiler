@@ -11,8 +11,8 @@ public class Main {
         final String END_OF_FILE = "EOF";
 
         SourceManager sourceManager = new SourceManagerImplOrig();
-        String filePath = args[0];
-//        String filePath = "resources/conErrores/lexConErrores10.java";
+//        String filePath = args[0];
+        String filePath = "resources/conErrores/lexConErrores22.java";
         Token token;
 
         try {
