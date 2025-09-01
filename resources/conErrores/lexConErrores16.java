@@ -1,0 +1,10 @@
+///[Error:"\u123|3]
+
+"\u123?123"
+"\u
+"\u"
+"\ua"
+"\uab"
+"\uabc"
+"\uabcd
+"\uabcde

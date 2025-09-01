@@ -1,0 +1,12 @@
+///[Error:'\u|3]
+
+'\u
+'\u'
+'\ua'
+'\uab'
+'\uabc'
+'\uabcd
+'\uabcde'
+'\uabcde
+'\uabcdeeee'
+
