@@ -299,7 +299,7 @@ public class LexicalAnalyser {
         }
 
         if(lexeme.length() - initialLength == 4){
-            int columnNumber = isLetter() || isDigit() ? getColumnNumber() - 1 : getColumnNumber();
+            int columnNumber = isWhitespace() && !is(' ') ? getColumnNumber() : getColumnNumber() - 1;
 
             exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), columnNumber, getCurrentLine()));
             return nextToken();
@@ -597,37 +597,3 @@ public class LexicalAnalyser {
         return new Token("EOF", lexeme, getLineNumber());
     }
 }
-
-//        if(is('\'') || is('\"') || is('\\') || is('n') || is('r') || is('t') || is('b') || is('f')){
-//            updateLexeme();
-//            updateCurrentCharacter();
-//            return charLiteral2();
-//        }
-//
-//        //TODO >= 0 <=377
-//        if(isDigit()){
-//            return octal(Character.toString(currentCharacter), lexeme.length());
-//        }
-
-//    private Token octal(String octalNumber, int initialLength) {
-//        System.out.println(octalNumber);
-//        if (!octalNumber.matches("[0-7]+")){
-//            System.out.println("entre");
-//            updateLexeme();
-//            throw new InvalidadOctalNumberException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine());
-//        }
-//
-//        if(is('\'')){
-//            updateLexeme();
-//            updateCurrentCharacter();
-//            return charLiteralFinal();
-//        }
-//
-//        if (octalNumber.matches("[0-7]+")){
-//            updateLexeme();
-//            updateCurrentCharacter();
-//            return octal(octalNumber + currentCharacter, initialLength);
-//        }
-//
-//        throw new InvalidadOctalNumberException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine());
-//    }

@@ -12,7 +12,6 @@ public class Main {
 
         SourceManager sourceManager = new SourceManagerImpl();
         String filePath = args[0];
-//        String filePath = "resources/conErrores/lexConErrores21.java";
         Token token;
 
         try {
