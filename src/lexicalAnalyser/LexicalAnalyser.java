@@ -16,7 +16,7 @@ public class LexicalAnalyser {
     private final ArrayList<LexicalException> exceptions = new ArrayList<>();
 
     String[] words = {
-        "class", "extends", "private", "static", "void",
+        "class", "extends", "public", "static", "void",
         "boolean", "char", "int", "abstract", "final",
         "if", "else", "while", "return", "var",
         "this", "new", "null", "true", "false"
@@ -222,16 +222,16 @@ public class LexicalAnalyser {
             return methodVarId();
         }
 
-        if(reservedWords.containsKey(lexeme)){
+        if(reservedWords.containsKey(lexeme))
             return new Token(reservedWords.get(lexeme), lexeme, getLineNumber());
-        }
 
         return new Token("methodVarId" , lexeme, getLineNumber());
     }
 
 
     private Token intLiteral(){
-        if(lexeme.length() > 9) {
+        if(isDigit() && lexeme.length() == 9) {
+            updateLexeme();
             exceptions.add(new IntegerOutOfBoundsException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();

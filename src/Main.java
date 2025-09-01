@@ -2,7 +2,7 @@ import exceptions.LexicalException;
 import lexicalAnalyser.LexicalAnalyser;
 import lexicalAnalyser.Token;
 import sourceManager.SourceManager;
-import sourceManager.SourceManagerImpl;
+import sourceManager.SourceManagerImplOrig;
 
 import java.util.ArrayList;
 
@@ -10,8 +10,9 @@ public class Main {
     public static void main(String[] args) {
         final String END_OF_FILE = "EOF";
 
-        SourceManager sourceManager = new SourceManagerImpl();
+        SourceManager sourceManager = new SourceManagerImplOrig();
         String filePath = args[0];
+//        String filePath = "resources/conErrores/lexConErrores10.java";
         Token token;
 
         try {

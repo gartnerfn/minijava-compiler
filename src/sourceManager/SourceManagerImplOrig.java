@@ -3,16 +3,18 @@ package sourceManager;//Author: Juan Dingevan
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class SourceManagerImpl implements SourceManager{
+public class SourceManagerImplOrig implements SourceManager{
     private BufferedReader reader;
     private String currentLine;
     private int lineNumber;
     private int lineIndexNumber;
+    private boolean mustReadNextLine;
 
-    public SourceManagerImpl() {
+    public SourceManagerImplOrig() {
         currentLine = "";
-        lineNumber = 1;
-        lineIndexNumber = 1;
+        lineNumber = 0;
+        lineIndexNumber = 0;
+        mustReadNextLine = true;
     }
 
     @Override
@@ -30,18 +32,23 @@ public class SourceManagerImpl implements SourceManager{
 
     @Override
     public char getNextChar() throws IOException {
-        char currentChar = (char) reader.read();
+        char currentChar = ' ';
 
-        if(currentChar == (char) -1)
-            return END_OF_FILE;
-
-        currentLine += currentChar;
-        lineIndexNumber++;
-
-        if (currentChar == '\n') {
+        if(mustReadNextLine) {
+            currentLine = reader.readLine();
             lineNumber++;
-            currentLine = "";
-            lineIndexNumber = 1;
+            lineIndexNumber = 0;
+            mustReadNextLine = false;
+        }
+
+        if(lineIndexNumber < currentLine.length()) {
+            currentChar = currentLine.charAt(lineIndexNumber);
+            lineIndexNumber++;
+        } else if (reader.ready()) {
+            currentChar = '\n';
+            mustReadNextLine = true;
+        } else {
+            currentChar = END_OF_FILE;
         }
 
         return currentChar;
