@@ -541,8 +541,7 @@ public class LexicalAnalyser {
         if(is('/')){
             updateLexeme();
             updateCurrentCharacter();
-            lexeme = "";
-            return initial();
+            return nextToken();
         }
 
         updateLexeme();
