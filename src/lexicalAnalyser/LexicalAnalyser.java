@@ -519,7 +519,7 @@ public class LexicalAnalyser {
     private Token multiLineCommentInitial(){
         if(is(SourceManager.END_OF_FILE)) {
             exceptions.add(new UnclosedMultiLineCommentException("*/", lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
-            return nextToken();
+            return EOF();
         }
 
         if(is('*')){
@@ -535,7 +535,7 @@ public class LexicalAnalyser {
     private Token multiLineComment2(){
         if(is(SourceManager.END_OF_FILE)) {
             exceptions.add(new UnclosedMultiLineCommentException("/", lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
-            return nextToken();
+            return EOF();
         }
 
         if(is('/')){
