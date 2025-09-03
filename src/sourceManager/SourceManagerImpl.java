@@ -12,7 +12,7 @@ public class SourceManagerImpl implements SourceManager{
     public SourceManagerImpl() {
         currentLine = "";
         lineNumber = 1;
-        lineIndexNumber = 1;
+        lineIndexNumber = 0;
     }
 
     @Override
@@ -30,21 +30,20 @@ public class SourceManagerImpl implements SourceManager{
 
     @Override
     public char getNextChar() throws IOException {
-        char currentChar = (char) reader.read();
-
-        if(currentChar == (char) -1)
-            return END_OF_FILE;
-
-        currentLine += currentChar;
+        int charInteger = reader.read();
         lineIndexNumber++;
 
-        if (currentChar == '\n') {
+        if(charInteger == -1)
+            return END_OF_FILE;
+
+        if (charInteger == '\n') {
+            lineIndexNumber = 0;
             lineNumber++;
             currentLine = "";
-            lineIndexNumber = 1;
-        }
+        } else
+            currentLine += (char) charInteger;
 
-        return currentChar;
+        return (char) charInteger;
     }
 
     @Override

@@ -1,3 +1,4 @@
-///[Error:/* asd|3]
+///[Error:/* asd
+/// |4]
 
 /* asd

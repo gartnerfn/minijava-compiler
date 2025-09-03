@@ -270,7 +270,7 @@ public class LexicalAnalyser {
             return charLiteralFinal();
         }
 
-        exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber() - 1, getCurrentLine()));
+        exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
         return nextToken();
     }
     private Token charLiteral3(){
@@ -298,9 +298,7 @@ public class LexicalAnalyser {
         }
 
         if(lexeme.length() - initialLength == 4){
-            int columnNumber = isWhitespace() && !is(' ') ? getColumnNumber() : getColumnNumber() - 1;
-
-            exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), columnNumber, getCurrentLine()));
+            exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             return nextToken();
         }
 
@@ -369,7 +367,6 @@ public class LexicalAnalyser {
         }
 
         exceptions.add(new InvalidUnicodeException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
-//        return nextToken();
         return stringLiteralInitial();
     }
     private Token stringLiteralFinal(){
@@ -522,7 +519,6 @@ public class LexicalAnalyser {
     private Token multiLineCommentInitial(){
         if(is(SourceManager.END_OF_FILE)) {
             exceptions.add(new UnclosedMultiLineCommentException("*/", lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
-            updateCurrentCharacter();
             return nextToken();
         }
 
@@ -539,7 +535,6 @@ public class LexicalAnalyser {
     private Token multiLineComment2(){
         if(is(SourceManager.END_OF_FILE)) {
             exceptions.add(new UnclosedMultiLineCommentException("/", lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
-            updateCurrentCharacter();
             return nextToken();
         }
 
@@ -592,6 +587,6 @@ public class LexicalAnalyser {
 
 
     private Token EOF(){
-        return new Token("EOF", lexeme, getLineNumber());
+        return new Token("EOF","" + SourceManager.END_OF_FILE, getLineNumber());
     }
 }

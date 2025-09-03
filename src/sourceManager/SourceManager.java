@@ -12,6 +12,8 @@ public interface SourceManager {
 
     String getCurrentLine();
 
+//    String getLine(int lineNumber);
+
     int getLineNumber();
 
     int getColumnNumber();

@@ -2,7 +2,7 @@ import exceptions.LexicalException;
 import lexicalAnalyser.LexicalAnalyser;
 import lexicalAnalyser.Token;
 import sourceManager.SourceManager;
-import sourceManager.SourceManagerImplOrig;
+import sourceManager.SourceManagerImpl;
 
 import java.util.ArrayList;
 
@@ -10,21 +10,19 @@ public class Main {
     public static void main(String[] args) {
         final String END_OF_FILE = "EOF";
 
-        SourceManager sourceManager = new SourceManagerImplOrig();
-//        String filePath = args[0];
-        String filePath = "resources/conErrores/lexConErrores22.java";
+        SourceManager sourceManager = new SourceManagerImpl();
+        String filePath = args[0];
         Token token;
 
         try {
             sourceManager.open(filePath);
             LexicalAnalyser lexicalAnalyser = new LexicalAnalyser(sourceManager);
-            token = lexicalAnalyser.nextToken();
 
-            while (!token.token().equals(END_OF_FILE)) {
+            do{
+                token = lexicalAnalyser.nextToken();
                 String tokenInfo = String.format("(%s,%s,%d)", token.token(), token.lexeme(), token.lineNumber());
                 System.out.println(tokenInfo);
-                token = lexicalAnalyser.nextToken();
-            }
+            } while (!token.token().equals(END_OF_FILE));
 
             ArrayList<LexicalException> exceptions = lexicalAnalyser.getExceptions();
 
@@ -33,7 +31,7 @@ public class Main {
                 final String RESET = "\u001B[0m";
 
                 System.out.println("\n" + RED + exception.getMessage() + RESET);
-                System.out.println("------------------------------------------");
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             }
 
             if(exceptions.isEmpty())
@@ -44,7 +42,7 @@ public class Main {
             try {
                 sourceManager.close();
             } catch (java.io.IOException e) {
-                System.out.println("An error with the file happened: " + e.getMessage());
+                System.out.println("Error in file: " + e.getMessage());
             }
         }
     }
