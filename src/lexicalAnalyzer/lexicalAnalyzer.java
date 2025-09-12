@@ -1,6 +1,6 @@
-package lexicalAnalyser;
+package lexicalAnalyzer;
 
-import exceptions.*;
+import exceptions.lexicalAnalyzer.*;
 import sourceManager.SourceManager;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LexicalAnalyser {
+public class lexicalAnalyzer {
     private final SourceManager sourceManager;
     private String lexeme;
     private char currentCharacter;
@@ -22,7 +22,7 @@ public class LexicalAnalyser {
         "this", "new", "null", "true", "false"
     };
 
-    public LexicalAnalyser(SourceManager sourceManager) {
+    public lexicalAnalyzer(SourceManager sourceManager) {
         this.sourceManager = sourceManager;
 
         for (String word : words)
@@ -86,6 +86,10 @@ public class LexicalAnalyser {
 
     private boolean isWhitespace(){
         return Character.isWhitespace(currentCharacter);
+    }
+
+    private boolean isHexaDigit(){
+        return (isDigit() || (currentCharacter >= 'A' && currentCharacter <= 'F') || (currentCharacter >= 'a' && currentCharacter <= 'f'));
     }
 
     private boolean isEOF(){
@@ -247,7 +251,7 @@ public class LexicalAnalyser {
 
 
     private Token charLiteralInitial(){
-        if(isEOF() || isWhitespace() && !is(' ')){
+        if(isEOF() || isWhitespace() && !is(' ') || is('\'')){
             exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();
@@ -302,7 +306,7 @@ public class LexicalAnalyser {
             return nextToken();
         }
 
-        if(isLetter() || isDigit()){
+        if(isHexaDigit()){
             updateLexeme();
             updateCurrentCharacter();
             return unicodeChar(initialLength);
@@ -360,7 +364,7 @@ public class LexicalAnalyser {
         if(lexeme.length() - initialLength == 4)
             return stringLiteralInitial();
 
-        if(isLetter() || isDigit()){
+        if(isHexaDigit()){
             updateLexeme();
             updateCurrentCharacter();
             return unicodeString(initialLength);
@@ -378,10 +382,10 @@ public class LexicalAnalyser {
         if(is('=')){
             updateLexeme();
             updateCurrentCharacter();
-            return operatorPlusEquals("greaterThanOrEquals");
+            return operatorPlusEquals(">=");
         }
 
-        return new Token("greaterThan" , lexeme, getLineNumber());
+        return new Token(">" , lexeme, getLineNumber());
     }
 
 
@@ -389,10 +393,10 @@ public class LexicalAnalyser {
         if(is('=')){
             updateLexeme();
             updateCurrentCharacter();
-            return operatorPlusEquals("lessThanOrEquals");
+            return operatorPlusEquals("<=");
         }
 
-        return new Token("lessThan" , lexeme, getLineNumber());
+        return new Token("<" , lexeme, getLineNumber());
     }
 
 
@@ -400,10 +404,10 @@ public class LexicalAnalyser {
         if(is('=')){
             updateLexeme();
             updateCurrentCharacter();
-            return operatorPlusEquals("notEquals");
+            return operatorPlusEquals("!=");
         }
 
-        return new Token("not" , lexeme, getLineNumber());
+        return new Token("!" , lexeme, getLineNumber());
     }
 
 
@@ -411,10 +415,10 @@ public class LexicalAnalyser {
         if(is('=')){
             updateLexeme();
             updateCurrentCharacter();
-            return operatorPlusEquals("equals");
+            return operatorPlusEquals("==");
         }
 
-        return new Token("assignment" , lexeme, getLineNumber());
+        return new Token("=" , lexeme, getLineNumber());
     }
 
 
@@ -434,7 +438,7 @@ public class LexicalAnalyser {
         return nextToken();
     }
     private Token and(){
-        return new Token("and" , lexeme, getLineNumber());
+        return new Token("&&" , lexeme, getLineNumber());
     }
 
 
@@ -449,12 +453,12 @@ public class LexicalAnalyser {
         return nextToken();
     }
     private Token or(){
-        return new Token("or" , lexeme, getLineNumber());
+        return new Token("||" , lexeme, getLineNumber());
     }
 
 
     private Token mod(){
-        return new Token("mod" , lexeme, getLineNumber());
+        return new Token("%" , lexeme, getLineNumber());
     }
 
 
@@ -465,10 +469,10 @@ public class LexicalAnalyser {
             return increment();
         }
 
-        return new Token("addition" , lexeme, getLineNumber());
+        return new Token("+" , lexeme, getLineNumber());
     }
     private Token increment(){
-        return new Token("increment" , lexeme, getLineNumber());
+        return new Token("++" , lexeme, getLineNumber());
     }
 
 
@@ -479,15 +483,15 @@ public class LexicalAnalyser {
             return decrement();
         }
 
-        return new Token("substraction" , lexeme, getLineNumber());
+        return new Token("-" , lexeme, getLineNumber());
     }
     private Token decrement(){
-        return new Token("decrement" , lexeme, getLineNumber());
+        return new Token("--" , lexeme, getLineNumber());
     }
 
 
     private Token multiplication(){
-        return new Token("multiplication" , lexeme, getLineNumber());
+        return new Token("*" , lexeme, getLineNumber());
     }
 
 
@@ -504,7 +508,7 @@ public class LexicalAnalyser {
             return multiLineCommentInitial();
         }
 
-        return new Token("division" , lexeme, getLineNumber());
+        return new Token("/" , lexeme, getLineNumber());
     }
 
     private Token singleLineComment(){
@@ -550,42 +554,42 @@ public class LexicalAnalyser {
     }
 
     private Token openingParenthesis(){
-        return new Token("openingParenthesis" , lexeme, getLineNumber());
+        return new Token("(" , lexeme, getLineNumber());
     }
     private Token closingParenthesis(){
-        return new Token("closingParenthesis" , lexeme, getLineNumber());
+        return new Token(")" , lexeme, getLineNumber());
     }
 
 
     private Token openingBrace(){
-        return new Token("openingBrace" , lexeme, getLineNumber());
+        return new Token("{" , lexeme, getLineNumber());
     }
     private Token closingBrace(){
-        return new Token("closingBrace" , lexeme, getLineNumber());
+        return new Token("}" , lexeme, getLineNumber());
     }
 
 
     private Token semicolon(){
-        return new Token("semicolon" , lexeme, getLineNumber());
+        return new Token(";" , lexeme, getLineNumber());
     }
 
 
     private Token comma(){
-        return new Token("comma" , lexeme, getLineNumber());
+        return new Token("," , lexeme, getLineNumber());
     }
 
 
     private Token dot(){
-        return new Token("dot" , lexeme, getLineNumber());
+        return new Token("." , lexeme, getLineNumber());
     }
 
 
     private Token colon(){
-        return new Token("colon" , lexeme, getLineNumber());
+        return new Token(":" , lexeme, getLineNumber());
     }
 
 
     private Token EOF(){
-        return new Token("EOF","" + SourceManager.END_OF_FILE, getLineNumber());
+        return new Token("eof"," ", getLineNumber());
     }
 }

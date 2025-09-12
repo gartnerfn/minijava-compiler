@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.lexicalAnalyzer;
 
 public class LexicalException extends RuntimeException {
     public LexicalException(String description, String lexeme, int lineNumber, int columnNumber, String currentLine) {

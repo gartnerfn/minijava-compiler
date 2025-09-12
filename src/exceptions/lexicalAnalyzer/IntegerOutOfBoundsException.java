@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.lexicalAnalyzer;
 
 public class IntegerOutOfBoundsException extends LexicalException {
     public IntegerOutOfBoundsException(String lexeme, int lineNumber, int columnNumber, String currentLine) {

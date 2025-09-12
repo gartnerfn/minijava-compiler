@@ -1,6 +1,6 @@
-import exceptions.LexicalException;
-import lexicalAnalyser.LexicalAnalyser;
-import lexicalAnalyser.Token;
+import exceptions.lexicalAnalyzer.LexicalException;
+import lexicalAnalyzer.lexicalAnalyzer;
+import lexicalAnalyzer.Token;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        final String END_OF_FILE = "EOF";
+        final String END_OF_FILE = "eof";
 
         SourceManager sourceManager = new SourceManagerImpl();
         String filePath = args[0];
@@ -16,7 +16,7 @@ public class Main {
 
         try {
             sourceManager.open(filePath);
-            LexicalAnalyser lexicalAnalyser = new LexicalAnalyser(sourceManager);
+            lexicalAnalyzer lexicalAnalyser = new lexicalAnalyzer(sourceManager);
 
             do{
                 token = lexicalAnalyser.nextToken();
