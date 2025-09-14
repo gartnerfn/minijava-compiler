@@ -1,4 +1,4 @@
-package exceptions.lexicalAnalyzer;
+package lexicalAnalyzer.exceptions;
 
 public class UnclosedCharException extends LexicalException {
     public UnclosedCharException(String lexeme, int lineNumber, int columnNumber, String currentLine) {

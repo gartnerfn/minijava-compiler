@@ -1,7 +1,8 @@
 package lexicalAnalyzer;
 
-import exceptions.lexicalAnalyzer.*;
+import lexicalAnalyzer.exceptions.*;
 import sourceManager.SourceManager;
+import src.Token;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class lexicalAnalyzer {
     private final ArrayList<LexicalException> exceptions = new ArrayList<>();
 
     String[] words = {
-        "class", "extends", "public", "static", "void",
-        "boolean", "char", "int", "abstract", "final",
+        "class", "extends", "public", "private", "static", "void",
+        "boolean", "char", "int", "abstract", "final", "for",
         "if", "else", "while", "return", "var",
         "this", "new", "null", "true", "false"
     };
@@ -40,6 +41,18 @@ public class lexicalAnalyzer {
         return exceptions;
     }
 
+    private int getLineNumber(){
+        return sourceManager.getLineNumber();
+    }
+
+    private int getColumnNumber(){
+        return sourceManager.getColumnNumber();
+    }
+
+    private String getCurrentLine(){
+        return sourceManager.getCurrentLine();
+    }
+
     private void updateLexeme(){
         lexeme += currentCharacter;
     }
@@ -52,17 +65,7 @@ public class lexicalAnalyzer {
         }
     }
 
-    private String getCurrentLine(){
-        return sourceManager.getCurrentLine();
-    }
 
-    private int getLineNumber(){
-        return sourceManager.getLineNumber();
-    }
-
-    private int getColumnNumber(){
-        return sourceManager.getColumnNumber();
-    }
 
     private boolean is(char c){
         return currentCharacter == c;
@@ -251,7 +254,7 @@ public class lexicalAnalyzer {
 
 
     private Token charLiteralInitial(){
-        if(isEOF() || isWhitespace() && !is(' ') || is('\'')){
+        if(isEOF() || isWhitespace() && (!is('\t') || !is(' ')) || is('\'')){
             exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();
@@ -319,9 +322,8 @@ public class lexicalAnalyzer {
         return new Token("charLiteral" , lexeme, getLineNumber());
     }
 
-
     private Token stringLiteralInitial(){
-        if(isEOF() || isWhitespace() && !is(' ')){
+        if(isEOF() || isWhitespace() && (!is('\t') || !is(' '))){
             exceptions.add(new UnclosedStringException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();

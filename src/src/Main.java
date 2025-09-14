@@ -1,6 +1,7 @@
-import exceptions.lexicalAnalyzer.LexicalException;
+package src;
+
+import lexicalAnalyzer.exceptions.LexicalException;
 import lexicalAnalyzer.lexicalAnalyzer;
-import lexicalAnalyzer.Token;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
 

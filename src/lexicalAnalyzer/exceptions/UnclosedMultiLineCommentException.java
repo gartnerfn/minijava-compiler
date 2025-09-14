@@ -1,4 +1,4 @@
-package exceptions.lexicalAnalyzer;
+package lexicalAnalyzer.exceptions;
 
 public class UnclosedMultiLineCommentException extends LexicalException {
     public UnclosedMultiLineCommentException(String description, String lexeme, int lineNumber, int columnNumber, String currentLine) {
