@@ -1,4 +1,4 @@
-///[Error: |9]
+///[Error:|9]
 
 class A {
     int x;

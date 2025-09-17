@@ -592,6 +592,6 @@ public class lexicalAnalyzer {
 
 
     private Token EOF(){
-        return new Token("eof"," ", getLineNumber());
+        return new Token("eof","", getLineNumber());
     }
 }

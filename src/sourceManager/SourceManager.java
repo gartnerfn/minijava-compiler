@@ -1,4 +1,4 @@
-package sourceManager;//Author: Juan Dingevan
+package sourceManager;//Author: Gartner, Facundo
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,11 +12,9 @@ public interface SourceManager {
 
     String getCurrentLine();
 
-//    String getLine(int lineNumber);
-
     int getLineNumber();
 
     int getColumnNumber();
 
-    public static final char END_OF_FILE = (char) 26;
+    char END_OF_FILE = (char) 26;
 }

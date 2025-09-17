@@ -181,7 +181,7 @@ public class syntaxAnalyzer {
     }
 
     private void tipoMetodo() {
-        if (isOneOf("rw_boolean", "rw_char", "rw_int"))
+        if (isOneOf("rw_boolean", "rw_char", "rw_int", "classId"))
             tipo();
         else if (is("rw_void"))
             match("rw_void");
