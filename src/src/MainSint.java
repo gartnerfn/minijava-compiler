@@ -13,7 +13,7 @@ public class MainSint {
     public static void main(String[] args) {
         SourceManager sourceManager = new SourceManagerImpl();
         String filePath = args[0];
-//        String filePath = "resources/sinErrores/sintCorrecto06.java";
+//        String filePath = "resources/sinErrores/sintCorrecto39.java";
         LexicalAnalyzer lexicalAnalyser = null;
 
         try {

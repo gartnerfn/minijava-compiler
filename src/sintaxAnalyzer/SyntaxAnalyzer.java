@@ -46,7 +46,7 @@ public class SyntaxAnalyzer {
     }
 
     private boolean isSentenciaStart() {
-        return isOneOf(";", "rw_var", "rw_return", "rw_if", "rw_while", "{") || isExpresionStart();
+        return isOneOf(";", "rw_var", "rw_return", "rw_if", "rw_while", "rw_for", "{") || isExpresionStart();
     }
 
     private boolean isExpresionStart() {
@@ -354,6 +354,8 @@ public class SyntaxAnalyzer {
             ifSentence();
         } else if (is("rw_while")) {
             whileSentence();
+        } else if(is("rw_for")){
+            forSentence();
         } else if (is("{")) {
             bloque();
         } else if(isExpresionStart()){
@@ -402,6 +404,45 @@ public class SyntaxAnalyzer {
         expresion();
         match(")");
         sentencia();
+    }
+
+    private void forSentence(){
+        match("rw_for");
+        match("(");
+        forPrima();
+        match(")");
+        sentencia();
+    }
+
+    private void forPrima(){
+        if(is("rw_var")){
+            match("rw_var");
+            match("methodVarId");
+            forSec();
+        } else if(isExpresionStart()){
+            expresion();
+            forClasico();
+        } else
+            throw new SyntaxException("var or expression", currentToken.lexeme(), currentToken.lineNumber());
+    }
+
+    private void forSec(){
+        if(is("=")){
+            match("=");
+            expresionCompuesta();
+            forClasico();
+        } else if(is(":")){
+            match(":");
+            expresion();
+        } else
+            throw new SyntaxException("= or :", currentToken.lexeme(), currentToken.lineNumber());
+    }
+
+    private void forClasico(){
+        match(";");
+        expresion();
+        match(";");
+        expresion();
     }
 
     private void expresion() {
