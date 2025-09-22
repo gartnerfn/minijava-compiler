@@ -33,8 +33,8 @@ public class SyntaxAnalyzer {
         return false;
     }
 
-    private boolean isClaseStart() {
-        return isOneOf("rw_abstract","rw_static","rw_final","rw_class");
+    private boolean isModificador() {
+        return isOneOf("rw_abstract","rw_static","rw_final");
     }
 
     private boolean isMiembroVisibilidadStart() {
@@ -70,35 +70,64 @@ public class SyntaxAnalyzer {
     }
 
     private void inicial() {
-        listaClases();
+        listaClasesOInterfaces();
         match("eof");
     }
 
-    private void listaClases() {
-        if (isClaseStart()) {
+    private void listaClasesOInterfaces() {
+        modificadorOpcional();
+        claseOInterfaz();
+    }
+
+    private void claseOInterfaz(){
+        if(is("rw_class")){
             clase();
-            listaClases();
+            listaClasesOInterfaces();
+        } else if(is("rw_interface")){
+            interfaz();
+            listaClasesOInterfaces();
         }
     }
 
     private void clase() {
-        modificadorOpcional();
         match("rw_class");
         match("classId");
-        herenciaOpcional();
+        herenciaOImplementacionOpcional();
         match("{");
         listaMiembros();
         match("}");
     }
 
+    private void interfaz(){
+        match("rw_interface");
+        match("classId");
+        herenciaOpcional();
+        match("{");
+        listaMiembrosInterfaz();
+        match("}");
+    }
+
     private void modificadorOpcional() {
-        if (isOneOf("rw_abstract", "rw_static", "rw_final"))
+        if (isModificador())
             modificador();
+    }
+
+    private void herencia(){
+        match("rw_extends");
+        match("classId");
     }
 
     private void herenciaOpcional() {
         if (is("rw_extends")) {
-            match("rw_extends");
+            herencia();
+        }
+    }
+
+    private void herenciaOImplementacionOpcional(){
+        if (is("rw_extends")) {
+            herencia();
+        }else if (is("rw_implements")){
+            match("rw_implements");
             match("classId");
         }
     }
@@ -107,6 +136,13 @@ public class SyntaxAnalyzer {
         if (isMiembroVisibilidadStart()) {
             miembroVisibilidad();
             listaMiembros();
+        }
+    }
+
+    private void listaMiembrosInterfaz(){
+        if(isMiembroVisibilidadStart()){
+            miembroVisibilidadInterfaz();
+            listaMiembrosInterfaz();
         }
     }
 
@@ -124,6 +160,31 @@ public class SyntaxAnalyzer {
         if (is("classId")) {
             match("classId");
             metodoOAtributoOConstructor();
+        } else if(isOneOf("rw_boolean", "rw_char", "rw_int")) {
+            tipoPrimitivo();
+            match("methodVarId");
+            metodoOAtributo();
+        } else if (isOneOf("rw_abstract", "rw_static", "rw_final")) {
+            modificador();
+            tipoMetodo();
+            declaracionMetodo();
+        } else if(is("rw_void")) {
+            match("rw_void");
+            declaracionMetodo();
+        }
+        else throw new SyntaxException("Class identifier, abstract, static or final", currentToken.lexeme(), currentToken.lineNumber());
+    }
+
+    private void miembroVisibilidadInterfaz(){
+        visibilidadOpcional();
+        miembroInterfaz();
+    }
+
+    private void miembroInterfaz() {
+        if (is("classId")) {
+            match("classId");
+            match("methodVarId");
+            metodoOAtributo();
         } else if(isOneOf("rw_boolean", "rw_char", "rw_int")) {
             tipoPrimitivo();
             match("methodVarId");

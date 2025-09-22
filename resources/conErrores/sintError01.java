@@ -1,8 +1,10 @@
 ///[Error:,|3]
 
-class Clase extends Clasesita, Clasesita{
+class Clase extends Clasesita#, Clasesita{
     
 }
+
+
 
 
 

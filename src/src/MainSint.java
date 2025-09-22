@@ -31,8 +31,8 @@ public class MainSint {
                 System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             }
 
-            if(lexicalExceptions.isEmpty())
-                System.out.print("\n" + "[SinErrores]");
+
+            System.out.print("\n" + "[SinErrores]");
         } catch (java.io.IOException e) {
             System.out.println("Error in file: " + e.getMessage());
         } catch (SyntaxException se){

@@ -17,7 +17,7 @@ public class LexicalAnalyzer {
     private final ArrayList<LexicalException> exceptions = new ArrayList<>();
 
     String[] words = {
-        "class", "extends", "public", "private", "static", "void",
+        "class", "interface", "extends", "implements", "public", "private", "static", "void",
         "boolean", "char", "int", "abstract", "final", "for",
         "if", "else", "while", "return", "var",
         "this", "new", "null", "true", "false"
