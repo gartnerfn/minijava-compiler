@@ -6,6 +6,9 @@ public class LexicalException extends RuntimeException {
     }
 
     private static String buildMessage(String description, String lexeme, int lineNumber, int columnNumber, String currentLine) {
+        final String RED = "\u001B[31m";
+        final String RESET = "\u001B[0m";
+
         String lineNumberStr = Integer.toString(lineNumber);
 
         String errorDescription = description
@@ -19,6 +22,6 @@ public class LexicalException extends RuntimeException {
 
         String errorMessage = "[Error:" + lexeme + "|" + lineNumber + "]";
 
-        return errorDescription + "\n" + errorDetail + "\n" + errorPointer + "\n\n" + errorMessage;
+        return RED + errorDescription + "\n" + errorDetail + "\n" + errorPointer + "\n\n" + errorMessage + RESET + "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
     }
 }

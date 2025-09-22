@@ -23,29 +23,19 @@ public class MainSint {
 
             ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
 
-            for(LexicalException exception : lexicalExceptions){
-                final String RED = "\u001B[31m";
-                final String RESET = "\u001B[0m";
-
-                System.out.println("\n" + RED + exception.getMessage() + RESET);
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            }
-
+            for(LexicalException exception : lexicalExceptions)
+                System.out.println(exception.getMessage());
 
             System.out.print("\n" + "[SinErrores]");
         } catch (java.io.IOException e) {
             System.out.println("Error in file: " + e.getMessage());
         } catch (SyntaxException se){
             if(lexicalAnalyser == null) return;
+
             ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
 
-            for(LexicalException exception : lexicalExceptions){
-                final String RED = "\u001B[31m";
-                final String RESET = "\u001B[0m";
-
-                System.out.println("\n" + RED + exception.getMessage() + RESET);
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            }
+            for(LexicalException exception : lexicalExceptions)
+                System.out.println(exception.getMessage());
 
             System.out.println(se.getMessage());
         } finally {

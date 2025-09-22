@@ -27,13 +27,8 @@ public class Main {
 
             ArrayList<LexicalException> exceptions = lexicalAnalyser.getExceptions();
 
-            for(LexicalException exception : exceptions){
-                final String RED = "\u001B[31m";
-                final String RESET = "\u001B[0m";
-
-                System.out.println("\n" + RED + exception.getMessage() + RESET);
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            }
+            for(LexicalException exception : exceptions)
+                System.out.println(exception.getMessage());
 
             if(exceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");
