@@ -92,6 +92,7 @@ public class SyntaxAnalyzer {
     private void clase() {
         match("rw_class");
         match("classId");
+        genericidadOpcional();
         herenciaOImplementacionOpcional();
         match("{");
         listaMiembros();
@@ -101,10 +102,32 @@ public class SyntaxAnalyzer {
     private void interfaz(){
         match("rw_interface");
         match("classId");
+        genericidadOpcional();
         herenciaOpcional();
         match("{");
         listaMiembrosInterfaz();
         match("}");
+    }
+
+    private void genericidadOpcional(){
+        if(is("<")){
+            match("<");
+            match("classId");
+            match(">");
+        }
+    }
+
+    private void diamanteOGenericidadOpcional(){
+        if(is("<")){
+            match("<");
+            diamanteOGenericidadOpcionalPrima();
+            match(">");
+        }
+    }
+
+    private void diamanteOGenericidadOpcionalPrima(){
+        if(is("classId"))
+            match("classId");
     }
 
     private void modificadorOpcional() {
@@ -115,6 +138,7 @@ public class SyntaxAnalyzer {
     private void herencia(){
         match("rw_extends");
         match("classId");
+        genericidadOpcional();
     }
 
     private void herenciaOpcional() {
@@ -129,6 +153,7 @@ public class SyntaxAnalyzer {
         }else if (is("rw_implements")){
             match("rw_implements");
             match("classId");
+            genericidadOpcional();
         }
     }
 
@@ -183,6 +208,7 @@ public class SyntaxAnalyzer {
     private void miembroInterfaz() {
         if (is("classId")) {
             match("classId");
+            genericidadOpcional();
             match("methodVarId");
             metodoOAtributo();
         } else if(isOneOf("rw_boolean", "rw_char", "rw_int")) {
@@ -233,7 +259,8 @@ public class SyntaxAnalyzer {
     }
 
     private void metodoOAtributoOConstructor(){
-        if(is("methodVarId")){
+        if(isOneOf("<","methodVarId")){
+            genericidadOpcional();
             match("methodVarId");
             metodoOAtributo();
         } else if(is("(")){
@@ -252,8 +279,10 @@ public class SyntaxAnalyzer {
     private void tipo() {
         if (isOneOf("rw_boolean", "rw_char", "rw_int"))
             tipoPrimitivo();
-        else if(is("classId"))
+        else if(is("classId")){
             match("classId");
+            genericidadOpcional();
+        }
         else
             throw new SyntaxException("boolean, char, int or class identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
@@ -484,6 +513,7 @@ public class SyntaxAnalyzer {
     private void llamadaConstructor() {
         match("rw_new");
         match("classId");
+        diamanteOGenericidadOpcional();
         argsActuales();
     }
 
