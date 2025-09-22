@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class lexicalAnalyzer {
+public class LexicalAnalyzer {
     private final SourceManager sourceManager;
     private String lexeme;
     private char currentCharacter;
@@ -23,7 +23,7 @@ public class lexicalAnalyzer {
         "this", "new", "null", "true", "false"
     };
 
-    public lexicalAnalyzer(SourceManager sourceManager) {
+    public LexicalAnalyzer(SourceManager sourceManager) {
         this.sourceManager = sourceManager;
 
         for (String word : words)

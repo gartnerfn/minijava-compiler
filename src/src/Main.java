@@ -1,7 +1,7 @@
 package src;
 
 import lexicalAnalyzer.exceptions.LexicalException;
-import lexicalAnalyzer.lexicalAnalyzer;
+import lexicalAnalyzer.LexicalAnalyzer;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
 
@@ -17,7 +17,7 @@ public class Main {
 
         try {
             sourceManager.open(filePath);
-            lexicalAnalyzer lexicalAnalyser = new lexicalAnalyzer(sourceManager);
+            LexicalAnalyzer lexicalAnalyser = new LexicalAnalyzer(sourceManager);
 
             do{
                 token = lexicalAnalyser.nextToken();

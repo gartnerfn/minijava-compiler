@@ -1,27 +1,53 @@
 package src;
 
-import lexicalAnalyzer.lexicalAnalyzer;
+import lexicalAnalyzer.exceptions.LexicalException;
+import lexicalAnalyzer.LexicalAnalyzer;
 import sintaxAnalyzer.exceptions.SyntaxException;
-import sintaxAnalyzer.syntaxAnalyzer;
+import sintaxAnalyzer.SyntaxAnalyzer;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
+
+import java.util.ArrayList;
 
 public class MainSint {
     public static void main(String[] args) {
         SourceManager sourceManager = new SourceManagerImpl();
         String filePath = args[0];
 //        String filePath = "resources/sinErrores/sintCorrecto06.java";
+        LexicalAnalyzer lexicalAnalyser = null;
 
         try {
             sourceManager.open(filePath);
-            lexicalAnalyzer lexicalAnalyser = new lexicalAnalyzer(sourceManager);
-            syntaxAnalyzer syntaxAnalyzer = new syntaxAnalyzer(lexicalAnalyser);
+            lexicalAnalyser = new LexicalAnalyzer(sourceManager);
+            new SyntaxAnalyzer(lexicalAnalyser);
 
-            System.out.print("\n" + "[SinErrores]");
+            ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
+
+            for(LexicalException exception : lexicalExceptions){
+                final String RED = "\u001B[31m";
+                final String RESET = "\u001B[0m";
+
+                System.out.println("\n" + RED + exception.getMessage() + RESET);
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            }
+
+            if(lexicalExceptions.isEmpty())
+                System.out.print("\n" + "[SinErrores]");
         } catch (java.io.IOException e) {
             System.out.println("Error in file: " + e.getMessage());
         } catch (SyntaxException se){
-          System.out.println(se.getMessage());
+            if(lexicalAnalyser == null) return;
+            ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
+
+            for(LexicalException exception : lexicalExceptions){
+                final String RED = "\u001B[31m";
+                final String RESET = "\u001B[0m";
+
+                System.out.println("\n" + RED + exception.getMessage() + RESET);
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            }
+
+            System.out.println(se.getMessage());
         } finally {
             try {
                 sourceManager.close();

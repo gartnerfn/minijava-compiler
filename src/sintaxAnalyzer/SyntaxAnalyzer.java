@@ -2,13 +2,13 @@ package sintaxAnalyzer;
 
 import src.Token;
 import sintaxAnalyzer.exceptions.SyntaxException;
-import lexicalAnalyzer.lexicalAnalyzer;
+import lexicalAnalyzer.LexicalAnalyzer;
 
-public class syntaxAnalyzer {
-    private final lexicalAnalyzer lexicalAnalyzer;
+public class SyntaxAnalyzer {
+    private final LexicalAnalyzer lexicalAnalyzer;
     private Token currentToken;
 
-    public syntaxAnalyzer(lexicalAnalyzer lexicalAnalyzer){
+    public SyntaxAnalyzer(LexicalAnalyzer lexicalAnalyzer){
         this.lexicalAnalyzer = lexicalAnalyzer;
         currentToken = lexicalAnalyzer.nextToken();
         inicial();
@@ -18,7 +18,7 @@ public class syntaxAnalyzer {
         if(token.equals(currentToken.token()))
             currentToken = lexicalAnalyzer.nextToken();
         else
-            throw new SyntaxException("Sentence", currentToken.lexeme(), currentToken.lineNumber());
+            throw new SyntaxException(token, currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private boolean is(String expected) {
