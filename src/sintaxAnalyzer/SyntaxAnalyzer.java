@@ -463,6 +463,7 @@ public class SyntaxAnalyzer {
 
     private void expresionCompuesta() {
         expresionBasica();
+        ternariaOpcional();
         expresionCompuestaPrima();
     }
 
@@ -470,7 +471,17 @@ public class SyntaxAnalyzer {
         if (isOperadorBinario()) {
             operadorBinario();
             expresionBasica();
+            ternariaOpcional();
             expresionCompuestaPrima();
+        }
+    }
+
+    private void ternariaOpcional(){
+        if(is("?")){
+            match("?");
+            expresionCompuesta();
+            match(":");
+            expresionCompuesta();
         }
     }
 

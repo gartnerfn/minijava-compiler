@@ -196,6 +196,10 @@ public class LexicalAnalyzer {
             updateLexeme();
             updateCurrentCharacter();
             return colon();
+        } else if(is('?')){
+            updateLexeme();
+            updateCurrentCharacter();
+            return questionMark();
         } else if(isWhitespace()){
             updateCurrentCharacter();
             return initial();
@@ -588,6 +592,10 @@ public class LexicalAnalyzer {
 
     private Token colon(){
         return new Token(":" , lexeme, getLineNumber());
+    }
+
+    private Token questionMark(){
+        return new Token("?", lexeme, getLineNumber());
     }
 
 
