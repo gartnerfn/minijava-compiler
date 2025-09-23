@@ -75,10 +75,6 @@ public class LexicalAnalyzer {
         return Character.isUpperCase(currentCharacter);
     }
 
-    private boolean isLowercase(){
-        return !isUppercase();
-    }
-
     private boolean isLetter(){
         return Character.isLetter(currentCharacter);
     }
@@ -104,7 +100,7 @@ public class LexicalAnalyzer {
             updateLexeme();
             updateCurrentCharacter();
             return classId();
-        }else if(isLetter() && isLowercase()){
+        }else if(isLetter()){
             updateLexeme();
             updateCurrentCharacter();
             return methodVarId();
@@ -258,7 +254,7 @@ public class LexicalAnalyzer {
 
 
     private Token charLiteralInitial(){
-        if(isEOF() || isWhitespace() && (!is('\t') || !is(' ')) || is('\'')){
+        if(isEOF() || isWhitespace() && (!is('\t') && !is(' ')) || is('\'')){
             exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();
@@ -285,7 +281,7 @@ public class LexicalAnalyzer {
         return nextToken();
     }
     private Token charLiteral3(){
-        if(isEOF() || isWhitespace() && !is(' ')){
+        if(isEOF() || isWhitespace()){
             exceptions.add(new UnclosedCharException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();
@@ -327,7 +323,7 @@ public class LexicalAnalyzer {
     }
 
     private Token stringLiteralInitial(){
-        if(isEOF() || isWhitespace() && (!is('\t') || !is(' '))){
+        if(isEOF() || isWhitespace() && (!is('\t') && !is(' '))){
             exceptions.add(new UnclosedStringException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();
@@ -350,7 +346,7 @@ public class LexicalAnalyzer {
         return stringLiteralInitial();
     }
     private Token stringLiteral2(){
-        if(isEOF() || isWhitespace() && !is(' ')){
+        if(isEOF() || isWhitespace()){
             exceptions.add(new UnclosedStringException(lexeme, getLineNumber(), getColumnNumber(), getCurrentLine()));
             updateCurrentCharacter();
             return nextToken();

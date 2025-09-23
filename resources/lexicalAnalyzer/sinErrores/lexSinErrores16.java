@@ -1,5 +1,7 @@
 ///[SinErrores]
 
 " \n "
-
+"'"
+'	'
+"	"
 //comentario
