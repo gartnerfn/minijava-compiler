@@ -197,7 +197,7 @@ public class SyntaxAnalyzer {
             match("rw_void");
             declaracionMetodo();
         }
-        else throw new SyntaxException("Class identifier, abstract, static or final", currentToken.lexeme(), currentToken.lineNumber());
+        else throw new SyntaxException("Class identifier, boolean, char, int, abstract, static, final or void", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void miembroVisibilidadInterfaz(){
@@ -223,7 +223,7 @@ public class SyntaxAnalyzer {
             match("rw_void");
             declaracionMetodo();
         }
-        else throw new SyntaxException("Class identifier, abstract, static or final", currentToken.lexeme(), currentToken.lineNumber());
+        else throw new SyntaxException("Class identifier, boolean, char, int, abstract, static, final or void", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void modificador(){
@@ -273,7 +273,7 @@ public class SyntaxAnalyzer {
             tipo();
         else if (is("rw_void"))
             match("rw_void");
-        else throw new SyntaxException("boolean, char, int or void", currentToken.lexeme(), currentToken.lineNumber());
+        else throw new SyntaxException("boolean, char, int, class identifier or void", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void tipo() {
@@ -282,8 +282,7 @@ public class SyntaxAnalyzer {
         else if(is("classId")){
             match("classId");
             genericidadOpcional();
-        }
-        else
+        } else
             throw new SyntaxException("boolean, char, int or class identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
 
@@ -493,11 +492,10 @@ public class SyntaxAnalyzer {
         if (isOperadorUnario()) {
             operadorUnario();
             operando();
-        }
-        else if(isPrimitivo() || isPrimario())
+        } else if(isPrimitivo() || isPrimario())
             operando();
         else
-            throw new SyntaxException("Primitivo, Unario or Primario", currentToken.lexeme(), currentToken.lineNumber());
+            throw new SyntaxException("Valid expression", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void operadorUnario() {
@@ -510,8 +508,7 @@ public class SyntaxAnalyzer {
         else if(isPrimario())
             referencia();
         else
-            throw new SyntaxException("Primitivo or Primario", currentToken.lexeme(), currentToken.lineNumber());
-
+            throw new SyntaxException("Valid operand", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void primitivo() {
@@ -553,7 +550,7 @@ public class SyntaxAnalyzer {
         } else if (is("classId"))
             llamadaMetodoEstatico();
         else
-            throw new SyntaxException("this, new, string literal, method or variable name or class identifier", currentToken.lexeme(), currentToken.lineNumber());
+            throw new SyntaxException("this, new, string literal, method identifier, variable identifier or class identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void primarioPrima(){

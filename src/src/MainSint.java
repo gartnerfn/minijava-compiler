@@ -24,7 +24,7 @@ public class MainSint {
             ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
 
             for(LexicalException exception : lexicalExceptions)
-                System.out.println(exception.getMessage());
+                System.out.println(exception.getMessage(false));
 
             System.out.print("\n" + "[SinErrores]");
         } catch (java.io.IOException e) {
@@ -35,7 +35,7 @@ public class MainSint {
             ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
 
             for(LexicalException exception : lexicalExceptions)
-                System.out.println(exception.getMessage());
+                System.out.println(exception.getMessage(false));
 
             System.out.println(se.getMessage());
         } finally {

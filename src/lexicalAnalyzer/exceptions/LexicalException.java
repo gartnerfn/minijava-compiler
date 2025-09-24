@@ -1,11 +1,16 @@
 package lexicalAnalyzer.exceptions;
 
 public class LexicalException extends RuntimeException {
+    private final String messageWithCode;
+    private final String messageWithoutCode;
+
     public LexicalException(String description, String lexeme, int lineNumber, int columnNumber, String currentLine) {
-        super(buildMessage(description,lexeme,lineNumber,columnNumber, currentLine));
+        super();
+        this.messageWithCode = buildMessage(description, lexeme, lineNumber, columnNumber, currentLine, true);
+        this.messageWithoutCode = buildMessage(description, lexeme, lineNumber, columnNumber, currentLine, false);
     }
 
-    private static String buildMessage(String description, String lexeme, int lineNumber, int columnNumber, String currentLine) {
+    private String buildMessage(String description, String lexeme, int lineNumber, int columnNumber, String currentLine, boolean showErrorCode) {
         final String RED = "\u001B[31m";
         final String RESET = "\u001B[0m";
 
@@ -20,8 +25,17 @@ public class LexicalException extends RuntimeException {
 
         String errorPointer = " ".repeat(lineNumberStr.length() + 2 + columnNumber - 1) + "^";
 
-        String errorMessage = "[Error:" + lexeme + "|" + lineNumber + "]";
+        String errorCode = showErrorCode ? "\n\n[Error:" + lexeme + "|" + lineNumber + "]" : "";
 
-        return RED + errorDescription + "\n" + errorDetail + "\n" + errorPointer + "\n\n" + errorMessage + RESET + "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+        return RED + errorDescription + "\n" + errorDetail + "\n" + errorPointer + errorCode + RESET + "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+    }
+
+    public String getMessage(boolean showErrorCode) {
+        return showErrorCode ? messageWithCode : messageWithoutCode;
+    }
+
+    @Override
+    public String getMessage() {
+        return messageWithCode;
     }
 }
