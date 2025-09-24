@@ -1,6 +1,6 @@
 ///[SinErrores]
 class Main {
-    public static void main(String[] args) {
+    public static void main(String args) {
         var numero = 42;        // int
         var nombre = "Facu";    // String
         var lista = List.of(1, 2, 3); // List<Integer>

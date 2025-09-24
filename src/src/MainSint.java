@@ -23,9 +23,10 @@ public class MainSint {
             ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
 
             for(LexicalException exception : lexicalExceptions)
-                System.out.println(exception.getMessage(false));
+                System.out.println(exception.getMessage());
 
-            System.out.print("\n" + "[SinErrores]");
+            if(lexicalExceptions.isEmpty())
+                System.out.print("\n" + "[SinErrores]");
         } catch (java.io.IOException e) {
             System.out.println("Error in file: " + e.getMessage());
         } catch (SyntaxException se){
@@ -34,7 +35,7 @@ public class MainSint {
             ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
 
             for(LexicalException exception : lexicalExceptions)
-                System.out.println(exception.getMessage(false));
+                System.out.println(exception.getMessage());
 
             System.out.println(se.getMessage());
         } finally {
