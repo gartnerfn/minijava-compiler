@@ -75,8 +75,10 @@ public class SyntaxAnalyzer {
     }
 
     private void listaClasesOInterfaces() {
-        modificadorOpcional();
-        claseOInterfaz();
+        if(isOneOf("rw_class", "rw_interface", "rw_abstract", "rw_final", "rw_static")){
+            modificadorOpcional();
+            claseOInterfaz();
+        }
     }
 
     private void claseOInterfaz(){
@@ -86,7 +88,7 @@ public class SyntaxAnalyzer {
         } else if(is("rw_interface")){
             interfaz();
             listaClasesOInterfaces();
-        }
+        } else throw new SyntaxException("Class identifier or interface identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void clase() {
