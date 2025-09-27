@@ -1,7 +1,7 @@
-package sintaxAnalyzer;
+package syntaxAnalyzer;
 
 import src.Token;
-import sintaxAnalyzer.exceptions.SyntaxException;
+import syntaxAnalyzer.exceptions.SyntaxException;
 import lexicalAnalyzer.LexicalAnalyzer;
 
 public class SyntaxAnalyzer {

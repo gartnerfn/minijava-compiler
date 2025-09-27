@@ -2,8 +2,8 @@ package src;
 
 import lexicalAnalyzer.exceptions.LexicalException;
 import lexicalAnalyzer.LexicalAnalyzer;
-import sintaxAnalyzer.exceptions.SyntaxException;
-import sintaxAnalyzer.SyntaxAnalyzer;
+import syntaxAnalyzer.exceptions.SyntaxException;
+import syntaxAnalyzer.SyntaxAnalyzer;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
 

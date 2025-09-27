@@ -1,4 +1,4 @@
-package sintaxAnalyzer.exceptions;
+package syntaxAnalyzer.exceptions;
 
 public class SyntaxException extends RuntimeException {
     public SyntaxException(String expected, String lexeme, int lineNumber) {
