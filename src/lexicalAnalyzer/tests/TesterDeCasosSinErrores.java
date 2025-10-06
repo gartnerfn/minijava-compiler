@@ -1,6 +1,6 @@
 package lexicalAnalyzer.tests;
 
-import src.Main;
+import src.MainLex;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
@@ -24,7 +24,7 @@ public class TesterDeCasosSinErrores {
     private static final String testFilesDirectoryPath = "resources/lexicalAnalyzer/sinErrores/";
 
     //TODO: el tipo de esta variable init tiene que ser la clase que tiene el main
-    private static final Main init = new Main();
+    private static final MainLex init = new MainLex();
    
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;

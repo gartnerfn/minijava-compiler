@@ -1,5 +1,8 @@
 package syntaxAnalyzer;
 
+import semanticAnalyzer.entities.Class;
+import semanticAnalyzer.entities.Interface;
+import semanticAnalyzer.entities.SymbolTable;
 import src.Token;
 import syntaxAnalyzer.exceptions.SyntaxException;
 import lexicalAnalyzer.LexicalAnalyzer;
@@ -7,6 +10,7 @@ import lexicalAnalyzer.LexicalAnalyzer;
 public class SyntaxAnalyzer {
     private final LexicalAnalyzer lexicalAnalyzer;
     private Token currentToken;
+    private final SymbolTable symbolTable = SymbolTable.getInstance();
 
     public SyntaxAnalyzer(LexicalAnalyzer lexicalAnalyzer){
         this.lexicalAnalyzer = lexicalAnalyzer;
@@ -93,22 +97,28 @@ public class SyntaxAnalyzer {
 
     private void clase() {
         match("rw_class");
+        symbolTable.currentClass = new Class(currentToken);
         match("classId");
         genericidadOpcional();
-        herenciaOImplementacionOpcional();
+        Token ancestor = herenciaOImplementacionOpcional();
+        symbolTable.currentClass.inheritsFrom(ancestor);
         match("{");
         listaMiembros();
         match("}");
+        symbolTable.addClass(symbolTable.currentClass);
     }
 
     private void interfaz(){
         match("rw_interface");
+        symbolTable.currentClass = new Interface(currentToken);
         match("classId");
         genericidadOpcional();
-        herenciaOpcional();
+        Token ancestor = herenciaOpcional();
+        symbolTable.currentClass.inheritsFrom(ancestor);
         match("{");
         listaMiembrosInterfaz();
         match("}");
+        symbolTable.addClass(symbolTable.currentClass);
     }
 
     private void genericidadOpcional(){
@@ -137,26 +147,38 @@ public class SyntaxAnalyzer {
             modificador();
     }
 
-    private void herencia(){
+    private Token herencia(){
         match("rw_extends");
+        Token tkn = currentToken;
         match("classId");
         genericidadOpcional();
+        return tkn;
     }
 
-    private void herenciaOpcional() {
-        if (is("rw_extends")) {
-            herencia();
-        }
+    private Token implementacion(){
+        match("rw_implements");
+        Token tkn = currentToken;
+        match("classId");
+        genericidadOpcional();
+        return tkn;
     }
 
-    private void herenciaOImplementacionOpcional(){
+    private Token herenciaOpcional() {
         if (is("rw_extends")) {
-            herencia();
+            return herencia();
+        } else if(is("{"))
+            return new Token("classId", "Object", 0);
+        else throw new SyntaxException("extends or }", currentToken.lexeme(), currentToken.lineNumber());
+    }
+
+    private Token herenciaOImplementacionOpcional(){
+        if (is("rw_extends")) {
+            return herencia();
         }else if (is("rw_implements")){
-            match("rw_implements");
-            match("classId");
-            genericidadOpcional();
-        }
+            return implementacion();
+        } else if(is("{"))
+            return new Token("classId", "Object", 0);
+        else throw new SyntaxException("extends or }", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void listaMiembros() {

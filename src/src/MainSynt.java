@@ -1,0 +1,68 @@
+package src;
+
+import lexicalAnalyzer.exceptions.LexicalException;
+import lexicalAnalyzer.LexicalAnalyzer;
+import semanticAnalyzer.entities.SymbolTable;
+import semanticAnalyzer.exceptions.SemanticException;
+import syntaxAnalyzer.exceptions.SyntaxException;
+import syntaxAnalyzer.SyntaxAnalyzer;
+import sourceManager.SourceManager;
+import sourceManager.SourceManagerImpl;
+
+import java.util.ArrayList;
+
+public class MainSynt {
+    public static void main(String[] args) {
+        SourceManager sourceManager = new SourceManagerImpl();
+        String filePath = args[0];
+//        String filePath = "resources/conErrores/semIError01.java";
+//        String filePath = "resources/sinErrores/semICorrecto01.java";
+        SymbolTable symbolTable = SymbolTable.getInstance();
+        LexicalAnalyzer lexicalAnalyser = null;
+
+        try {
+            sourceManager.open(filePath);
+            lexicalAnalyser = new LexicalAnalyzer(sourceManager);
+            new SyntaxAnalyzer(lexicalAnalyser);
+
+            ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
+
+            for(LexicalException exception : lexicalExceptions)
+                System.out.println(exception.getMessage());
+
+            symbolTable.isWellDeclared();
+
+            if(lexicalExceptions.isEmpty())
+                System.out.print("\n" + "[SinErrores]");
+
+            symbolTable.deleteInstance();
+        } catch (java.io.IOException e) {
+            System.out.println("Error in file: " + e.getMessage());
+        } catch (SyntaxException syE){
+            if(lexicalAnalyser == null) return;
+
+            ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
+
+            for(LexicalException exception : lexicalExceptions)
+                System.out.println(exception.getMessage());
+
+            System.out.println(syE.getMessage());
+        } catch (SemanticException smE){
+            if(lexicalAnalyser == null) return;
+
+            ArrayList<LexicalException> lexicalExceptions = lexicalAnalyser.getExceptions();
+
+            for(LexicalException exception : lexicalExceptions)
+                System.out.println(exception.getMessage());
+
+            System.out.println(smE.getMessage());
+        } finally {
+            try {
+                symbolTable.deleteInstance();
+                sourceManager.close();
+            } catch (java.io.IOException e) {
+                System.out.println("Error in file: " + e.getMessage());
+            }
+        }
+    }
+}

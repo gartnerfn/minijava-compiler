@@ -1,12 +1,12 @@
-///[Error:m1|5]
+///[Error:C|7]
 //Tambien podria ser el token abstract
 
-class A{
-    abstract m1(){}
+interface A{
 }
 
+interface B extends C {
 
-
+}
 
 class Init{
     static void main()
