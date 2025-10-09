@@ -32,12 +32,16 @@ public class Entity {
     }
 
     public void addConstructor(Constructor constructor){
-        Constructor previousCons = constructors.get(constructor.name);
+        Constructor previousCons = existsConstructor(constructor);
 
-        if(previousCons != null && previousCons.parameters.size() == constructor.parameters.size())
+        if(previousCons != null)
             throw new SemanticException("Duplicated constructor.", constructor.name, constructor.lineNumber);
 
-        constructors.put(constructor.name, constructor);
+        constructors.put(constructor.name + constructor.parameters.size(), constructor);
+    }
+
+    public Constructor existsConstructor(Constructor constructor){
+        return constructors.get(constructor.name + constructor.parameters.size());
     }
 
     public void inheritsFrom(Token ancestor){
