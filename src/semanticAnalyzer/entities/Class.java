@@ -88,9 +88,10 @@ public class Class extends Entity{
         if(ancestorInheritance.equals(name))
             throw new SemanticException("Herencia circular entre la misma clase.", ancestorInheritance, lineNumber);
 
-        while(ancestorInheritanceClass.ancestorInheritance != null ){
-            if( ancestorInheritanceClass.ancestorInheritance.equals(name))
+        while(ancestorInheritanceClass.ancestorInheritance != null){
+            if(ancestorInheritanceClass.ancestorInheritance.equals(name))
                 throw new SemanticException("Herencia circular.", ancestorInheritance, lineNumber);
+
             ancestorInheritanceClass = symbolTable.existsClass(ancestorInheritanceClass.ancestorInheritance);
         }
 
@@ -130,18 +131,18 @@ public class Class extends Entity{
             ancestorInheritanceClass.consolidate();
 
         for (Attribute attribute : ancestorInheritanceClass.attributes.values()) {
-            this.attributes.put(attribute.name + ancestorInheritance, attribute);
+            addInheritedAttribute(attribute, ancestorInheritance);
         }
 
         for (Method method : ancestorInheritanceClass.methods.values()) {
-            Method thisMethod = this.methods.get(method.name);
+            Method thisMethod = existsMethod(method);
 
             if (thisMethod == null) {
                 if(method.isAbstract){
                     if(!this.isAbstract)
                         throw new SemanticException("La clase no implementa todos los metodos heredados.", method.name, method.lineNumber);
                 } else
-                    this.methods.put(method.name + ancestorInheritance, method);
+                    addMethod(method);
             } else {
                 if(method.isFinal){
                     throw new SemanticException("El metodo heredado es final y no puede ser redefinido.", thisMethod.name, thisMethod.lineNumber);
@@ -149,7 +150,7 @@ public class Class extends Entity{
                     throw new SemanticException("El metodo redefinido no puede reducir la visibilidad del metodo heredado.", thisMethod.name, thisMethod.lineNumber);
                 } else if(thisMethod.isStatic && !method.isStatic){
                     throw new SemanticException("No se puede redefinir un metodo no estatico convirtiendolo en estatico.", thisMethod.name, thisMethod.lineNumber);
-                } else if(thisMethod.parameters.size() == method.parameters.size()){
+                } else {
                     if (!thisMethod.returnType.name.equals(method.returnType.name))
                         throw new SemanticException("El metodo heredado debe tener el mismo tipo de retorno.", thisMethod.name, thisMethod.lineNumber);
 
@@ -171,30 +172,25 @@ public class Class extends Entity{
         if(ancestorImplementation != null){
             Interface ancestorImplementationInterface = symbolTable.existsInterface(ancestorImplementation);
 
-            if(!ancestorImplementationInterface.isConsolidated)
-                ancestorImplementationInterface.consolidate();
-
             for(Attribute attribute : ancestorImplementationInterface.attributes.values()){
-                this.attributes.put(attribute.name + ancestorImplementation, attribute);
+                addInheritedAttribute(attribute, ancestorImplementation);
             }
 
             for(Method method : ancestorImplementationInterface.methods.values()){
-                Method thisMethod = this.methods.get(method.name);
+                Method thisMethod = existsMethod(method);
 
                 if (thisMethod == null) {
                     if(method.isAbstract) {
                         if (!this.isAbstract)
                             throw new SemanticException("La clase no implementa todos los metodos de la interfaz.", method.name, method.lineNumber);
                     } else
-                        this.methods.put(method.name + ancestorInheritance, method);
+                        addMethod(method);
                 } else {
-                    if(method.isFinal){
-                        throw new SemanticException("El metodo heredado es final y no puede ser redefinido.", thisMethod.name, thisMethod.lineNumber);
-                    } else if (method.isPublic && !thisMethod.isPublic){
+                    if (method.isPublic && !thisMethod.isPublic){
                         throw new SemanticException("El metodo redefinido no puede reducir la visibilidad del metodo heredado.", thisMethod.name, thisMethod.lineNumber);
                     } else if(thisMethod.isStatic && !method.isStatic){
                         throw new SemanticException("No se puede redefinir un metodo no estatico convirtiendolo en estatico.", thisMethod.name, thisMethod.lineNumber);
-                    } else if(thisMethod.parameters.size() == method.parameters.size()){
+                    } else if(!method.isStatic && method.isPublic){
                         if (!thisMethod.returnType.name.equals(method.returnType.name))
                             throw new SemanticException("El metodo heredado debe tener el mismo tipo de retorno.", thisMethod.name, thisMethod.lineNumber);
 

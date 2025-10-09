@@ -23,7 +23,6 @@ public class Attribute {
     }
 
     void isWellDeclared(){
-
         if(type instanceof ReferenceType){
             Class referenceType = symbolTable.existsClass(type.name);
 

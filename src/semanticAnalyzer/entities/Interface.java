@@ -39,6 +39,7 @@ public class Interface extends Entity{
             while(ancestorInheritanceInterface.ancestorInheritance != null ){
                 if( ancestorInheritanceInterface.ancestorInheritance.equals(name))
                     throw new SemanticException("Herencia circular.", ancestorInheritance, lineNumber);
+
                 ancestorInheritanceInterface = symbolTable.existsInterface(ancestorInheritanceInterface.ancestorInheritance);
             }
         }
@@ -62,12 +63,12 @@ public class Interface extends Entity{
                 ancestorInheritanceInterface.consolidate();
 
             for(Attribute attribute : ancestorInheritanceInterface.attributes.values()){
-                attributes.put(attribute.name + ancestorInheritance, attribute);
+                addInheritedAttribute(attribute, ancestorInheritance);
             }
 
             for(Method method : ancestorInheritanceInterface.methods.values()){
                 if(!method.isStatic && method.isPublic)
-                    methods.put(method.name, method);
+                    addMethod(method);
             }
         }
 

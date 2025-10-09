@@ -1,6 +1,6 @@
 ///[SinErrores]
 
-class D extends B {
+class D extends A {
 
 }
 
@@ -12,10 +12,26 @@ class A {
 
 }
 
-class B extends A {
+class Z {
+
+}
+
+class B extends D {
 
 }
 
 class E extends D {
+
+}
+
+class Y extends Z{
+
+}
+
+class Probando extends Z {
+
+}
+
+class Algo extends D {
 
 }

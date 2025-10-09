@@ -48,19 +48,31 @@ public class Entity {
         ancestorImplementation = ancestor.lexeme();
     }
 
+    public boolean existsAttribute(Attribute attribute){
+        return attributes.containsKey(attribute.name + '|' + this.name);
+    }
+
+    public Method existsMethod(Method method){
+        return methods.get(method.name + method.parameters.size());
+    }
+
+    public void addInheritedAttribute(Attribute attribute, String ancestor){
+        attributes.put(attribute.name + '|' + ancestor, attribute);
+    }
+
     public void addAttribute(Attribute attribute){
-        if(attributes.containsKey(attribute.name))
+        if(existsAttribute(attribute))
             throw new SemanticException("Duplicated attribute.", attribute.name, attribute.lineNumber);
 
-        attributes.put(attribute.name, attribute);
+        attributes.put(attribute.name + '|' + this.name, attribute);
     }
 
     public void addMethod(Method method){
-        Method previousMethod = methods.get(method.name);
+        Method previousMethod = existsMethod(method);
 
-        if(previousMethod != null && previousMethod.parameters.size() == method.parameters.size())
+        if(previousMethod != null)
             throw new SemanticException("Duplicated method.", method.name, method.lineNumber);
 
-        methods.put(method.name, method);
+        methods.put(method.name + method.parameters.size(), method);
     }
 }

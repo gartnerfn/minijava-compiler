@@ -15,8 +15,6 @@ public class Main {
     public static void main(String[] args) {
         SourceManager sourceManager = new SourceManagerImpl();
         String filePath = args[0];
-//        String filePath = "resources/conErrores/semIError47.java";
-//        String filePath = "resources/sinErrores/semICorrecto31.java";
         SymbolTable symbolTable = SymbolTable.getInstance();
         LexicalAnalyzer lexicalAnalyser = null;
 
@@ -32,7 +30,6 @@ public class Main {
 
             symbolTable.isWellDeclared();
             symbolTable.consolidate();
-            symbolTable.printTable();
 
             if(lexicalExceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");
@@ -57,7 +54,6 @@ public class Main {
             for(LexicalException exception : lexicalExceptions)
                 System.out.println(exception.getMessage());
 
-            symbolTable.printTable();
             System.out.println(smE.getMessage());
         } finally {
             try {
