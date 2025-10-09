@@ -1,6 +1,7 @@
 package semanticAnalyzer.entities.predefined;
 
 import semanticAnalyzer.entities.Class;
+import semanticAnalyzer.entities.Constructor;
 import src.Token;
 
 public class Object extends Class {
@@ -15,7 +16,9 @@ public class Object extends Class {
         return false;
     }
 
-    public void isWellDeclared() {}
+    public void isWellDeclared() {
+        addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
+    }
     public void consolidate(){}
 
     static void debugPrint(int i){
