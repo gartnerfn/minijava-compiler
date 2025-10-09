@@ -1,8 +1,11 @@
 package syntaxAnalyzer;
 
+import semanticAnalyzer.entities.*;
 import semanticAnalyzer.entities.Class;
-import semanticAnalyzer.entities.Interface;
-import semanticAnalyzer.entities.SymbolTable;
+import semanticAnalyzer.types.PrimitiveType;
+import semanticAnalyzer.types.ReferenceType;
+import semanticAnalyzer.types.Type;
+import semanticAnalyzer.types.VoidType;
 import src.Token;
 import syntaxAnalyzer.exceptions.SyntaxException;
 import lexicalAnalyzer.LexicalAnalyzer;
@@ -79,46 +82,38 @@ public class SyntaxAnalyzer {
     }
 
     private void listaClasesOInterfaces() {
-        if(isOneOf("rw_class", "rw_interface", "rw_abstract", "rw_final", "rw_static")){
-            modificadorOpcional();
-            claseOInterfaz();
+        if(isOneOf("rw_class", "rw_abstract", "rw_final", "rw_static")){
+            String optionalModifer = modificadorOpcional();
+            clase(optionalModifer);
+            listaClasesOInterfaces();
+        }  else if(is("rw_interface")){
+            interfaz();
+            listaClasesOInterfaces();
         }
     }
 
-    private void claseOInterfaz(){
-        if(is("rw_class")){
-            clase();
-            listaClasesOInterfaces();
-        } else if(is("rw_interface")){
-            interfaz();
-            listaClasesOInterfaces();
-        } else throw new SyntaxException("Class identifier or interface identifier", currentToken.lexeme(), currentToken.lineNumber());
-    }
-
-    private void clase() {
+    private void clase(String optionalModifier) {
         match("rw_class");
-        symbolTable.currentClass = new Class(currentToken);
+        symbolTable.currentEntity = new Class(currentToken, optionalModifier);
         match("classId");
         genericidadOpcional();
-        Token ancestor = herenciaOImplementacionOpcional();
-        symbolTable.currentClass.inheritsFrom(ancestor);
+        herenciaOImplementacionOpcional();
         match("{");
         listaMiembros();
         match("}");
-        symbolTable.addClass(symbolTable.currentClass);
+        symbolTable.addClass((Class) symbolTable.currentEntity);
     }
 
-    private void interfaz(){
+    private void interfaz() {
         match("rw_interface");
-        symbolTable.currentClass = new Interface(currentToken);
+        symbolTable.currentEntity = new Interface(currentToken);
         match("classId");
         genericidadOpcional();
-        Token ancestor = herenciaOpcional();
-        symbolTable.currentClass.inheritsFrom(ancestor);
+        herenciaOpcional();
         match("{");
         listaMiembrosInterfaz();
         match("}");
-        symbolTable.addClass(symbolTable.currentClass);
+        symbolTable.addInterface((Interface) symbolTable.currentEntity);
     }
 
     private void genericidadOpcional(){
@@ -142,43 +137,39 @@ public class SyntaxAnalyzer {
             match("classId");
     }
 
-    private void modificadorOpcional() {
+    private String modificadorOpcional() {
         if (isModificador())
-            modificador();
+            return modificador();
+        else return "";
     }
 
     private Token herencia(){
         match("rw_extends");
-        Token tkn = currentToken;
+        Token name = currentToken;
         match("classId");
         genericidadOpcional();
-        return tkn;
+        return name;
     }
 
     private Token implementacion(){
         match("rw_implements");
-        Token tkn = currentToken;
+        Token name = currentToken;
         match("classId");
         genericidadOpcional();
-        return tkn;
+        return name;
     }
 
-    private Token herenciaOpcional() {
-        if (is("rw_extends")) {
-            return herencia();
-        } else if(is("{"))
-            return new Token("classId", "Object", 0);
-        else throw new SyntaxException("extends or }", currentToken.lexeme(), currentToken.lineNumber());
+    private void herenciaOpcional() {
+        if (is("rw_extends"))
+            symbolTable.currentEntity.inheritsFrom(herencia());
     }
 
-    private Token herenciaOImplementacionOpcional(){
+    private void herenciaOImplementacionOpcional(){
         if (is("rw_extends")) {
-            return herencia();
+            symbolTable.currentEntity.inheritsFrom(herencia());
         }else if (is("rw_implements")){
-            return implementacion();
-        } else if(is("{"))
-            return new Token("classId", "Object", 0);
-        else throw new SyntaxException("extends or }", currentToken.lexeme(), currentToken.lineNumber());
+            symbolTable.currentEntity.implementsFrom(implementacion());
+        }
     }
 
     private void listaMiembros() {
@@ -196,79 +187,96 @@ public class SyntaxAnalyzer {
     }
 
     private void miembroVisibilidad(){
-        visibilidadOpcional();
-        miembro();
+        String visibilityModifier = visibilidadOpcional();
+        miembro(visibilityModifier);
     }
 
-    private void visibilidadOpcional(){
-        if(isOneOf("rw_public", "rw_private"))
+    private String visibilidadOpcional(){
+        if(isOneOf("rw_public", "rw_private")){
+            Token visibilityModifier = currentToken;
             match(currentToken.token());
+            return visibilityModifier.lexeme();
+        } else return "";
     }
 
-    private void miembro() {
+    private void miembro(String visibilityModifier) {
         if (is("classId")) {
+            Token classId = currentToken;
             match("classId");
-            metodoOAtributoOConstructor();
+            metodoOAtributoOConstructor(classId, visibilityModifier);
         } else if(isOneOf("rw_boolean", "rw_char", "rw_int")) {
-            tipoPrimitivo();
+            Type primitiveType = tipoPrimitivo();
+            Token methodVarId = currentToken;
             match("methodVarId");
-            metodoOAtributo();
+            metodoOAtributo(primitiveType, methodVarId, visibilityModifier);
         } else if (isOneOf("rw_abstract", "rw_static", "rw_final")) {
-            modificador();
-            tipoMetodo();
-            declaracionMetodo();
+            String typeModifier = modificador();
+            Type returnType = tipoMetodo();
+            declaracionMetodo(returnType, typeModifier, visibilityModifier);
         } else if(is("rw_void")) {
-            match("rw_void");
-            declaracionMetodo();
+            Type returnType = voidType();
+            declaracionMetodo(returnType, "", visibilityModifier);
         }
         else throw new SyntaxException("Class identifier, boolean, char, int, abstract, static, final or void", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void miembroVisibilidadInterfaz(){
-        visibilidadOpcional();
-        miembroInterfaz();
+        String visibilityModifier = visibilidadOpcional();
+        miembroInterfaz(visibilityModifier);
     }
 
-    private void miembroInterfaz() {
+    private void miembroInterfaz(String visibilityModifier) {
         if (is("classId")) {
+            Token classId = currentToken;
             match("classId");
+            Type referenceType = new ReferenceType(classId);
             genericidadOpcional();
+            Token methodVarId = currentToken;
             match("methodVarId");
-            metodoOAtributo();
+            metodoOAtributo(referenceType, methodVarId, visibilityModifier);
         } else if(isOneOf("rw_boolean", "rw_char", "rw_int")) {
-            tipoPrimitivo();
+            Type primitiveType = tipoPrimitivo();
+            Token methodVarId = currentToken;
             match("methodVarId");
-            metodoOAtributo();
+            metodoOAtributo(primitiveType, methodVarId, visibilityModifier);
         } else if (isOneOf("rw_abstract", "rw_static", "rw_final")) {
-            modificador();
-            tipoMetodo();
-            declaracionMetodo();
+            String typeModifier = modificador();
+            Type returnType = tipoMetodo();
+            declaracionMetodo(returnType, typeModifier, visibilityModifier);
         } else if(is("rw_void")) {
-            match("rw_void");
-            declaracionMetodo();
+            Type returnType = voidType();
+            declaracionMetodo(returnType, "", visibilityModifier);
         }
         else throw new SyntaxException("Class identifier, boolean, char, int, abstract, static, final or void", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void modificador(){
+    private String modificador(){
+        Token modifier = currentToken;
         match(currentToken.token());
+        return modifier.lexeme();
     }
 
-    private void declaracionMetodo(){
+    private void declaracionMetodo(Type returnType, String typeModifier, String visibilityModifier) {
+        Token methodVarId = currentToken;
         match("methodVarId");
+        symbolTable.currentRoutine = new Method(methodVarId, returnType, typeModifier, visibilityModifier);
         argsFormales();
         bloqueOpcional();
+        symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
     }
 
-    private void metodoOAtributo() {
+    private void metodoOAtributo(Type type, Token methodVarId, String visibilityModifier) {
         if(is("(")){
+            symbolTable.currentRoutine = new Method(methodVarId, type, "", visibilityModifier);
             argsFormales();
             bloqueOpcional();
+            symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
         } else if(is("=")){
             inicializacionAtributo();
         } else if(is(";")){
             match(";");
-        } else throw new SyntaxException("( or =", currentToken.lexeme(), currentToken.lineNumber());
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier));
+        } else throw new SyntaxException("(, = or ;", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void inicializacionAtributo(){
@@ -282,36 +290,51 @@ public class SyntaxAnalyzer {
         bloque();
     }
 
-    private void metodoOAtributoOConstructor(){
+    private void metodoOAtributoOConstructor(Token classId, String visibilityModifier){
         if(isOneOf("<","methodVarId")){
             genericidadOpcional();
+            Token methodVarId = currentToken;
             match("methodVarId");
-            metodoOAtributo();
+            Type referenceType = new ReferenceType(classId);
+            metodoOAtributo(referenceType, methodVarId, visibilityModifier);
         } else if(is("(")){
+            symbolTable.currentRoutine = new Constructor(classId, visibilityModifier);
             constructor();
+            symbolTable.currentEntity.addConstructor((Constructor) symbolTable.currentRoutine);
         } else throw new SyntaxException("Method identifier, attribute identifier or (", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void tipoMetodo() {
+    private Type tipoMetodo() {
         if (isOneOf("rw_boolean", "rw_char", "rw_int", "classId"))
-            tipo();
-        else if (is("rw_void"))
-            match("rw_void");
+            return tipo();
+        else if (is("rw_void")){
+            return voidType();
+        }
         else throw new SyntaxException("boolean, char, int, class identifier or void", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void tipo() {
+    private Type voidType(){
+        Type voidType = new VoidType(currentToken);
+        match("rw_void");
+        return voidType;
+    }
+
+    private Type tipo() {
         if (isOneOf("rw_boolean", "rw_char", "rw_int"))
-            tipoPrimitivo();
+            return tipoPrimitivo();
         else if(is("classId")){
+            Type referenceType = new ReferenceType(currentToken);
             match("classId");
             genericidadOpcional();
+            return referenceType;
         } else
             throw new SyntaxException("boolean, char, int or class identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void tipoPrimitivo() {
+    private Type tipoPrimitivo() {
+        Type primitiveType = new PrimitiveType(currentToken);
         match(currentToken.token());
+        return primitiveType;
     }
 
     private void argsFormales() {
@@ -339,15 +362,20 @@ public class SyntaxAnalyzer {
     }
 
     private void argFormal() {
-        tipo();
+        Type type = tipo();
+        Token methodVarId = currentToken;
         match("methodVarId");
+        symbolTable.currentRoutine.addParameter(new Parameter(methodVarId, type));
     }
 
     private void bloqueOpcional() {
         if (is("{"))
             bloque();
-        else if(is(";"))
+        else if(is(";")){
+            Method currentMethod = (Method) symbolTable.currentRoutine;
+            currentMethod.hasBody = false;
             match(";");
+        }
         else throw new SyntaxException("{ or ;", currentToken.lexeme(), currentToken.lineNumber());
     }
 

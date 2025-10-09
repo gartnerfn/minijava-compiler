@@ -1,14 +1,20 @@
 ///[SinErrores]
-// Prueba constructores
 
 interface A {
-}
-class B extends A {
-   public B(int w){}
+
 }
 
+class B extends Object {
 
+}
 
+class C implements A{
+
+}
+
+class D implements A {
+
+}
 
 class Init{
     static void main()

@@ -1,14 +1,17 @@
 package semanticAnalyzer.entities;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import src.Token;
 
-public class Constructor {
-    String name;
-    int lineNumber;
-    private Map<String, Parameter> parameters = new LinkedHashMap<>();
+public class Constructor extends Routine{
+    public Constructor(Token tkn, String visibilityModifier){
+        this.name = tkn.lexeme();
+        this.lineNumber = tkn.lineNumber();
+
+        if(visibilityModifier.equals("private"))
+            this.isPublic = false;
+    }
 
     void isWellDeclared(){
-
+        super.isWellDeclared();
     }
 }

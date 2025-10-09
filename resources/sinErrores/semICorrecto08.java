@@ -1,5 +1,4 @@
 ///[SinErrores]
-// Prueba constructores
 
 interface A {
 }

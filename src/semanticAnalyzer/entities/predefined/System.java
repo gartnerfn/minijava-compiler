@@ -5,9 +5,12 @@ import src.Token;
 import java.io.IOException;
 
 public class System extends Class {
-    public System(Token tkn){
-        super(tkn);
+    public System(){
+        super(new Token("classId", "System", 0));
     }
+
+    public void isWellDeclared() {}
+    public void consolidate(){}
 
     public static int read() {
         try {

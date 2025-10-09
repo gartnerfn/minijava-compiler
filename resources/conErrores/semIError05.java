@@ -5,9 +5,6 @@ class A{
     abstract m1(){}
 }
 
-
-
-
 class Init{
     static void main()
     { }

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import src.MainSynt;
+import src.Main;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -24,7 +24,7 @@ public class TesterDeCasosSinErrores {
     private static final String testFilesDirectoryPath = "resources/sinErrores/";
 
     //TODO: el tipo de esta variable init tiene que ser la clase que tiene el main
-    private static final MainSynt init = new MainSynt();
+    private static final Main init = new Main();
    
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
