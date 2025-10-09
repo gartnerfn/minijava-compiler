@@ -38,7 +38,7 @@ public class SymbolTable {
 
     public void addInterface(Interface i){
         if(interfaces.containsKey(i.name))
-            throw new SemanticException("Duplicated class.", i.name, i.lineNumber);
+            throw new SemanticException("Duplicated interface.", i.name, i.lineNumber);
 
         interfaces.put(i.name, i);
     }
@@ -78,6 +78,53 @@ public class SymbolTable {
     public void printTable() {
         System.out.println("===== TABLA DE SIMBOLOS =====");
 
+        for (Interface itf : interfaces.values()) {
+            System.out.println("Interfaz: " + itf.name);
+            if (itf.ancestorInheritance!= null)
+                System.out.println("  Hereda de: " + itf.ancestorInheritance);
+
+
+            // --- Atributos ---
+            System.out.println("  Atributos:");
+            if (itf.attributes.isEmpty()) {
+                java.lang.System.out.println("    (sin atributos)");
+            } else {
+                for (Attribute a : itf.attributes.values()) {
+                    System.out.println("    " + a.type.name + " " + a.name);
+                }
+            }
+
+            // --- Métodos ---
+            System.out.println("  Métodos:");
+            if (itf.methods.isEmpty()) {
+                System.out.println("    (sin métodos)");
+            } else {
+                for (Method m : itf.methods.values()) {
+                    java.lang.String modificador = "";
+                    if(m.isAbstract)
+                        modificador = "abstract ";
+                    else if(m.isFinal)
+                        modificador = "final ";
+                    else if(m.isStatic)
+                        modificador = "static ";
+                    java.lang.String visibility = m.isPublic ? "public " : "private ";
+                    System.out.println("    " + visibility + modificador + m.returnType.name + " " + m.name+ "()");
+                    System.out.println("      Parámetros:");
+                    if (m.parameters.isEmpty()) {
+                        System.out.println("        (sin parámetros)");
+                    } else {
+                        for (Parameter p : m.parameters.values()) {
+                            System.out.println("        " + p.type.name + " " + p.name);
+                        }
+                    }
+                }
+            }
+
+            System.out.println(); // salto de línea entre clases
+        }
+
+        System.out.println("==============================");
+
         for (Class c : classes.values()) {
             System.out.println("Clase: " + c.name);
             if (c.ancestorInheritance!= null)
@@ -94,15 +141,13 @@ public class SymbolTable {
             // --- Constructor ---
             HashMap<java.lang.String,Constructor> ctors = c.constructors;
             for (Constructor ctor : ctors.values()) {
-                if (ctor != null) {
-                    System.out.println("  Constructor: " + ctor.name);
-                    System.out.println("    Parámetros:");
-                    if (ctor.parameters.isEmpty()) {
-                        System.out.println("      (sin parámetros)");
-                    } else {
-                        for (Parameter p : ctor.parameters.values()) {
-                            System.out.println("      " + p.type.name + " " + p.name);
-                        }
+                System.out.println("  Constructor: " + ctor.name);
+                System.out.println("    Parámetros:");
+                if (ctor.parameters.isEmpty()) {
+                    System.out.println("      (sin parámetros)");
+                } else {
+                    for (Parameter p : ctor.parameters.values()) {
+                        System.out.println("      " + p.type.name + " " + p.name);
                     }
                 }
             }
@@ -124,11 +169,11 @@ public class SymbolTable {
             } else {
                 for (Method m : c.methods.values()) {
                     java.lang.String modificador = "";
-                    if(c.isAbstract)
+                    if(m.isAbstract)
                         modificador = "abstract ";
-                    else if(c.isFinal)
+                    else if(m.isFinal)
                         modificador = "final ";
-                    else if(c.isStatic)
+                    else if(m.isStatic)
                         modificador = "static ";
                     java.lang.String visibility = m.isPublic ? "public " : "private ";
                     System.out.println("    " + visibility + modificador + m.returnType.name + " " + m.name+ "()");

@@ -1,4 +1,4 @@
-///[SinErrores]
+///[Error:m1|15]
 
 class A {
     private boolean m1(){
@@ -10,8 +10,14 @@ class A {
     }
 }
 
+//Redefinicion con distinto tipo de retorno
 class B extends A {
     private int m1(){
-        return 1;
-    }
+        return 1;}
 }
+
+
+
+
+
+

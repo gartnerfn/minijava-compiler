@@ -4,7 +4,6 @@ import semanticAnalyzer.exceptions.SemanticException;
 import src.Token;
 
 public class Interface extends Entity{
-
     public Interface(Token tkn){
         super(tkn);
         this.ancestorInheritance = null;
@@ -13,18 +12,14 @@ public class Interface extends Entity{
     }
 
     public void inheritsFrom(Token ancestor){
-        if(ancestor != null)
-            ancestorInheritance = ancestor.lexeme();
+        super.inheritsFrom(ancestor);
     }
 
     public void addMethod(Method method){
-        if(methods.containsKey(method.name))
-            throw new SemanticException("Duplicated method.", method.name, method.lineNumber);
-
-        if(!method.isFinal && !method.isStatic)
+        if(method.isPublic && !method.isFinal && !method.isStatic)
             method.isAbstract = true;
 
-        methods.put(method.name, method);
+        super.addMethod(method);
     }
 
     public void isWellDeclared(){
@@ -62,16 +57,16 @@ public class Interface extends Entity{
     public void consolidate(){
         if(ancestorInheritance != null){
             Interface ancestorInheritanceInterface = symbolTable.existsInterface(ancestorInheritance);
+
             if(!ancestorInheritanceInterface.isConsolidated)
                 ancestorInheritanceInterface.consolidate();
 
             for(Attribute attribute : ancestorInheritanceInterface.attributes.values()){
-                if(!attributes.containsKey(attribute.name))
-                    attributes.put(attribute.name, attribute);
+                attributes.put(attribute.name + ancestorInheritance, attribute);
             }
 
             for(Method method : ancestorInheritanceInterface.methods.values()){
-                if(!methods.containsKey(method.name))
+                if(!method.isStatic && method.isPublic)
                     methods.put(method.name, method);
             }
         }

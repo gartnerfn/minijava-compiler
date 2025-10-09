@@ -1,14 +1,13 @@
 package semanticAnalyzer.entities;
 
 import semanticAnalyzer.exceptions.SemanticException;
-import semanticAnalyzer.types.Type;
 import src.Token;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class Entity {
+public class Entity {
     SymbolTable symbolTable = SymbolTable.getInstance();
 
     public boolean isAbstract;
@@ -19,9 +18,11 @@ public abstract class Entity {
     public int lineNumber;
 
     public String ancestorInheritance;
+    String ancestorImplementation;
 
     Map<String, Attribute> attributes = new LinkedHashMap<>();
     HashMap<String, Method> methods = new HashMap<>();
+    HashMap<String, Constructor> constructors = new HashMap<>();
 
     public Entity(Token tkn){
         this.name = tkn.lexeme();
@@ -30,11 +31,22 @@ public abstract class Entity {
         this.isConsolidated = false;
     }
 
-    public  void addConstructor(Constructor constructor){}
+    public void addConstructor(Constructor constructor){
+        Constructor previousCons = constructors.get(constructor.name);
 
-    public  void inheritsFrom(Token ancestor){}
+        if(previousCons != null && previousCons.parameters.size() == constructor.parameters.size())
+            throw new SemanticException("Duplicated constructor.", constructor.name, constructor.lineNumber);
 
-    public  void implementsFrom(Token ancestor){}
+        constructors.put(constructor.name, constructor);
+    }
+
+    public void inheritsFrom(Token ancestor){
+        ancestorInheritance = ancestor.lexeme();
+    }
+
+    public void implementsFrom(Token ancestor){
+        ancestorImplementation = ancestor.lexeme();
+    }
 
     public void addAttribute(Attribute attribute){
         if(attributes.containsKey(attribute.name))
@@ -43,14 +55,12 @@ public abstract class Entity {
         attributes.put(attribute.name, attribute);
     }
 
-    public abstract void addMethod(Method method);
+    public void addMethod(Method method){
+        Method previousMethod = methods.get(method.name);
 
-    public Attribute existsAttribute(String attributeName){
-        return attributes.get(attributeName);
+        if(previousMethod != null && previousMethod.parameters.size() == method.parameters.size())
+            throw new SemanticException("Duplicated method.", method.name, method.lineNumber);
+
+        methods.put(method.name, method);
     }
-
-    public Method existsMethod(String methodName){
-        return methods.get(methodName);
-    }
-
 }

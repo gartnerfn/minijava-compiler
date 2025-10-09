@@ -1,4 +1,4 @@
-///[Error:m1|8]
+///[SinErrores]
 
 class A {
     boolean m1(boolean a){}
@@ -7,7 +7,3 @@ class A {
 class B extends A {
     boolean m1(boolean a, int b){}
 }
-
-
-
-

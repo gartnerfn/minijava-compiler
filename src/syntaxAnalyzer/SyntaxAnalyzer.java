@@ -273,6 +273,7 @@ public class SyntaxAnalyzer {
             symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
         } else if(is("=")){
             inicializacionAtributo();
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier));
         } else if(is(";")){
             match(";");
             symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier));

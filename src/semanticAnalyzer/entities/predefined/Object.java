@@ -8,6 +8,7 @@ public class Object extends Class {
     public Object(){
         super(new Token("classId", "Object", 0));
         this.ancestorInheritance = null;
+        isConsolidated = true;
     }
 
     public boolean isConcrete(){

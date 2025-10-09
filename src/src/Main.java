@@ -16,7 +16,7 @@ public class Main {
         SourceManager sourceManager = new SourceManagerImpl();
         String filePath = args[0];
 //        String filePath = "resources/conErrores/semIError47.java";
-//        String filePath = "resources/sinErrores/semICorrecto17.java";
+//        String filePath = "resources/sinErrores/semICorrecto31.java";
         SymbolTable symbolTable = SymbolTable.getInstance();
         LexicalAnalyzer lexicalAnalyser = null;
 

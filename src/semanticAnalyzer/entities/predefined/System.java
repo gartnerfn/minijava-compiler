@@ -7,6 +7,7 @@ import java.io.IOException;
 public class System extends Class {
     public System(){
         super(new Token("classId", "System", 0));
+        isConsolidated = true;
     }
 
     public void isWellDeclared() {}

@@ -1,4 +1,4 @@
-///[Error:m|8]
+///[SinErrores]
 
 class A {
     static void m(){}
@@ -7,8 +7,3 @@ class A {
 class B extends A {
     static void m(){}
 }
-
-
-
-
-
