@@ -137,9 +137,10 @@ public class Class extends Entity{
             Method thisMethod = this.methods.get(method.name);
 
             if (thisMethod == null) {
-                if(method.isAbstract)
-                    throw new SemanticException("La clase no implementa todos los metodos heredados.", method.name, method.lineNumber);
-                else
+                if(method.isAbstract){
+                    if(!this.isAbstract)
+                        throw new SemanticException("La clase no implementa todos los metodos heredados.", method.name, method.lineNumber);
+                } else
                     this.methods.put(method.name + ancestorInheritance, method);
             } else {
                 if(method.isFinal){
@@ -181,10 +182,11 @@ public class Class extends Entity{
                 Method thisMethod = this.methods.get(method.name);
 
                 if (thisMethod == null) {
-                    if(method.isAbstract)
-                        throw new SemanticException("La clase no implementa todos los metodos de la interfaz.", method.name, method.lineNumber);
-                    else
-                        this.methods.put(method.name + "|" + ancestorInheritance, method);
+                    if(method.isAbstract) {
+                        if (!this.isAbstract)
+                            throw new SemanticException("La clase no implementa todos los metodos de la interfaz.", method.name, method.lineNumber);
+                    } else
+                        this.methods.put(method.name + ancestorInheritance, method);
                 } else {
                     if(method.isFinal){
                         throw new SemanticException("El metodo heredado es final y no puede ser redefinido.", thisMethod.name, thisMethod.lineNumber);

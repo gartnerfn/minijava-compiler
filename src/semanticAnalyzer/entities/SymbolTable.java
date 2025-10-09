@@ -130,7 +130,7 @@ public class SymbolTable {
             if (c.ancestorInheritance!= null)
                 System.out.println("  Hereda de: " + c.ancestorInheritance);
             if(c.ancestorImplementation != null)
-                System.out.println("  Implementa de: " + c.ancestorInheritance);
+                System.out.println("  Implementa de: " + c.ancestorImplementation);
             if(c.isAbstract)
                 System.out.println("  Modificador: Abstract" );
             else if(c.isFinal)
