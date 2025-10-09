@@ -1,5 +1,6 @@
 package semanticAnalyzer.entities.predefined;
 import semanticAnalyzer.entities.Class;
+import semanticAnalyzer.entities.Constructor;
 import src.Token;
 
 import java.io.IOException;
@@ -10,7 +11,9 @@ public class System extends Class {
         isConsolidated = true;
     }
 
-    public void isWellDeclared() {}
+    public void isWellDeclared() {
+        addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
+    }
     public void consolidate(){}
 
     public static int read() {

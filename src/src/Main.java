@@ -30,6 +30,7 @@ public class Main {
 
             symbolTable.isWellDeclared();
             symbolTable.consolidate();
+            symbolTable.printTable();
 
             if(lexicalExceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");
@@ -54,6 +55,7 @@ public class Main {
             for(LexicalException exception : lexicalExceptions)
                 System.out.println(exception.getMessage());
 
+            symbolTable.printTable();
             System.out.println(smE.getMessage());
         } finally {
             try {

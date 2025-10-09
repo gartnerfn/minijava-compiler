@@ -141,6 +141,8 @@ public class Class extends Entity{
                 if(method.isAbstract){
                     if(!this.isAbstract)
                         throw new SemanticException("La clase no implementa todos los metodos heredados.", method.name, method.lineNumber);
+                    else
+                        addMethod(method);
                 } else
                     addMethod(method);
             } else {
@@ -183,6 +185,8 @@ public class Class extends Entity{
                     if(method.isAbstract) {
                         if (!this.isAbstract)
                             throw new SemanticException("La clase no implementa todos los metodos de la interfaz.", method.name, method.lineNumber);
+                        else
+                            addMethod(method);
                     } else
                         addMethod(method);
                 } else {
