@@ -1,11 +1,12 @@
 package syntaxAnalyzer;
 
-import semanticAnalyzer.entities.*;
-import semanticAnalyzer.entities.Class;
-import semanticAnalyzer.types.PrimitiveType;
-import semanticAnalyzer.types.ReferenceType;
-import semanticAnalyzer.types.Type;
-import semanticAnalyzer.types.VoidType;
+import semanticAnalyzerI.SymbolTable;
+import semanticAnalyzerI.entities.*;
+import semanticAnalyzerI.entities.Class;
+import semanticAnalyzerI.types.PrimitiveType;
+import semanticAnalyzerI.types.ReferenceType;
+import semanticAnalyzerI.types.Type;
+import semanticAnalyzerI.types.VoidType;
 import src.Token;
 import syntaxAnalyzer.exceptions.SyntaxException;
 import lexicalAnalyzer.LexicalAnalyzer;
@@ -370,11 +371,10 @@ public class SyntaxAnalyzer {
     }
 
     private void bloqueOpcional() {
-        if (is("{"))
+        if (is("{")){
             bloque();
+        }
         else if(is(";")){
-            Method currentMethod = (Method) symbolTable.currentRoutine;
-            currentMethod.hasBody = false;
             match(";");
         }
         else throw new SyntaxException("{ or ;", currentToken.lexeme(), currentToken.lineNumber());
@@ -382,6 +382,8 @@ public class SyntaxAnalyzer {
 
     private void bloque() {
         match("{");
+        symbolTable.currentBlock = new Block();
+        symbolTable.currentRoutine.addBlock(symbolTable.currentBlock);
         listaSentencias();
         match("}");
     }

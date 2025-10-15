@@ -2,8 +2,8 @@ package src;
 
 import lexicalAnalyzer.exceptions.LexicalException;
 import lexicalAnalyzer.LexicalAnalyzer;
-import semanticAnalyzer.entities.SymbolTable;
-import semanticAnalyzer.exceptions.SemanticException;
+import semanticAnalyzerI.SymbolTable;
+import semanticAnalyzerI.exceptions.SemanticException;
 import syntaxAnalyzer.exceptions.SyntaxException;
 import syntaxAnalyzer.SyntaxAnalyzer;
 import sourceManager.SourceManager;
