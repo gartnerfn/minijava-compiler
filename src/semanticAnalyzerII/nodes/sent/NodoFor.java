@@ -1,4 +1,5 @@
 package semanticAnalyzerII.nodes.sent;
 
-public class NodoFor {
+public class NodoFor extends NodoSentencia{
+    public void check(){}
 }

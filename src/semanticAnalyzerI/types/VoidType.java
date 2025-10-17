@@ -6,4 +6,8 @@ public class VoidType extends Type{
     public VoidType(Token tkn){
         super("void", tkn.lineNumber());
     }
+
+    public boolean isCompatible(Type type){
+        return false;
+    }
 }

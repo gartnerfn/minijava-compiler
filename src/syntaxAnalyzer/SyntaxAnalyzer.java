@@ -3,13 +3,19 @@ package syntaxAnalyzer;
 import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.entities.*;
 import semanticAnalyzerI.entities.Class;
-import semanticAnalyzerI.types.PrimitiveType;
-import semanticAnalyzerI.types.ReferenceType;
-import semanticAnalyzerI.types.Type;
-import semanticAnalyzerI.types.VoidType;
+import semanticAnalyzerI.types.*;
+import semanticAnalyzerII.nodes.exp.NodoExp;
+import semanticAnalyzerII.nodes.exp.NodoExpBasica;
+import semanticAnalyzerII.nodes.exp.NodoExpComp;
+import semanticAnalyzerII.nodes.exp.NodoExpVacia;
+import semanticAnalyzerII.nodes.lit.*;
+import semanticAnalyzerII.nodes.sent.*;
 import src.Token;
 import syntaxAnalyzer.exceptions.SyntaxException;
 import lexicalAnalyzer.LexicalAnalyzer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SyntaxAnalyzer {
     private final LexicalAnalyzer lexicalAnalyzer;
@@ -260,17 +266,21 @@ public class SyntaxAnalyzer {
     private void declaracionMetodo(Type returnType, String typeModifier, String visibilityModifier) {
         Token methodVarId = currentToken;
         match("methodVarId");
-        symbolTable.currentRoutine = new Method(methodVarId, returnType, typeModifier, visibilityModifier);
+        Method method = new Method(methodVarId, returnType, typeModifier, visibilityModifier, symbolTable.currentEntity);
+        symbolTable.currentRoutine = method;
         argsFormales();
-        bloqueOpcional();
+        NodoBloque block = bloqueOpcional();
+        method.addBlock(block);
         symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
     }
 
     private void metodoOAtributo(Type type, Token methodVarId, String visibilityModifier) {
         if(is("(")){
-            symbolTable.currentRoutine = new Method(methodVarId, type, "", visibilityModifier);
+            Method method = new Method(methodVarId, type, "", visibilityModifier, symbolTable.currentEntity);
+            symbolTable.currentRoutine = method;
             argsFormales();
-            bloqueOpcional();
+            NodoBloque block = bloqueOpcional();
+            method.addBlock(block);
             symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
         } else if(is("=")){
             inicializacionAtributo();
@@ -287,9 +297,13 @@ public class SyntaxAnalyzer {
         match(";");
     }
 
-    private void constructor() {
+    private void constructor(Token classId, String visibilityModifier){
+        Constructor constructor = new Constructor(classId, visibilityModifier);
+        symbolTable.currentRoutine = constructor;
         argsFormales();
-        bloque();
+        NodoBloque block = bloque();
+        constructor.addBlock(block);
+        symbolTable.currentEntity.addConstructor((Constructor) symbolTable.currentRoutine);
     }
 
     private void metodoOAtributoOConstructor(Token classId, String visibilityModifier){
@@ -300,9 +314,7 @@ public class SyntaxAnalyzer {
             Type referenceType = new ReferenceType(classId);
             metodoOAtributo(referenceType, methodVarId, visibilityModifier);
         } else if(is("(")){
-            symbolTable.currentRoutine = new Constructor(classId, visibilityModifier);
-            constructor();
-            symbolTable.currentEntity.addConstructor((Constructor) symbolTable.currentRoutine);
+            constructor(classId, visibilityModifier);
         } else throw new SyntaxException("Method identifier, attribute identifier or (", currentToken.lexeme(), currentToken.lineNumber());
     }
 
@@ -334,9 +346,18 @@ public class SyntaxAnalyzer {
     }
 
     private Type tipoPrimitivo() {
-        Type primitiveType = new PrimitiveType(currentToken);
-        match(currentToken.token());
-        return primitiveType;
+        if(is("rw_boolean")){
+            match("rw_boolean");
+            return new BooleanType(currentToken.lineNumber());
+        } else if(is("rw_char")){
+            match("rw_char");
+            return new CharType(currentToken.lineNumber());
+        } else if(is("rw_int")){
+            match("rw_int");
+            return new IntType(currentToken.lineNumber());
+        } else {
+            throw new SyntaxException("boolean, char or int expected", currentToken.lexeme(), currentToken.lineNumber());
+        }
     }
 
     private void argsFormales() {
@@ -370,34 +391,43 @@ public class SyntaxAnalyzer {
         symbolTable.currentRoutine.addParameter(new Parameter(methodVarId, type));
     }
 
-    private void bloqueOpcional() {
+    private NodoBloque bloqueOpcional() {
         if (is("{")){
-            bloque();
-        }
-        else if(is(";")){
+            return bloque();
+        } else if(is(";")){
             match(";");
-        }
-        else throw new SyntaxException("{ or ;", currentToken.lexeme(), currentToken.lineNumber());
+            NodoBloque block = new NodoBloqueNulo();
+            symbolTable.currentBlock = block;
+            return block;
+        } else throw new SyntaxException("{ or ;", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void bloque() {
+    private NodoBloque bloque() {
         match("{");
-        symbolTable.currentBlock = new Block();
-        symbolTable.currentRoutine.addBlock(symbolTable.currentBlock);
-        listaSentencias();
+        NodoBloque block = new NodoBloque();
+        symbolTable.currentBlock = block;
+        block.sentences = listaSentencias(block);
         match("}");
+        return block;
     }
 
-    private void listaSentencias() {
+    private List<NodoSentencia> listaSentencias(NodoBloque block) {
+        List<NodoSentencia> sentenceList = new ArrayList<>();
+        sentenceList.add(new NodoSentenciaVacia());
+
         if (isSentenciaStart()) {
-            sentencia();
-            listaSentencias();
+            NodoSentencia sentence = sentencia(block);
+            sentenceList = listaSentencias(block);
+            sentenceList.add(sentence);
         }
+
+        return sentenceList;
     }
 
-    private void sentencia() {
+    private NodoSentencia sentencia(NodoBloque block) {
         if (is(";")) {
             match(";");
+            return new NodoSentenciaVacia();
         } else if (is("rw_var")) {
             varLocal();
             match(";");
@@ -405,18 +435,21 @@ public class SyntaxAnalyzer {
             returnSentence();
             match(";");
         } else if (is("rw_if")) {
-            ifSentence();
+            return ifSentence(block);
         } else if (is("rw_while")) {
-            whileSentence();
+            whileSentence(block);
         } else if(is("rw_for")){
-            forSentence();
+            forSentence(block);
         } else if (is("{")) {
-            bloque();
+            return bloque();
         } else if(isExpresionStart()){
             expresion();
             match(";");
-        } else
+        } else {
             throw new SyntaxException("Valid sentence", currentToken.lexeme(), currentToken.lineNumber());
+        }
+
+        return new NodoSentenciaVacia();
     }
 
     private void varLocal() {
@@ -436,36 +469,39 @@ public class SyntaxAnalyzer {
             expresion();
     }
 
-    private void ifSentence() {
+    private NodoIf ifSentence(NodoBloque block) {
         match("rw_if");
         match("(");
-        expresion();
+        NodoExp cond = expresion();
         match(")");
-        sentencia();
-        ifPrima();
+        NodoSentencia thenBody = sentencia(block);
+        NodoSentencia elseBody = ifPrima(block);
+        return new NodoIf(cond, thenBody, elseBody);
     }
 
-    private void ifPrima() {
+    private NodoSentencia ifPrima(NodoBloque block) {
         if (is("rw_else")) {
             match("rw_else");
-            sentencia();
+            return sentencia(block);
+        } else {
+            return new NodoSentenciaVacia();
         }
     }
 
-    private void whileSentence() {
+    private void whileSentence(NodoBloque block) {
         match("rw_while");
         match("(");
         expresion();
         match(")");
-        sentencia();
+        sentencia(block);
     }
 
-    private void forSentence(){
+    private void forSentence(NodoBloque block){
         match("rw_for");
         match("(");
         forPrima();
         match(")");
-        sentencia();
+        sentencia(block);
     }
 
     private void forPrima(){
@@ -499,9 +535,10 @@ public class SyntaxAnalyzer {
         expresion();
     }
 
-    private void expresion() {
+    private NodoExp expresion() {
         expresionCompuesta();
         expresionPrima();
+        return new NodoExpVacia();
     }
 
     private void expresionPrima() {
@@ -547,9 +584,9 @@ public class SyntaxAnalyzer {
         if (isOperadorUnario()) {
             operadorUnario();
             operando();
-        } else if(isPrimitivo() || isPrimario())
+        } else if(isPrimitivo() || isPrimario()){
             operando();
-        else
+        } else
             throw new SyntaxException("Valid expression", currentToken.lexeme(), currentToken.lineNumber());
     }
 
@@ -560,14 +597,28 @@ public class SyntaxAnalyzer {
     private void operando() {
         if (isPrimitivo())
             primitivo();
+//            return primitivo();
         else if(isPrimario())
             referencia();
+//            return referencia();
         else
             throw new SyntaxException("Valid operand", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void primitivo() {
-        match(currentToken.token());
+    private NodoLit primitivo() {
+        if(isOneOf("rw_true", "rw_false")){
+            match(currentToken.token());
+            return new NodoBooleanLit(currentToken);
+        } else if(is("intLiteral")){
+            match("intLiteral");
+            return new NodoIntLit(currentToken);
+        } else if(is("charLiteral")){
+            match("charLiteral");
+            return new NodoCharLit(currentToken);
+        } else if(is("rw_null")){
+            match("rw_null");
+            return new NodoNullLit(currentToken);
+        } else throw new SyntaxException("Valid primitive literal", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private void referencia() {

@@ -14,4 +14,5 @@ public class String extends Class{
         addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
     }
     public void consolidate(){}
+    public void check(){}
 }

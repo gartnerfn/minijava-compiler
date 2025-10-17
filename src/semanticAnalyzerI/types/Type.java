@@ -1,6 +1,6 @@
 package semanticAnalyzerI.types;
 
-public class Type {
+public abstract class Type {
     public String name;
     public int lineNumber;
 
@@ -8,4 +8,6 @@ public class Type {
         this.name = name;
         this.lineNumber = lineNumber;
     }
+
+    public abstract boolean isCompatible(Type type);
 }

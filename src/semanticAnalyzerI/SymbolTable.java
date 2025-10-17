@@ -5,6 +5,7 @@ import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.predefined.Object;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.entities.predefined.String;
+import semanticAnalyzerII.nodes.sent.NodoBloque;
 
 import java.util.HashMap;
 
@@ -15,7 +16,7 @@ public class SymbolTable {
 
     public Entity currentEntity;
     public Routine currentRoutine;
-    public Block currentBlock;
+    public NodoBloque currentBlock;
 
     private SymbolTable(){}
 
@@ -64,7 +65,7 @@ public class SymbolTable {
         for(Interface itf : interfaces.values())
             itf.isWellDeclared();
 
-        for (semanticAnalyzerI.entities.Class cl : classes.values())
+        for (Class cl : classes.values())
             cl.isWellDeclared();
     }
 
@@ -73,9 +74,17 @@ public class SymbolTable {
             if(!itf.isConsolidated)
                 itf.consolidate();
 
-        for (semanticAnalyzerI.entities.Class cl : classes.values())
+        for (Class cl : classes.values())
             if(!cl.isConsolidated)
                 cl.consolidate();
+    }
+
+    public void check(){
+        for(Interface itf : interfaces.values())
+            itf.check();
+
+        for (Class cl : classes.values())
+            cl.check();
     }
 
     public void printTable() {

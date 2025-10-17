@@ -15,6 +15,7 @@ public class System extends Class {
         addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
     }
     public void consolidate(){}
+    public void check(){}
 
     public static int read() {
         try {

@@ -1,6 +1,7 @@
 package semanticAnalyzerI.entities;
 
 import semanticAnalyzerI.exceptions.SemanticException;
+import semanticAnalyzerII.nodes.sent.NodoBloque;
 import src.Token;
 
 public class Class extends Entity{
@@ -60,12 +61,19 @@ public class Class extends Entity{
         return !constructors.isEmpty();
     }
 
+    private void createConstructor(){
+        Constructor constructor = new Constructor(new Token("classId", this.name, 0), "");
+        constructor.addBlock(new NodoBloque());
+
+        addConstructor(constructor);
+    }
+
     public void isWellDeclared(){
         if(isStatic)
             throw new SemanticException("Una clase no puede ser static fuera de otra clase.", this.name, this.lineNumber);
 
         if(isConcrete() && !hasConstructor())
-            addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
+            createConstructor();
 
         Interface ancestorInheritanceInterface = symbolTable.existsInterface(ancestorInheritance);
         Class ancestorInheritanceClass = symbolTable.existsClass(ancestorInheritance);

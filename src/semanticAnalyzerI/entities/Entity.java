@@ -80,4 +80,15 @@ public class Entity {
 
         methods.put(method.name + method.parameters.size(), method);
     }
+
+    public void check(){
+        symbolTable.currentEntity = this;
+
+        for(Method method : methods.values()){
+            method.check();
+        }
+
+        for(Constructor constructor : constructors.values())
+            constructor.check();
+    }
 }

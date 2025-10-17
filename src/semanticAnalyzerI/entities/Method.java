@@ -3,6 +3,7 @@ package semanticAnalyzerI.entities;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.ReferenceType;
 import semanticAnalyzerI.types.Type;
+import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
 import src.Token;
 
 public class Method extends Routine{
@@ -13,7 +14,7 @@ public class Method extends Routine{
 
     public Type returnType;
 
-    public Method(Token tkn, Type returnType, String typeModifier, String visibilityModifier){
+    public Method(Token tkn, Type returnType, String typeModifier, String visibilityModifier, Entity declaredIn){
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
         this.returnType = returnType;
@@ -35,13 +36,15 @@ public class Method extends Routine{
                 isStatic = true;
                 break;
         }
+
+        this.declaredIn = declaredIn;
     }
 
     public boolean hasBody(){
-        return block != null;
+        return !(block instanceof NodoBloqueNulo);
     }
 
-    void isWellDeclared(){
+    public void isWellDeclared(){
         if(returnType instanceof ReferenceType){
             Class referenceType = symbolTable.existsClass(returnType.name);
 

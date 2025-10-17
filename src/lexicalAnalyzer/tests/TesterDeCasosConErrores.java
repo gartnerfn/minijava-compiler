@@ -1,6 +1,5 @@
 package lexicalAnalyzer.tests;
 
-import src.MainLex;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -12,12 +11,13 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import src.Main;
 
 @RunWith(Parameterized.class)
 public class TesterDeCasosConErrores {
     
     //TODO: el tipo de esta variable init tiene que ser la clase que tiene el main
-    private static final MainLex init = new MainLex();
+    private static final Main init = new Main();
     
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;

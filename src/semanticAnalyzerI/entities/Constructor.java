@@ -11,7 +11,7 @@ public class Constructor extends Routine{
             this.isPublic = false;
     }
 
-    void isWellDeclared(){
+    public void isWellDeclared(){
         super.isWellDeclared();
     }
 }

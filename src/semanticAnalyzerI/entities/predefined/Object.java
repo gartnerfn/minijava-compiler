@@ -20,6 +20,7 @@ public class Object extends Class {
         addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
     }
     public void consolidate(){}
+    public void check(){}
 
     static void debugPrint(int i){
         java.lang.System.out.println(i);

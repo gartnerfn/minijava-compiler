@@ -30,7 +30,9 @@ public class Main {
 
             symbolTable.isWellDeclared();
             symbolTable.consolidate();
-            symbolTable.printTable();
+//            symbolTable.printTable();
+
+            symbolTable.check();
 
             if(lexicalExceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");

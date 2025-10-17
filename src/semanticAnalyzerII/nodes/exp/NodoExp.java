@@ -1,4 +1,7 @@
 package semanticAnalyzerII.nodes.exp;
 
-public class NodoExp {
+import semanticAnalyzerI.types.Type;
+
+public abstract class NodoExp {
+    public abstract Type check();
 }
