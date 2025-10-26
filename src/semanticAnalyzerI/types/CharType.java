@@ -1,21 +1,19 @@
 package semanticAnalyzerI.types;
 
-import semanticAnalyzerI.exceptions.SemanticException;
-import src.Token;
-
 public class CharType extends Type {
     public CharType(){
-        super("boolean", 0);
+        super("boolean");
     }
 
     public CharType(int lineNumber){
-        super("boolean", lineNumber);
+        super("char", lineNumber);
     }
 
     public boolean isCompatible(Type type){
-        if(!(type instanceof CharType))
-            throw new SemanticException("Char type expected.", name, lineNumber);
+        return (type instanceof CharType);
+    }
 
-        return true;
+    public boolean conformsTo(Type type){
+        return (type instanceof CharType);
     }
 }

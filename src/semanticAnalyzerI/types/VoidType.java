@@ -1,13 +1,19 @@
 package semanticAnalyzerI.types;
 
-import src.Token;
-
 public class VoidType extends Type{
-    public VoidType(Token tkn){
-        super("void", tkn.lineNumber());
+    public VoidType(){
+        super("void");
+    }
+
+    public VoidType(int lineNumber){
+        super("void", lineNumber);
     }
 
     public boolean isCompatible(Type type){
+        return false;
+    }
+
+    public boolean conformsTo(Type type){
         return false;
     }
 }

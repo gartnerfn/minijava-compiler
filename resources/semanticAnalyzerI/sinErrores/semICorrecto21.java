@@ -1,9 +1,25 @@
 ///[SinErrores]
 
-interface A {
-    static void m(){}
+
+class A {
+    private boolean m1(){
+        return true;
+    }
+
+    public void m2(){
+        m1();
+    }
 }
 
-class B implements A {
-    static void m(){}
+//Redefinicion con distinto tipo de retorno
+class B extends A {
+    private int m1(){
+        return 1;}
 }
+
+
+
+
+
+
+

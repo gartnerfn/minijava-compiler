@@ -1,10 +1,8 @@
 package semanticAnalyzerI.types;
 
-import semanticAnalyzerI.exceptions.SemanticException;
-
 public class BooleanType extends Type {
     public BooleanType(){
-        super("boolean", 0);
+        super("boolean");
     }
 
     public BooleanType(int lineNumber){
@@ -12,9 +10,10 @@ public class BooleanType extends Type {
     }
 
     public boolean isCompatible(Type type){
-        if(!(type instanceof BooleanType))
-            throw new SemanticException("Boolean type expected.", name, lineNumber);
+        return (type instanceof BooleanType);
+    }
 
-        return true;
+    public boolean conformsTo(Type type){
+        return (type instanceof BooleanType);
     }
 }

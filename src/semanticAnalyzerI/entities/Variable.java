@@ -6,7 +6,7 @@ import semanticAnalyzerI.types.ReferenceType;
 import semanticAnalyzerI.types.Type;
 import src.Token;
 
-public class Variable {
+public abstract class Variable {
     SymbolTable symbolTable = SymbolTable.getInstance();
 
     public String name;

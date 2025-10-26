@@ -67,7 +67,7 @@ public class Interface extends Entity{
             }
 
             for(Method method : ancestorInheritanceInterface.methods.values()){
-                if(!method.isStatic && method.isPublic)
+                if(!method.isStatic && method.isPublic && existsMethod(method) == null)
                     addMethod(method);
             }
         }

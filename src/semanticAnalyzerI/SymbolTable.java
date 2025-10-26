@@ -33,6 +33,14 @@ public class SymbolTable {
         return symbolTable;
     }
 
+    public Class getClass(java.lang.String className){
+        return classes.get(className);
+    }
+
+    public Interface getInterface(java.lang.String interfaceName){
+        return interfaces.get(interfaceName);
+    }
+
     public void addClass(semanticAnalyzerI.entities.Class c){
         if(classes.containsKey(c.name))
             throw new SemanticException("Duplicated class.", c.name, c.lineNumber);

@@ -1,9 +1,10 @@
 package semanticAnalyzerII.nodes.lit;
 
+import semanticAnalyzerI.types.IntType;
 import src.Token;
 
 public class NodoIntLit extends NodoLit{
     public NodoIntLit(Token tkn){
-        super(tkn.lexeme());
+        super(tkn, new IntType());
     }
 }

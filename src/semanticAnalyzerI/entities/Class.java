@@ -34,6 +34,22 @@ public class Class extends Entity{
         }
     }
 
+    public boolean hasParentInheritance(){
+        return ancestorInheritance != null;
+    }
+
+    public boolean hasParentImplementation(){
+        return ancestorImplementation != null;
+    }
+
+    public String getParentInheritance(){
+        return ancestorInheritance;
+    }
+
+    public String getParentImplementation(){
+        return ancestorImplementation;
+    }
+
     public void inheritsFrom(Token ancestor){
         super.inheritsFrom(ancestor);
     }
@@ -146,11 +162,8 @@ public class Class extends Entity{
             Method thisMethod = existsMethod(method);
 
             if (thisMethod == null) {
-                if(method.isAbstract){
-                    if(!this.isAbstract)
-                        throw new SemanticException("La clase " + this.name + " no implementa todos los metodos heredados.", method.name, method.lineNumber);
-                    else
-                        addMethod(method);
+                if(method.isAbstract && !this.isAbstract){
+                    throw new SemanticException("La clase " + this.name + " no implementa todos los metodos heredados.", method.name, method.lineNumber);
                 } else
                     addMethod(method);
             } else {
@@ -160,7 +173,7 @@ public class Class extends Entity{
                     throw new SemanticException("El metodo redefinido no puede reducir la visibilidad del metodo heredado.", thisMethod.name, thisMethod.lineNumber);
                 } else if(thisMethod.isStatic && !method.isStatic){
                     throw new SemanticException("No se puede redefinir un metodo no estatico convirtiendolo en estatico.", thisMethod.name, thisMethod.lineNumber);
-                } else {
+                } else if(!method.isStatic && method.isPublic) {
                     if (!thisMethod.returnType.name.equals(method.returnType.name))
                         throw new SemanticException("El metodo heredado debe tener el mismo tipo de retorno.", thisMethod.name, thisMethod.lineNumber);
 
@@ -175,6 +188,8 @@ public class Class extends Entity{
                             throw new SemanticException("El metodo heredado debe tener los mismos tipos de parametros.", thisMethod.name, thisMethod.lineNumber);
                         }
                     }
+                } else if(method.isStatic) {
+                    throw new SemanticException("No se puede redefinir un metodo estatico.", thisMethod.name, thisMethod.lineNumber);
                 }
             }
         }
@@ -190,11 +205,8 @@ public class Class extends Entity{
                 Method thisMethod = existsMethod(method);
 
                 if (thisMethod == null) {
-                    if(method.isAbstract) {
-                        if (!this.isAbstract)
-                            throw new SemanticException("La clase no implementa todos los metodos de la interfaz.", method.name, method.lineNumber);
-                        else
-                            addMethod(method);
+                    if(method.isAbstract && !this.isAbstract) {
+                        throw new SemanticException("La clase no implementa todos los metodos de la interfaz.", method.name, method.lineNumber);
                     } else
                         addMethod(method);
                 } else {
@@ -217,6 +229,8 @@ public class Class extends Entity{
                                 throw new SemanticException("El metodo heredado debe tener los mismos tipos de parametros.", thisMethod.name, thisMethod.lineNumber);
                             }
                         }
+                    } else if(method.isStatic) {
+                        throw new SemanticException("No se puede redefinir un metodo estatico.", thisMethod.name, thisMethod.lineNumber);
                     }
                 }
             }
