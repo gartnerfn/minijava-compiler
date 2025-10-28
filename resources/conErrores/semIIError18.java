@@ -1,26 +1,24 @@
-//[Error:a|7]
+///[Error:==|9]
 
 class A {
-    void m1(){
-        var a = new B();
-        if (true){
-            var a = 3;
-        }
+    public boolean m1(){
+        var x = new B();
+        var y = new C();
+
+        return x == y;
     }
-
-}
-class B {
-
 }
 
+class B{
+
+}
+
+class C {
+
+}
 
 class Init{
     static void main()
-    {
-
-    }
-
-
+    { }
 }
-
 

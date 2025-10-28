@@ -282,10 +282,10 @@ public class SyntaxAnalyzer {
             symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
         } else if(is("=")){
             NodoExpComp init =  inicializacionAtributo();
-            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, init));
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, init, symbolTable.currentEntity));
         } else if(is(";")){
             match(";");
-            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, new NodoExpVacia()));
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, new NodoExpVacia(), symbolTable.currentEntity));
         } else throw new SyntaxException("(, = or ;", currentToken.lexeme(), currentToken.lineNumber());
     }
 
@@ -689,8 +689,8 @@ public class SyntaxAnalyzer {
 
     private NodoReferencia primarioPrima(Token methodVarId){
         if (is("(")) {
-            argsActuales();
-            return new NodoLlamadaMetodo(methodVarId);
+            List<NodoExp> args = argsActuales();
+            return new NodoLlamadaMetodo(methodVarId, args);
         } else {
             return new NodoLlamadaVar(methodVarId);
         }
@@ -716,26 +716,34 @@ public class SyntaxAnalyzer {
         argsActuales();
     }
 
-    private void argsActuales() {
+    private List<NodoExp> argsActuales() {
         match("(");
-        listaExpsOpcional();
+        List<NodoExp> args =  listaExpsOpcional();
         match(")");
+        return args;
     }
 
-    private void listaExpsOpcional() {
+    private List<NodoExp> listaExpsOpcional() {
         if (isExpresionStart())
-            listaExps();
+            return listaExps();
+        else {
+            return new ArrayList<>();
+        }
     }
 
-    private void listaExps() {
-        expresion();
-        listaExpsPrima();
+    private List<NodoExp> listaExps() {
+        NodoExp arg = expresion();
+        List<NodoExp> args = listaExpsPrima();
+        args.addFirst(arg);
+        return args;
     }
 
-    private void listaExpsPrima() {
+    private List<NodoExp> listaExpsPrima() {
         if (is(",")) {
             match(",");
-            listaExps();
+            return listaExps();
+        } else {
+            return new ArrayList<>();
         }
     }
 }

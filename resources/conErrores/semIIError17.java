@@ -1,24 +1,15 @@
-//[Error:a|6]
+///[Error:m1|5]
+//Falta return
 
 class A {
-    void m1(){
-        var a = new B();
-        var a = 2;
+    public boolean m1(){
+        var x = true;
+        var y = 5;
     }
-
 }
-class B {
-
-}
-
 
 class Init{
     static void main()
-    {
-
-    }
-
-
+    { }
 }
-
 

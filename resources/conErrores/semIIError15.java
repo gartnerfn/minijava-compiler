@@ -1,22 +1,19 @@
-//[Error:+|5]
+///[Error:x|5]
 
 class A {
-    void m1(int a){
-        if(2+2){
-
-        }
+    public boolean m1(){
+        var x
+                =
+                m2();
     }
 
+    public void m2(){
+        return;
+    }
 }
-
 
 class Init{
     static void main()
-    {
-
-    }
-
-
+    { }
 }
-
 

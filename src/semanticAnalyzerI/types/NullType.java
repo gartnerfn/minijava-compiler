@@ -1,7 +1,5 @@
 package semanticAnalyzerI.types;
 
-import javax.xml.crypto.dsig.Reference;
-
 public class NullType extends Type{
     public NullType(){
         super("null");
@@ -12,7 +10,7 @@ public class NullType extends Type{
     }
 
     public boolean isCompatible(Type type){
-        return false;
+        return (type instanceof ReferenceType);
     }
 
     public boolean conformsTo(Type type){

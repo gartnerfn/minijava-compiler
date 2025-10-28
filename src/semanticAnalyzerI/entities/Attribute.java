@@ -3,14 +3,17 @@ package semanticAnalyzerI.entities;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
 import semanticAnalyzerII.nodes.exp.NodoExpComp;
+import semanticAnalyzerII.nodes.exp.NodoExpVacia;
 import src.Token;
 
 public class Attribute extends Variable{
-    boolean isPublic;
+    public boolean isPublic;
+    public Entity declaredIn;
     NodoExpComp init;
 
-    public Attribute(Token tkn, Type type, String visibilityModifier, NodoExpComp init){
+    public Attribute(Token tkn, Type type, String visibilityModifier, NodoExpComp init, Entity declaredIn){
         super(tkn, type);
+        this.declaredIn = declaredIn;
         this.isPublic = !visibilityModifier.equals("private");
         this.init = init;
     }
@@ -19,9 +22,10 @@ public class Attribute extends Variable{
         super.isWellDeclared();
     }
 
-    public void check() {
-        if (init != null) {
+    public void check(){
+        if (!(init instanceof NodoExpVacia)) {
             Type initType = init.check();
+
             if (!initType.conformsTo(type))
                 throw new SemanticException("Inicialización incompatible con el tipo de atributo " + name, init.value, init.lineNumber);
         }

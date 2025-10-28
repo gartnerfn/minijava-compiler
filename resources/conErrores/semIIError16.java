@@ -1,23 +1,14 @@
-//[Error:a|5]
+///[Error:x|6]
 
 class A {
-    void m1(int a){
-        var a = new B();
+    public boolean m1(){
+        var x = true;
+        var x = 5;
     }
-
 }
-class B {
-
-}
-
 
 class Init{
     static void main()
-    {
-
-    }
-
-
+    { }
 }
-
 

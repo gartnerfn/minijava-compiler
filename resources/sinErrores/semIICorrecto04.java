@@ -1,4 +1,3 @@
-//[SinErrores]
 // mediante la llamada a un metodo directo accede encadenadamente a una var
 // Tambien la invocacion a un Ctor
 class A {

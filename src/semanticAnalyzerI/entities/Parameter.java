@@ -12,7 +12,5 @@ public class Parameter extends Variable{
         super.isWellDeclared();
     }
 
-    public void check(){
-
-    }
+    public void check(){}
 }

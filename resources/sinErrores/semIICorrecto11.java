@@ -1,18 +1,19 @@
-//[SinErrores]
+// Prueba un lado izquierdo simple
 
 class A {
-    void m1(int a){
-        a = 1;
+    private void m1(){
+        var a = 'a';
+        var b = "ba";
+        var c = 3;
+        var d = new B();
+
+        return;
     }
-   
-    
-    
-    
 }
 
-class Init{
-    static void main()
-    { }
+class B{
+
 }
+
 
 

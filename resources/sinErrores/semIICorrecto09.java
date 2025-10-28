@@ -1,23 +1,17 @@
-//[SinErrores]
+// Prueba un lado izquierdo simple
 
 class A {
     void m1(){
-        while (6<7) {
-            ;;;
-        }
-        while('a'!='b'){
-            ;;;
-        }
-    }
-   
-    
-    
-    
-}
+        var x = 5;
 
-class Init{
-    static void main()
-    { }
-}
+        if(x
+                <
+                6){
+            x = 10;
+        } else
+            x = x + 1;
+    }
+}    
+
 
 

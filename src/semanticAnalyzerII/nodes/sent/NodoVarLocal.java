@@ -3,10 +3,8 @@ package semanticAnalyzerII.nodes.sent;
 import semanticAnalyzerI.entities.Variable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.NullType;
-import semanticAnalyzerI.types.Type;
 import semanticAnalyzerI.types.VoidType;
 import semanticAnalyzerII.nodes.exp.NodoExp;
-import semanticAnalyzerII.nodes.exp.NodoExpVacia;
 import src.Token;
 
 public class NodoVarLocal extends Variable {

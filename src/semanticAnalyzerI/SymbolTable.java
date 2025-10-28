@@ -77,6 +77,15 @@ public class SymbolTable {
         return symbolTable;
     }
 
+    public Entity getEntity(java.lang.String name){
+        Class c = getClass(name);
+
+        if(c != null)
+            return c;
+
+        return getInterface(name);
+    }
+
     public Class getClass(java.lang.String className){
         return classes.get(className);
     }

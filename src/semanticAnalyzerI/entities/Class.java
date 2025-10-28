@@ -34,22 +34,6 @@ public class Class extends Entity{
         }
     }
 
-    public boolean hasParentInheritance(){
-        return ancestorInheritance != null;
-    }
-
-    public boolean hasParentImplementation(){
-        return ancestorImplementation != null;
-    }
-
-    public String getParentInheritance(){
-        return ancestorInheritance;
-    }
-
-    public String getParentImplementation(){
-        return ancestorImplementation;
-    }
-
     public void inheritsFrom(Token ancestor){
         super.inheritsFrom(ancestor);
     }
@@ -159,7 +143,7 @@ public class Class extends Entity{
         }
 
         for (Method method : ancestorInheritanceClass.methods.values()) {
-            Method thisMethod = existsMethod(method);
+            Method thisMethod = existsMethod(method.name, method.parameters.size());
 
             if (thisMethod == null) {
                 if(method.isAbstract && !this.isAbstract){
@@ -202,7 +186,7 @@ public class Class extends Entity{
             }
 
             for(Method method : ancestorImplementationInterface.methods.values()){
-                Method thisMethod = existsMethod(method);
+                Method thisMethod = existsMethod(method.name, method.parameters.size());
 
                 if (thisMethod == null) {
                     if(method.isAbstract && !this.isAbstract) {

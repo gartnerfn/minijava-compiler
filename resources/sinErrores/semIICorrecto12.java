@@ -1,19 +1,17 @@
-//[SinErrores]
-
 class A {
-    int a;
-    void m1(){
-        a = 1;
+    public boolean m1(){
+        var x = "a";
+
+        {
+            var y = x;
+        }
+
+        var b = 5;
     }
-   
-    
-    
-    
 }
 
 class Init{
     static void main()
     { }
 }
-
 

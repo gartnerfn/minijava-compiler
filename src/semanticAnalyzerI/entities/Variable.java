@@ -10,6 +10,7 @@ import src.Token;
 public abstract class Variable extends NodoSentencia {
     public SymbolTable symbolTable = SymbolTable.getInstance();
 
+
     public String name;
     public int lineNumber;
     public Type type;

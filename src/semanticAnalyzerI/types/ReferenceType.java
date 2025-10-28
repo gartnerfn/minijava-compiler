@@ -1,6 +1,8 @@
 package semanticAnalyzerI.types;
 
 import semanticAnalyzerI.SymbolTable;
+import semanticAnalyzerI.entities.Class;
+import semanticAnalyzerI.entities.Entity;
 import src.Token;
 
 public class ReferenceType extends Type{
@@ -11,26 +13,33 @@ public class ReferenceType extends Type{
     }
 
     public boolean isCompatible(Type type){
-        return false;
+        if (type instanceof NullType) return true;
+        if (!(type instanceof ReferenceType)) return false;
+
+        return this.conformsTo(type) || type.conformsTo(this);
     }
 
     public boolean conformsTo(Type type){
+        if(type instanceof NullType)
+            return true;
+
         if (!(type instanceof ReferenceType))
             return false;
 
         if (this.name.equals(type.name))
             return true;
 
-        semanticAnalyzerI.entities.Class currentClass = (semanticAnalyzerI.entities.Class) symbolTable.currentEntity;
-        while (currentClass.hasParentInheritance() || currentClass.hasParentImplementation()) {
-            String parentInheritance = currentClass.getParentInheritance();
-            String parentImplementation = currentClass.getParentImplementation();
+        Entity thisEntity = symbolTable.getEntity(this.name);
+
+        while (thisEntity.hasParentInheritance() || thisEntity.hasParentImplementation()) {
+            String parentInheritance = thisEntity.getParentInheritance();
+            String parentImplementation = thisEntity.getParentImplementation();
             String parent = parentInheritance != null ? parentInheritance : parentImplementation;
 
             if (parent.equals(type.name))
                 return true;
 
-            currentClass = symbolTable.getClass(parent);
+            thisEntity = symbolTable.getEntity(parent);
         }
 
         return false;

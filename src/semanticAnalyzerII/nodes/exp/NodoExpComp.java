@@ -29,8 +29,13 @@ public class NodoExpComp extends NodoExp{
         Type expectedTypes = getExpectedTypes();
         Type resultType = getResultType();
 
-        if (!leftType.conformsTo(rightType) || !rightType.conformsTo(expectedTypes) || !leftType.conformsTo(expectedTypes))
+        if(value.equals("==") || value.equals("!=")){
+            if(!leftType.conformsTo(rightType)) {
+                throw new SemanticException("Los tipos no conforman para el operador " + value, value, lineNumber);
+            }
+        } else if (!leftType.isCompatible(rightType) || !leftType.conformsTo(expectedTypes))
             throw new SemanticException("Los tipos no conforman para el operador " + value, value, lineNumber);
+
 
         return resultType;
     }
@@ -41,7 +46,7 @@ public class NodoExpComp extends NodoExp{
 
     public Type getExpectedTypes() {
         switch (value) {
-            case "+", "-", "*", "/", "%", ">",">=","<","<=", "==", "!=" -> {
+            case "+", "-", "*", "/", "%", ">",">=","<","<=" -> {
                 return new IntType();
             }
             default -> {
@@ -55,11 +60,8 @@ public class NodoExpComp extends NodoExp{
             case "+", "-", "*", "/", "%" -> {
                 return new IntType();
             }
-            case "&&", "||", ">",">=","<","<=","==", "!=" -> {
-                return new BooleanType();
-            }
             default -> {
-                return new NullType();
+                return new BooleanType();
             }
         }
     }

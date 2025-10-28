@@ -1,28 +1,17 @@
-//[SinErrores]
+// Prueba un lado izquierdo simple
 
 class A {
     void m1(){
-        while (6<7) {
-            if (true);
-             else;
-
-        }
-        if(false){
-            while('a'!='b'){
-                ;;;
-            }
-        }
-
+        var a = 'a';
+        var b = "ba";
+        var c = 3;
+        var d = new B();
     }
-   
-    
-    
-    
 }
 
-class Init{
-    static void main()
-    { }
+class B{
+
 }
+
 
 

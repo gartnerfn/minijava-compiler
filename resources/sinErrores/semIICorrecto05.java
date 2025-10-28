@@ -3,10 +3,7 @@
 class A {
     B a1;
     int a2;
-   
-    
-    
-    
+
 } 
 
 class B extends A{
@@ -15,7 +12,6 @@ class B extends A{
      void m1(B p1)     
     {
         a1.a3.a2 = 4;
-        
     }
 }
 

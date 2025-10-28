@@ -1,23 +1,12 @@
-//[SinErrores]
-
 class A {
-     public B att = new B();
+    public boolean m1(){
+        var x = m2();
 
-
-}
-class B extends A{
-
-}
-class C {
-    A a1;
-
-    void m1(){
-        a1 = new A();
-        m2(a1.att);
+        return x;
     }
 
-    void m2(B p1){
-
+    public boolean m2(){
+        return true;
     }
 }
 
@@ -25,5 +14,4 @@ class Init{
     static void main()
     { }
 }
-
 

@@ -5,7 +5,9 @@ import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerII.nodes.sent.NodoBloque;
 import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Routine {
@@ -19,6 +21,7 @@ public class Routine {
     public int lineNumber;
 
     public Map<String, Parameter> parameters = new LinkedHashMap<>();
+    public List<Parameter> parameterList = new ArrayList<>();
     NodoBloque block;
 
     public void addParameter(Parameter parameter){
@@ -26,6 +29,7 @@ public class Routine {
             throw new SemanticException("Duplicated parameter.", parameter.name, parameter.lineNumber);
 
         parameters.put(parameter.name, parameter);
+        parameterList.add(parameter);
     }
 
     public Parameter existsParameter(String name){

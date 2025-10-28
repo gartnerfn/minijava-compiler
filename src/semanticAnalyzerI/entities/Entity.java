@@ -54,11 +54,47 @@ public class Entity {
     }
 
     public Attribute existsAttribute(String name){
-        return attributes.get(name + '|' + this.name);
+        Attribute attr = attributes.get(name + '|' + this.name);
+
+        if(attr == null){
+            Entity ent = this;
+
+            while (ent.hasParentInheritance() || ent.hasParentImplementation()) {
+                String parentInheritance = ent.getParentInheritance();
+                String parentImplementation = ent.getParentImplementation();
+                String parent = parentInheritance != null ? parentInheritance : parentImplementation;
+
+                attr = attributes.get(name + '|' + parent);
+
+                if(attr != null )
+                    return attr;
+
+                ent = symbolTable.getEntity(parent);
+            }
+        }
+
+
+        return attr;
     }
 
-    public Method existsMethod(Method method){
-        return methods.get(method.name + method.parameters.size());
+    public boolean hasParentInheritance(){
+        return ancestorInheritance != null;
+    }
+
+    public boolean hasParentImplementation(){
+        return ancestorImplementation != null;
+    }
+
+    public String getParentInheritance(){
+        return ancestorInheritance;
+    }
+
+    public String getParentImplementation(){
+        return ancestorImplementation;
+    }
+
+    public Method existsMethod(String methodName, int parameterCount){
+        return methods.get(methodName + parameterCount);
     }
 
     public void addInheritedAttribute(Attribute attribute, String ancestor){
@@ -73,7 +109,7 @@ public class Entity {
     }
 
     public void addMethod(Method method){
-        Method previousMethod = existsMethod(method);
+        Method previousMethod = existsMethod(method.name, method.parameters.size());
 
         if(previousMethod != null)
             throw new SemanticException("Duplicated method.", method.name, method.lineNumber);
@@ -84,11 +120,19 @@ public class Entity {
     public void check(){
         symbolTable.currentEntity = this;
 
-        for(Method method : methods.values()){
-            method.check();
+        for(Attribute attribute : attributes.values()){
+            if(attribute.declaredIn == this)
+                attribute.check();
         }
 
         for(Constructor constructor : constructors.values())
             constructor.check();
+
+        for(Method method : methods.values()){
+            if(method.declaredIn == this)
+                method.check();
+        }
+
+
     }
 }

@@ -1,4 +1,4 @@
-//[Error:null|4]
+//[Error:=|6]
 
 class A {
     public int metodo(){
@@ -6,8 +6,6 @@ class A {
         var a = 0;
     }
 }
-
-
 
 
 class Init{

@@ -1,22 +1,17 @@
-//[Error:m1|8]
+///[Error:else|6]
 
 class A {
-    void m1(int a){
+    public boolean m1(){
+        if(false)
+        else {
+            var a = 2;
+        }
     }
-
-    int m2(){
-        m1(2,true);
-    }
-    
-    
 }
 
 class Init{
     static void main()
-    {
-
-    }
-
+    { }
 }
 
 

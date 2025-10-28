@@ -1,24 +1,25 @@
-//[Error:;|6]
+///[Error:'a'|6]
 
 class A {
-    void m1(){
-        var a = new B();
-        a.att;
+    private int x
+            =
+            'a';
+
+    public boolean m1(){
+        return true;
     }
-
-}
-class B {
-    public int att;
 }
 
+class B{
+
+}
+
+class C {
+
+}
 
 class Init{
     static void main()
-    {
-
-    }
-
-
+    { }
 }
-
 

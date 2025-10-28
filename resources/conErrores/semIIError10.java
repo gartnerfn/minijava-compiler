@@ -1,23 +1,16 @@
-//[Error:B|5]
+///[Error:4|6]
 
 class A {
-    void m1(int a){
-        var a = new B(true);
-    }
-
-}
-class B{
-    public B(int a){
-        
+    public boolean m1(){
+        while(
+                4
+        );
     }
 }
 
 class Init{
     static void main()
-    {
-
-    }
-
+    { }
 }
 
 
