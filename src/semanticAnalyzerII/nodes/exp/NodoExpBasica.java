@@ -15,9 +15,7 @@ public class NodoExpBasica extends NodoExpComp{
     }
 
     public Type check(){
-        System.out.println(operand);
-
-        Type operandType = operand.type;
+        Type operandType = operand.check();
         Type expectedType = getExpectedType();
 
         if (!operandType.conformsTo(expectedType))

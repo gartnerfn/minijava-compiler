@@ -1,6 +1,5 @@
 package semanticAnalyzerII.nodes.sent;
 
-import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.entities.Method;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
@@ -22,9 +21,9 @@ public class NodoReturn extends NodoSentencia{
         Method method = (Method) symbolTable.currentRoutine;
         Type methodType = method.returnType;
 
-        Type returnExpType = returnExp.check();
+        Type returnType = returnExp.check();
 
-        if(!returnExpType.conformsTo(methodType))
-            throw new SemanticException("Tipo de retorno incompatible en el método " + method.name + ", el valor de retorno " + returnExpType.name + " no conforma con " + methodType.name, name, lineNumber);
+        if(!returnType.conformsTo(methodType))
+            throw new SemanticException("Tipo de retorno incompatible en el método " + method.name + ", el valor de retorno " + returnType.name + " no conforma con " + methodType.name, name, lineNumber);
     }
 }

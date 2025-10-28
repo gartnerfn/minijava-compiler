@@ -10,13 +10,15 @@ import src.Token;
 public class NodoExpComp extends NodoExp{
     NodoExpComp leftSide;
     NodoExpBasica rightSide;
-    Token operator;
 
     public NodoExpComp(){}
 
-    public NodoExpComp(NodoExpComp leftSide, Token operator,  NodoExpBasica rightSide){
+    public NodoExpComp(NodoExpComp leftSide, Token operator, NodoExpBasica rightSide){
         this.leftSide = leftSide;
-        this.operator = operator;
+
+        this.value = operator.lexeme();
+        this.lineNumber = operator.lineNumber();
+
         this.rightSide = rightSide;
     }
 
@@ -25,10 +27,10 @@ public class NodoExpComp extends NodoExp{
         Type rightType = rightSide.check();
 
         Type expectedTypes = getExpectedTypes();
-        Type resultType = getResultType(operator);
+        Type resultType = getResultType();
 
         if (!leftType.conformsTo(rightType) || !rightType.conformsTo(expectedTypes) || !leftType.conformsTo(expectedTypes))
-            throw new SemanticException("Los tipos no conforman para el operador " + operator.lexeme(), operator.lexeme(), operator.lineNumber());
+            throw new SemanticException("Los tipos no conforman para el operador " + value, value, lineNumber);
 
         return resultType;
     }
@@ -38,7 +40,7 @@ public class NodoExpComp extends NodoExp{
     }
 
     public Type getExpectedTypes() {
-        switch (operator.token()) {
+        switch (value) {
             case "+", "-", "*", "/", "%", ">",">=","<","<=", "==", "!=" -> {
                 return new IntType();
             }
@@ -48,8 +50,8 @@ public class NodoExpComp extends NodoExp{
         }
     }
 
-    public Type getResultType(Token operator) {
-        switch (operator.token()) {
+    public Type getResultType() {
+        switch (value) {
             case "+", "-", "*", "/", "%" -> {
                 return new IntType();
             }
