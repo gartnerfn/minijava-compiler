@@ -10,7 +10,7 @@ public class SemanticException extends RuntimeException {
         final String RESET = "\u001B[0m";
 
         String errorDescription =
-                "Semantic error on line " + lineNumber + ". " + error;
+                "Semantic error on line " + lineNumber + ". " + error + ".";
 
         String errorMessage = "[Error:" + lexeme + "|" + lineNumber + "]";
 

@@ -1,8 +1,20 @@
-// Prueba un lado izquierdo simple
+// Prueba un lado izquierdo con dos encadenamiento y atributos heredados
 
 class A {
-    void m1(){}
-}    
+    void m1(){
+        if (true) {
+            ;;;
+        }
+    }
+   
+    
+    
+    
+}
 
+class Init{
+    static void main()
+    { }
+}
 
 

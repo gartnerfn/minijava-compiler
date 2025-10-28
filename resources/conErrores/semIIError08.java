@@ -1,17 +1,18 @@
-///[Error:4|6]
+//[Error:B|5]
 
 class A {
-    public boolean m1(){
-        if(
-                4
-        );
-        else;
+    void m1(){
+        var a = new B();
     }
+
 }
 
 class Init{
     static void main()
-    { }
+    {
+
+    }
+
 }
 
 

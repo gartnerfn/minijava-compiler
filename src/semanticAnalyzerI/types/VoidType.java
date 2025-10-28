@@ -14,6 +14,6 @@ public class VoidType extends Type{
     }
 
     public boolean conformsTo(Type type){
-        return false;
+        return (type instanceof VoidType);
     }
 }

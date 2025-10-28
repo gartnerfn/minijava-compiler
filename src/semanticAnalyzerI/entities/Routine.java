@@ -28,11 +28,7 @@ public class Routine {
         parameters.put(parameter.name, parameter);
     }
 
-    public boolean existsParameter(String name){
-        return parameters.containsKey(name);
-    }
-
-    public Parameter getParameter(String name){
+    public Parameter existsParameter(String name){
         return parameters.get(name);
     }
 

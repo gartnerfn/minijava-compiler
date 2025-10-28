@@ -4,9 +4,9 @@ import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.entities.*;
 import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.types.*;
-import semanticAnalyzerII.nodes.exp.NodoExp;
-import semanticAnalyzerII.nodes.exp.NodoExpVacia;
+import semanticAnalyzerII.nodes.exp.*;
 import semanticAnalyzerII.nodes.lit.*;
+import semanticAnalyzerII.nodes.ref.*;
 import semanticAnalyzerII.nodes.sent.*;
 import src.Token;
 import syntaxAnalyzer.exceptions.SyntaxException;
@@ -281,18 +281,19 @@ public class SyntaxAnalyzer {
             method.addBlock(block);
             symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
         } else if(is("=")){
-            inicializacionAtributo();
-            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier));
+            NodoExpComp init =  inicializacionAtributo();
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, init));
         } else if(is(";")){
             match(";");
-            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier));
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, new NodoExpVacia()));
         } else throw new SyntaxException("(, = or ;", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void inicializacionAtributo(){
+    private NodoExpComp inicializacionAtributo(){
         operadorAsignacion();
-        expresionCompuesta();
+        NodoExpComp init = expresionCompuesta();
         match(";");
+        return init;
     }
 
     private void constructor(Token classId, String visibilityModifier){
@@ -394,16 +395,13 @@ public class SyntaxAnalyzer {
             return bloque();
         } else if(is(";")){
             match(";");
-            NodoBloque block = new NodoBloqueNulo();
-            symbolTable.currentBlock = block;
-            return block;
+            return new NodoBloqueNulo();
         } else throw new SyntaxException("{ or ;", currentToken.lexeme(), currentToken.lineNumber());
     }
 
     private NodoBloque bloque() {
         match("{");
         NodoBloque block = new NodoBloque();
-        symbolTable.currentBlock = block;
         block.sentences = listaSentencias(block);
         match("}");
         return block;
@@ -416,7 +414,7 @@ public class SyntaxAnalyzer {
         if (isSentenciaStart()) {
             NodoSentencia sentence = sentencia(block);
             sentenceList = listaSentencias(block);
-            sentenceList.add(sentence);
+            sentenceList.addFirst(sentence);
         }
 
         return sentenceList;
@@ -427,8 +425,9 @@ public class SyntaxAnalyzer {
             match(";");
             return new NodoSentenciaVacia();
         } else if (is("rw_var")) {
-            varLocal();
+            NodoSentencia varLocal = varLocal();
             match(";");
+            return varLocal;
         } else if (is("rw_return")) {
             NodoSentencia ret = returnSentence();
             match(";");
@@ -439,23 +438,26 @@ public class SyntaxAnalyzer {
             return whileSentence(block);
         } else if(is("rw_for")){
             forSentence(block);
+            return new NodoSentenciaVacia();
         } else if (is("{")) {
             return bloque();
         } else if(isExpresionStart()){
-            expresion();
+            Token tkn = currentToken;
+            NodoExp exp = expresion();
             match(";");
+            return new NodoSentenciaConExp(tkn, exp);
         } else {
             throw new SyntaxException("Valid sentence", currentToken.lexeme(), currentToken.lineNumber());
         }
-
-        return new NodoSentenciaVacia();
     }
 
-    private void varLocal() {
+    private NodoVarLocal varLocal() {
         match("rw_var");
+        Token tkn = currentToken;
         match("methodVarId");
         match("=");
-        expresionCompuesta();
+        NodoExp exp = expresionCompuesta();
+        return new NodoVarLocal(tkn, exp);
     }
 
     private NodoSentencia returnSentence() {
@@ -542,15 +544,18 @@ public class SyntaxAnalyzer {
     }
 
     private NodoExp expresion() {
-        NodoExp nodoExpComp = expresionCompuesta();
-        expresionPrima();
-        return nodoExpComp;
+        NodoExpComp leftSide = expresionCompuesta();
+        return expresionPrima(leftSide);
     }
 
-    private void expresionPrima() {
+    private NodoExp expresionPrima(NodoExpComp leftSide) {
         if (is("=")) {
+            Token tkn = currentToken;
             operadorAsignacion();
-            expresionCompuesta();
+            NodoExpComp rightSide = expresionCompuesta();
+            return new NodoAsignacion(tkn, leftSide, rightSide);
+        } else {
+            return leftSide;
         }
     }
 
@@ -558,19 +563,22 @@ public class SyntaxAnalyzer {
         match(currentToken.token());
     }
 
-    private NodoExp expresionCompuesta() {
-        NodoExp exp = expresionBasica();
+    private NodoExpComp expresionCompuesta() {
+        NodoExpBasica leftSide = expresionBasica();
         ternariaOpcional();
-        expresionCompuestaPrima();
-        return exp;
+        return expresionCompuestaPrima(leftSide);
     }
 
-    private void expresionCompuestaPrima() {
+    private NodoExpComp expresionCompuestaPrima(NodoExpComp leftSide) {
         if (isOperadorBinario()) {
+            Token operator = currentToken;
             operadorBinario();
-            expresionBasica();
+            NodoExpBasica rightSide = expresionBasica();
             ternariaOpcional();
-            expresionCompuestaPrima();
+            NodoExpComp nodoExpComp = new NodoExpComp(leftSide, operator, rightSide);
+            return expresionCompuestaPrima(nodoExpComp);
+        } else {
+            return leftSide;
         }
     }
 
@@ -587,27 +595,28 @@ public class SyntaxAnalyzer {
         match(currentToken.token());
     }
 
-    private NodoExp expresionBasica() {
+    private NodoExpBasica expresionBasica() {
         if (isOperadorUnario()) {
-            operadorUnario();
-            operando();
-            return new NodoExpVacia();
+            Token unaryOperator = operadorUnario();
+            NodoOperando operand = operando();
+            return new NodoExpBasica(unaryOperator, operand);
         } else if(isPrimitivo() || isPrimario()){
             return operando();
         } else
             throw new SyntaxException("Valid expression", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void operadorUnario() {
+    private Token operadorUnario() {
+        Token unaryOperator = currentToken;
         match(currentToken.token());
+        return unaryOperator;
     }
 
-    private NodoExp operando() {
+    private NodoOperando operando() {
         if (isPrimitivo()){
             return primitivo();
         } else if(isPrimario()){
-            referencia();
-            return new NodoExpVacia();
+            return referencia();
         } else
             throw new SyntaxException("Valid operand", currentToken.lexeme(), currentToken.lineNumber());
     }
@@ -632,9 +641,10 @@ public class SyntaxAnalyzer {
         } else throw new SyntaxException("Valid primitive literal", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void referencia() {
-        primario();
+    private NodoOperando referencia() {
+        NodoOperando prim = primario();
         referenciaPrima();
+        return prim;
     }
 
     private void referenciaPrima() {
@@ -652,27 +662,37 @@ public class SyntaxAnalyzer {
         }
     }
 
-    private void primario() {
-        if (is("rw_this"))
+    private NodoOperando primario() {
+        if (is("rw_this")){
             match("rw_this");
-        else if (is("stringLiteral"))
+            return new NodoReferenciaThis();
+        } else if (is("stringLiteral")){
+            NodoLit lit = new NodoStringLit(currentToken);
             match("stringLiteral");
-        else if (is("rw_new"))
+            return lit;
+        } else if (is("rw_new")){
             llamadaConstructor();
-        else if (is("("))
+            return new NodoLlamadaConstructor();
+        } else if (is("(")){
             expresionParentizada();
-        else if (is("methodVarId")) {
+            return new NodoExpresionParentizada();
+        } else if (is("methodVarId")) {
+            Token methodVarId = currentToken;
             match("methodVarId");
-            primarioPrima();
-        } else if (is("classId"))
+            return primarioPrima(methodVarId);
+        } else if (is("classId")){
             llamadaMetodoEstatico();
-        else
+            return new NodoLlamadaMetodoEstatico();
+        } else
             throw new SyntaxException("this, new, string literal, method identifier, variable identifier or class identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
 
-    private void primarioPrima(){
+    private NodoReferencia primarioPrima(Token methodVarId){
         if (is("(")) {
             argsActuales();
+            return new NodoLlamadaMetodo(methodVarId);
+        } else {
+            return new NodoLlamadaVar(methodVarId);
         }
     }
 

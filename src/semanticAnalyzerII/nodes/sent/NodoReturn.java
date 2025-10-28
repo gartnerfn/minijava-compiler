@@ -22,7 +22,9 @@ public class NodoReturn extends NodoSentencia{
         Method method = (Method) symbolTable.currentRoutine;
         Type methodType = method.returnType;
 
-        if(!returnExp.check().conformsTo(methodType))
-            throw new SemanticException("Tipo de retorno incompatible en el método " + method.name, returnExp.value, returnExp.lineNumber);
+        Type returnExpType = returnExp.check();
+
+        if(!returnExpType.conformsTo(methodType))
+            throw new SemanticException("Tipo de retorno incompatible en el método " + method.name + ", el valor de retorno " + returnExpType.name + " no conforma con " + methodType.name, name, lineNumber);
     }
 }

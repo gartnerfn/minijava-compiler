@@ -1,15 +1,20 @@
-// Prueba un lado izquierdo simple
+//[SinErrores]
 
 class A {
     void m1(){
-        if(true){
-            ;
-            ;
-            ;
-            ;
+        while (true) {
+            ;;;
         }
     }
-}    
+   
+    
+    
+    
+}
 
+class Init{
+    static void main()
+    { }
+}
 
 

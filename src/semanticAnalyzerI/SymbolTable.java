@@ -5,20 +5,64 @@ import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.predefined.Object;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.entities.predefined.String;
-import semanticAnalyzerII.nodes.sent.NodoBloque;
+import semanticAnalyzerII.nodes.sent.NodoVarLocal;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolTable {
     private static SymbolTable symbolTable = null;
     private final HashMap<java.lang.String, semanticAnalyzerI.entities.Class> classes = new HashMap<>();
     private final HashMap<java.lang.String, Interface> interfaces = new HashMap<>();
+    private final Deque<Map<java.lang.String, NodoVarLocal>> blockStack = new ArrayDeque<>();
 
     public Entity currentEntity;
     public Routine currentRoutine;
-    public NodoBloque currentBlock;
 
     private SymbolTable(){}
+
+    public void openBlock() {
+        blockStack.push(new HashMap<>());
+    }
+
+    public void closeBlock() {
+        blockStack.pop();
+    }
+
+    public void addLocalVar(NodoVarLocal localVar) {
+        Map<java.lang.String, NodoVarLocal> currentBlock = blockStack.peek();
+
+        if (currentBlock != null){
+            for (Map<java.lang.String , NodoVarLocal> block : blockStack)
+                if (block.containsKey(localVar.name))
+                    throw new SemanticException("Variable local '" + localVar.name + "' ya declarada en este ámbito", localVar.name, localVar.lineNumber);
+
+            if (currentRoutine != null && currentRoutine.existsParameter(localVar.name) != null)
+                throw new SemanticException("Variable local '" + localVar.name + "' ya declarada como parámetro del método '" + currentRoutine.name + "'", localVar.name, localVar.lineNumber);
+
+            currentBlock.put(localVar.name, localVar);
+        }
+    }
+
+    public Variable existsVar(java.lang.String name) {
+        Variable variable = null;
+
+        for (Map<java.lang.String , NodoVarLocal> block : blockStack) {
+            NodoVarLocal var = block.get(name);
+            if (var != null)
+                return var;
+        }
+
+        if (currentRoutine != null)
+            variable = currentRoutine.existsParameter(name);
+
+        if (currentEntity != null && variable == null)
+            variable = currentEntity.existsAttribute(name);
+
+        return variable;
+    }
 
     public void deleteInstance(){
         symbolTable = null;

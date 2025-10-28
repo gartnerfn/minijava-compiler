@@ -57,7 +57,7 @@ public class Main {
             for(LexicalException exception : lexicalExceptions)
                 System.out.println(exception.getMessage());
 
-            symbolTable.printTable();
+//            symbolTable.printTable();
             System.out.println(smE.getMessage());
         } finally {
             try {

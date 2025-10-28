@@ -1,7 +1,5 @@
 package semanticAnalyzerI.entities;
 
-import semanticAnalyzerI.exceptions.SemanticException;
-import semanticAnalyzerI.types.ReferenceType;
 import semanticAnalyzerI.types.Type;
 import src.Token;
 
@@ -12,5 +10,9 @@ public class Parameter extends Variable{
 
     void isWellDeclared(){
         super.isWellDeclared();
+    }
+
+    public void check(){
+
     }
 }

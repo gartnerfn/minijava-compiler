@@ -53,8 +53,8 @@ public class Entity {
         ancestorImplementation = ancestor.lexeme();
     }
 
-    public boolean existsAttribute(Attribute attribute){
-        return attributes.containsKey(attribute.name + '|' + this.name);
+    public Attribute existsAttribute(String name){
+        return attributes.get(name + '|' + this.name);
     }
 
     public Method existsMethod(Method method){
@@ -66,7 +66,7 @@ public class Entity {
     }
 
     public void addAttribute(Attribute attribute){
-        if(existsAttribute(attribute))
+        if(existsAttribute(attribute.name) != null)
             throw new SemanticException("Duplicated attribute.", attribute.name, attribute.lineNumber);
 
         attributes.put(attribute.name + '|' + this.name, attribute);

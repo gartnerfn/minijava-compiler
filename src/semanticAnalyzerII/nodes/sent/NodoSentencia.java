@@ -5,8 +5,8 @@ import semanticAnalyzerI.SymbolTable;
 public abstract class NodoSentencia {
     SymbolTable symbolTable = SymbolTable.getInstance();
 
-    String name;
-    int lineNumber;
+    public String name;
+    public int lineNumber;
 
     public abstract void check();
 }

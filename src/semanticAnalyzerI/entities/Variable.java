@@ -4,14 +4,17 @@ import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.ReferenceType;
 import semanticAnalyzerI.types.Type;
+import semanticAnalyzerII.nodes.sent.NodoSentencia;
 import src.Token;
 
-public abstract class Variable {
-    SymbolTable symbolTable = SymbolTable.getInstance();
+public abstract class Variable extends NodoSentencia {
+    public SymbolTable symbolTable = SymbolTable.getInstance();
 
     public String name;
     public int lineNumber;
     public Type type;
+
+    public Variable(){}
 
     public Variable(Token tkn, Type type){
         this.name = tkn.lexeme();
