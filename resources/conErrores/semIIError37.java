@@ -1,4 +1,4 @@
-//[Error:this|5]
+//[Error:=|5]
 
 class A {
     static void m1(){

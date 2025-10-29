@@ -33,7 +33,7 @@ public class Entity {
     }
 
     public void addConstructor(Constructor constructor){
-        Constructor previousCons = existsConstructor(constructor);
+        Constructor previousCons = existsConstructor(constructor.name, constructor.parameters.size());
 
         if(previousCons != null)
             throw new SemanticException("Duplicated constructor.", constructor.name, constructor.lineNumber);
@@ -41,8 +41,8 @@ public class Entity {
         constructors.put(constructor.name + constructor.parameters.size(), constructor);
     }
 
-    public Constructor existsConstructor(Constructor constructor){
-        return constructors.get(constructor.name + constructor.parameters.size());
+    public Constructor existsConstructor(String constructorName, int parameterCount){
+        return constructors.get(constructorName + parameterCount);
     }
 
     public void inheritsFrom(Token ancestor){

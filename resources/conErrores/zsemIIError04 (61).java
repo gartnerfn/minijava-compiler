@@ -1,4 +1,4 @@
-//[Error:;|7]
+//[Error:return|7]
 class Vehiculo3 {}
 class Casa3 {}
 

@@ -1,4 +1,4 @@
-//[Error:this|6]
+//[Error:=|6]
 
 class A {
     int a = 0;

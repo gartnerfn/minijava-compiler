@@ -1,8 +1,7 @@
-//[Error:+|4]
+//[Error:=|4]
 
 class A {
     boolean bool = 5+3;
-
 }
 
 

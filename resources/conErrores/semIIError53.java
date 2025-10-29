@@ -1,4 +1,4 @@
-//[Error:4|4]
+//[Error:=|4]
 
 class A {
     B b = 4;

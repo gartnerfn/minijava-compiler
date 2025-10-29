@@ -1,4 +1,4 @@
-///[Error:'a'|6]
+///[Error:=|5]
 
 class A {
     private int x

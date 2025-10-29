@@ -1,4 +1,4 @@
-//[Error:;|7]
+//[Error:return|7]
 class Animal2 {}
 class Gato extends Animal2 {}
 

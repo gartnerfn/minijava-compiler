@@ -1,10 +1,12 @@
-//[Error:metodo|8]
+//[Error:'a'|9]
 class ErrorParametroChar {
     void metodo(int x) {
         var y = 1;
     }
     
     void llamada() {
-        metodo('a'); // ERROR: char no conforma con int
+        metodo(
+                'a'
+        ); // ERROR: char no conforma con int
     }
 }

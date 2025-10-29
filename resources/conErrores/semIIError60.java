@@ -1,4 +1,4 @@
-//[Error:"hola"|4]
+//[Error:=|4]
 
 class A {
     int num = "hola";

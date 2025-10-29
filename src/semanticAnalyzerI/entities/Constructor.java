@@ -9,6 +9,8 @@ public class Constructor extends Routine{
 
         if(visibilityModifier.equals("private"))
             this.isPublic = false;
+        else
+            this.isPublic = true;
     }
 
     public void isWellDeclared(){

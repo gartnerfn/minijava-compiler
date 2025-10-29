@@ -10,6 +10,12 @@ public class Attribute extends Variable{
     public boolean isPublic;
     public Entity declaredIn;
     NodoExpComp init;
+    Token assignOp;
+
+    public Attribute(Token tkn, Type type, String visibilityModifier, NodoExpComp init, Entity declaredIn, Token assignOp){
+        this(tkn, type, visibilityModifier, init, declaredIn);
+        this.assignOp = assignOp;
+    }
 
     public Attribute(Token tkn, Type type, String visibilityModifier, NodoExpComp init, Entity declaredIn){
         super(tkn, type);
@@ -27,7 +33,7 @@ public class Attribute extends Variable{
             Type initType = init.check();
 
             if (!initType.conformsTo(type))
-                throw new SemanticException("Inicialización incompatible con el tipo de atributo " + name, init.value, init.lineNumber);
+                throw new SemanticException("Inicialización incompatible con el tipo de atributo " + name, assignOp.lexeme(), assignOp.lineNumber());
         }
     }
 }

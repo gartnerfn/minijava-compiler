@@ -7,6 +7,10 @@ public abstract class NodoEncadenado {
     public int lineNumber;
     public NodoEncadenado nextInTheChain;
 
+    public void setNextInTheChain(NodoEncadenado nextInTheChain) {
+        this.nextInTheChain = nextInTheChain;
+    }
+
     public abstract Type check();
     public abstract Type checkAssignable(Type baseType);
 }

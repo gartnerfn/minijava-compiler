@@ -1,4 +1,4 @@
-//[Error:true|4]
+//[Error:=|4]
 
 class A {
     int num = !true;

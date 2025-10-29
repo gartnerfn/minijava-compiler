@@ -1,5 +1,6 @@
 package semanticAnalyzerII.nodes.sent;
 
+import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerII.nodes.exp.NodoExp;
 import src.Token;
 
@@ -15,5 +16,8 @@ public class NodoSentenciaConExp extends NodoSentencia{
 
     public void check(){
         exp.check();
+
+        if(!exp.checkAssignable())
+            throw new SemanticException("La expresion no es una asignacion ni un llamado a una funcion", name, lineNumber);
     }
 }

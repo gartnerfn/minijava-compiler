@@ -4,19 +4,12 @@ import semanticAnalyzerI.entities.Attribute;
 import semanticAnalyzerI.entities.Variable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
-import semanticAnalyzerII.nodes.enc.NodoEncadenado;
 import src.Token;
 
 public class NodoLlamadaVar extends NodoReferencia{
-    NodoEncadenado nextInTheChain;
-
     public NodoLlamadaVar(Token tkn) {
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
-    }
-
-    public void addNextInTheChain(NodoEncadenado nextInTheChain) {
-        this.nextInTheChain = nextInTheChain;
     }
 
     public Type check(){
@@ -28,12 +21,8 @@ public class NodoLlamadaVar extends NodoReferencia{
         if(variable instanceof Attribute && !((Attribute) variable).isPublic && ((Attribute) variable).declaredIn != symbolTable.currentEntity)
             throw new SemanticException("Variable '" + name + "' es privada y no puede ser accedida desde este ámbito", name, lineNumber);
 
-        //        // Si hay encadenado, delega en él
-        //        if (chain != null) {
-        //            return chain.checkAssignable(type);
-        //        }
-
-        System.out.println(variable.type);
+//        if (nextInTheChain != null)
+//            return nextInTheChain.checkAssignable(type);
 
         return variable.type;
     }

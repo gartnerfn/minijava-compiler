@@ -30,10 +30,10 @@ public class NodoExpComp extends NodoExp{
         Type resultType = getResultType();
 
         if(value.equals("==") || value.equals("!=")){
-            if(!leftType.conformsTo(rightType)) {
+            if(!leftType.isCompatible(rightType))
                 throw new SemanticException("Los tipos no conforman para el operador " + value, value, lineNumber);
-            }
-        } else if (!leftType.isCompatible(rightType) || !leftType.conformsTo(expectedTypes))
+
+        } else if (!leftType.isCompatible(rightType) || !leftType.isCompatible(expectedTypes))
             throw new SemanticException("Los tipos no conforman para el operador " + value, value, lineNumber);
 
 

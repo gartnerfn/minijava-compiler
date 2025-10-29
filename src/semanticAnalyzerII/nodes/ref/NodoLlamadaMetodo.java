@@ -38,7 +38,7 @@ public class NodoLlamadaMetodo extends NodoReferencia{
             Type paramType = param.type;
 
             if(!argType.conformsTo(paramType))
-                throw new SemanticException("Method parameter type mismatch", arg.value, arg.lineNumber);
+                throw new SemanticException("Method parameter type mismatch", this.name, this.lineNumber);
         }
 
         return method.returnType;

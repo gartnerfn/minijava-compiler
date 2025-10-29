@@ -1,4 +1,4 @@
-//[Error:null|4]
+//[Error:=|4]
 
 class A {
     int a = null;

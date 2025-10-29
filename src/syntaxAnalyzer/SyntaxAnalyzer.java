@@ -4,6 +4,9 @@ import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.entities.*;
 import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.types.*;
+import semanticAnalyzerII.nodes.enc.NodoEncadenado;
+import semanticAnalyzerII.nodes.enc.NodoLlamadaEncadenada;
+import semanticAnalyzerII.nodes.enc.NodoVarEncadenada;
 import semanticAnalyzerII.nodes.exp.*;
 import semanticAnalyzerII.nodes.lit.*;
 import semanticAnalyzerII.nodes.ref.*;
@@ -281,8 +284,9 @@ public class SyntaxAnalyzer {
             method.addBlock(block);
             symbolTable.currentEntity.addMethod((Method) symbolTable.currentRoutine);
         } else if(is("=")){
+            Token assignOp = currentToken;
             NodoExpComp init =  inicializacionAtributo();
-            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, init, symbolTable.currentEntity));
+            symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, init, symbolTable.currentEntity, assignOp));
         } else if(is(";")){
             match(";");
             symbolTable.currentEntity.addAttribute(new Attribute(methodVarId, type, visibilityModifier, new NodoExpVacia(), symbolTable.currentEntity));
@@ -455,9 +459,10 @@ public class SyntaxAnalyzer {
         match("rw_var");
         Token tkn = currentToken;
         match("methodVarId");
+        Token assignOp = currentToken;
         match("=");
         NodoExp exp = expresionCompuesta();
-        return new NodoVarLocal(tkn, exp);
+        return new NodoVarLocal(tkn, exp, assignOp);
     }
 
     private NodoSentencia returnSentence() {
@@ -643,46 +648,61 @@ public class SyntaxAnalyzer {
 
     private NodoOperando referencia() {
         NodoOperando prim = primario();
-        referenciaPrima();
+        NodoEncadenado optChain = referenciaPrima();
+        prim.setNextInTheChain(optChain);
         return prim;
     }
 
-    private void referenciaPrima() {
+    private NodoEncadenado referenciaPrima() {
         if (is(".")) {
             match(".");
+            Token methodVarId = currentToken;
             match("methodVarId");
-            referenciaSec();
-            referenciaPrima();
+            List<NodoExp> args = referenciaSec();
+            if(args == null){
+                NodoVarEncadenada varChained = new NodoVarEncadenada(methodVarId);
+                NodoEncadenado nextChain = referenciaPrima();
+                varChained.setNextInTheChain(nextChain);
+                return varChained;
+            } else {
+                NodoLlamadaEncadenada callChained = new NodoLlamadaEncadenada(methodVarId, args);
+                NodoEncadenado nextChain = referenciaPrima();
+                callChained.setNextInTheChain(nextChain);
+                return callChained;
+            }
+        } else {
+            return null;
         }
     }
 
-    private void referenciaSec() {
+    private List<NodoExp> referenciaSec() {
         if (is("(")) {
-            argsActuales();
+            return argsActuales();
+        } else {
+            return null;
         }
     }
 
     private NodoOperando primario() {
         if (is("rw_this")){
+            Token thisTkn = currentToken;
             match("rw_this");
-            return new NodoReferenciaThis();
+            return new NodoReferenciaThis(thisTkn);
         } else if (is("stringLiteral")){
             NodoLit lit = new NodoStringLit(currentToken);
             match("stringLiteral");
             return lit;
         } else if (is("rw_new")){
-            llamadaConstructor();
-            return new NodoLlamadaConstructor();
+            return llamadaConstructor();
         } else if (is("(")){
-            expresionParentizada();
-            return new NodoExpresionParentizada();
+            NodoExp exp = expresionParentizada();
+            return new NodoExpresionParentizada(exp);
         } else if (is("methodVarId")) {
             Token methodVarId = currentToken;
             match("methodVarId");
             return primarioPrima(methodVarId);
         } else if (is("classId")){
-            llamadaMetodoEstatico();
-            return new NodoLlamadaMetodoEstatico();
+            return llamadaMetodoEstatico();
         } else
             throw new SyntaxException("this, new, string literal, method identifier, variable identifier or class identifier", currentToken.lexeme(), currentToken.lineNumber());
     }
@@ -696,24 +716,30 @@ public class SyntaxAnalyzer {
         }
     }
 
-    private void llamadaConstructor() {
+    private NodoLlamadaConstructor llamadaConstructor() {
         match("rw_new");
+        Token classId = currentToken;
         match("classId");
         diamanteOGenericidadOpcional();
-        argsActuales();
+        List<NodoExp> args = argsActuales();
+        return new NodoLlamadaConstructor(classId, args);
     }
 
-    private void expresionParentizada() {
+    private NodoExp expresionParentizada() {
         match("(");
-        expresion();
+        NodoExp exp = expresion();
         match(")");
+        return exp;
     }
 
-    private void llamadaMetodoEstatico() {
+    private NodoLlamadaMetodoEstatico llamadaMetodoEstatico() {
+        Token classId = currentToken;
         match("classId");
         match(".");
+        Token methodId = currentToken;
         match("methodVarId");
-        argsActuales();
+        List<NodoExp> args = argsActuales();
+        return new NodoLlamadaMetodoEstatico(classId, methodId, args);
     }
 
     private List<NodoExp> argsActuales() {
