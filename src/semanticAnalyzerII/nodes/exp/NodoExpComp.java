@@ -25,6 +25,7 @@ public class NodoExpComp extends NodoExp{
         Type leftType = leftSide.check();
         Type rightType = rightSide.check();
 
+
         Type expectedTypes = getExpectedTypes();
         Type resultType = getResultType();
 

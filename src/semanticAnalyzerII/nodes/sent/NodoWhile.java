@@ -23,4 +23,15 @@ public class NodoWhile extends NodoSentencia{
 
         body.check();
     }
+
+    public String getName(){
+        return name;
+    }
+    public int getLineNumber(){
+        return lineNumber;
+    }
+
+    public boolean guaranteeReturn(){
+        return body.guaranteeReturn();
+    }
 }

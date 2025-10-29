@@ -8,11 +8,13 @@ public class SourceManagerImpl implements SourceManager{
     private String currentLine;
     private int lineNumber;
     private int lineIndexNumber;
+    boolean isEnter;
 
     public SourceManagerImpl() {
         currentLine = "";
         lineNumber = 1;
         lineIndexNumber = 0;
+        isEnter = false;
     }
 
     @Override
@@ -33,13 +35,19 @@ public class SourceManagerImpl implements SourceManager{
         int charInteger = reader.read();
         lineIndexNumber++;
 
+        if(isEnter){
+            lineIndexNumber = 0;
+            lineNumber++;
+            currentLine = "";
+
+            isEnter = false;
+        }
+
         if(charInteger == -1)
             return END_OF_FILE;
 
         if (charInteger == '\n') {
-            lineIndexNumber = 0;
-            lineNumber++;
-            currentLine = "";
+            isEnter = true;
         } else
             currentLine += (char) charInteger;
 

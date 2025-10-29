@@ -1,4 +1,4 @@
-///[Error:==|9]
+///[Error:==|8]
 
 class A {
     public boolean m1(){

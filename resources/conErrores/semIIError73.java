@@ -1,10 +1,11 @@
-//[Error:=|10]
+//[Error:a|11]
 
 class A {
     public int metodo(){
         if(true){
             return 5;
-        } else {
+        }
+        else {
             return 5;
         }
         var a = metodo();

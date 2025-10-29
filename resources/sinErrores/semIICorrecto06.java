@@ -3,6 +3,8 @@
 class A {
     public boolean m1(){
         if(true);
+
+        return true;
     }
 }
 

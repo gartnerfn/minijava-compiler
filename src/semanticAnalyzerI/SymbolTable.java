@@ -143,6 +143,9 @@ public class SymbolTable {
     }
 
     public void check(){
+        currentEntity = null;
+        currentRoutine = null;
+
         for(Interface itf : interfaces.values())
             itf.check();
 

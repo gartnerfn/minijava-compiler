@@ -5,6 +5,8 @@ class A {
         {
             var y = true;
         }
+
+        return x == "a";
     }
 }
 

@@ -1,4 +1,4 @@
-//[Error:cuadruple|8]
+//[Error:cuadruple|7]
 
 class Utilidades {
     public static void doble(int x) {

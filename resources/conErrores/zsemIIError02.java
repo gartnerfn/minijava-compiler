@@ -1,4 +1,4 @@
-///[Error:'a'|10]
+///[Error:m1|9]
 
 class A {
     public int m1( int a){

@@ -1,4 +1,4 @@
-//[Error:C|4]
+//[Error:=|4]
 
 class A {
     B b = new C();

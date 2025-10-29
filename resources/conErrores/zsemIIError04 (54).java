@@ -1,4 +1,4 @@
-//[Error:'a'|9]
+//[Error:metodo|8]
 class ErrorParametroChar {
     void metodo(int x) {
         var y = 1;

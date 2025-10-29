@@ -10,7 +10,6 @@ import src.Token;
 public abstract class Variable extends NodoSentencia {
     public SymbolTable symbolTable = SymbolTable.getInstance();
 
-
     public String name;
     public int lineNumber;
     public Type type;
@@ -23,6 +22,13 @@ public abstract class Variable extends NodoSentencia {
         this.type = type;
     }
 
+    public String getName(){
+        return name;
+    }
+    public int getLineNumber(){
+        return lineNumber;
+    }
+
     void isWellDeclared(){
         if(type instanceof ReferenceType){
             Class referenceType = symbolTable.existsClass(type.name);
@@ -30,5 +36,9 @@ public abstract class Variable extends NodoSentencia {
             if(referenceType == null)
                 throw new SemanticException("La clase utilizada como tipo no existe.", type.name, type.lineNumber);
         }
+    }
+
+    public boolean guaranteeReturn(){
+        return false;
     }
 }

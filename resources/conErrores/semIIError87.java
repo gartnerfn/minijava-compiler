@@ -1,11 +1,11 @@
-//[Error:a|8]
+//[Error:metodo|8]
 
 class A {
     public int metodo(){
         while(true){
             return 1;
         }
-        var a = metodo();
+        metodo();
         return 1;
     }
 }

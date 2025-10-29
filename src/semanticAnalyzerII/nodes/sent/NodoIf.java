@@ -28,4 +28,15 @@ public class NodoIf extends NodoSentencia{
         thenBody.check();
         elseBody.check();
     }
+
+    public String getName(){
+        return name;
+    }
+    public int getLineNumber(){
+        return lineNumber;
+    }
+
+    public boolean guaranteeReturn(){
+        return thenBody.guaranteeReturn() && elseBody.guaranteeReturn();
+    }
 }

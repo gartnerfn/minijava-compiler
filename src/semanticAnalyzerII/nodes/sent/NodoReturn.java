@@ -26,4 +26,14 @@ public class NodoReturn extends NodoSentencia{
         if(!returnType.conformsTo(methodType))
             throw new SemanticException("Tipo de retorno incompatible en el método " + method.name + ", el valor de retorno " + returnType.name + " no conforma con " + methodType.name, name, lineNumber);
     }
+    public String getName(){
+        return name;
+    }
+    public int getLineNumber(){
+        return lineNumber;
+    }
+
+    public boolean guaranteeReturn(){
+        return true;
+    }
 }

@@ -1,4 +1,4 @@
-//[Error:B|4]
+//[Error:=|4]
 
 class A {
     int b = new B();

@@ -3,8 +3,10 @@ class A {
         var x = false;
 
         if(x = true){
-
+            return false;
         }
+
+        return true;
     }
 }
 

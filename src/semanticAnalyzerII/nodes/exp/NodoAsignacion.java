@@ -1,11 +1,7 @@
-package semanticAnalyzerII.nodes.sent;
+package semanticAnalyzerII.nodes.exp;
 
-import semanticAnalyzerI.entities.Attribute;
-import semanticAnalyzerI.entities.Variable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
-import semanticAnalyzerII.nodes.exp.NodoExp;
-import semanticAnalyzerII.nodes.exp.NodoExpComp;
 import src.Token;
 
 public class NodoAsignacion extends NodoExp {

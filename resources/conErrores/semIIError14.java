@@ -8,6 +8,8 @@ class A {
         }
 
         var b = 5;
+
+        return true;
     }
 }
 

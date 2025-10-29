@@ -1,17 +1,11 @@
-//[Error:=|16]
+//[Error:=|6]
 
 class A {
-
+    void metodo(boolean b) {
+        b = b
+                = true;
+    }
 }
-
-class B extends A{
-
-}
-
-class C {
-    this;
-}
-
 
 class Init{
     static void main()

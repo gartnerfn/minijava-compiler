@@ -1,9 +1,10 @@
-//[Error:;|6]
+//[Error:;|7]
 
 class A {
     void m1(){
         var a = new B();
-        1+1;
+        1+1
+        ;
     }
 
 }

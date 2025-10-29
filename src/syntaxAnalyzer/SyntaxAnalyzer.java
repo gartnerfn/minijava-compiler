@@ -448,8 +448,9 @@ public class SyntaxAnalyzer {
         } else if(isExpresionStart()){
             Token tkn = currentToken;
             NodoExp exp = expresion();
+            Token semicolon = currentToken;
             match(";");
-            return new NodoSentenciaConExp(tkn, exp);
+            return new NodoSentenciaConExp(tkn, exp, semicolon);
         } else {
             throw new SyntaxException("Valid sentence", currentToken.lexeme(), currentToken.lineNumber());
         }

@@ -3,6 +3,7 @@
 class A {
     public boolean m1(){
         var x = asd;
+        return true;
     }
 }
 

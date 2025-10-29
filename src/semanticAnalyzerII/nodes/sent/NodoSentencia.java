@@ -8,5 +8,9 @@ public abstract class NodoSentencia {
     public String name;
     public int lineNumber;
 
+    public abstract String getName();
+    public abstract int getLineNumber();
+
     public abstract void check();
+    public abstract boolean guaranteeReturn();
 }

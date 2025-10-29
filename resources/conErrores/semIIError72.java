@@ -1,4 +1,4 @@
-//[Error:=|6]
+//[Error:a|6]
 
 class A {
     public int metodo(){

@@ -35,11 +35,6 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
         if(!method.isStatic)
             throw new SemanticException("Method is not static", this.methodId.lexeme(), this.methodId.lineNumber());
 
-//        if(!((Method) symbolTable.currentRoutine).isStatic)
-//            throw new SemanticException("Cannot call non-static method from static context", this.name, this.lineNumber);
-
-
-
         return method.returnType;
     }
 

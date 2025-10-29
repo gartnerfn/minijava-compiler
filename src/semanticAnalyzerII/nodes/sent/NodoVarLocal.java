@@ -20,6 +20,13 @@ public class NodoVarLocal extends Variable {
         this.assignOp = assignOp;
     }
 
+    public String getName(){
+        return name;
+    }
+    public int getLineNumber(){
+        return lineNumber;
+    }
+
     public void check(){
         type = exp.check();
 

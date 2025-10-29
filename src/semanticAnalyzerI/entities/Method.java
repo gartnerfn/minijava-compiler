@@ -3,6 +3,7 @@ package semanticAnalyzerI.entities;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.ReferenceType;
 import semanticAnalyzerI.types.Type;
+import semanticAnalyzerI.types.VoidType;
 import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
 import src.Token;
 
@@ -59,5 +60,12 @@ public class Method extends Routine{
             throw new SemanticException("Los metodos abstractos no pueden tener cuerpo.", name, lineNumber);
 
         super.isWellDeclared();
+    }
+
+    public void check(){
+        super.check();
+
+        if(!(returnType instanceof VoidType) && !block.guaranteeReturn())
+            throw new SemanticException("Missing return statement in routine '" + name + "'", name, lineNumber);
     }
 }

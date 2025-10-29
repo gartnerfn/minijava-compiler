@@ -22,7 +22,7 @@ public class Routine {
 
     public Map<String, Parameter> parameters = new LinkedHashMap<>();
     public List<Parameter> parameterList = new ArrayList<>();
-    NodoBloque block;
+    public NodoBloque block;
 
     public void addParameter(Parameter parameter){
         if(parameters.containsKey(parameter.name))
