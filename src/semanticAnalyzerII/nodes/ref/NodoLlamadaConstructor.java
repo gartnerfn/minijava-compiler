@@ -31,11 +31,9 @@ public class NodoLlamadaConstructor extends NodoReferencia{
         if(constructor == null)
             throw new SemanticException("Contructor does not exist", this.name, this.lineNumber);
 
-        if(!constructor.isPublic && constructor.declaredIn != symbolTable.currentEntity)
+        if(!constructor.isPublic && !constructor.name.equals(symbolTable.currentEntity.name))
             throw new SemanticException("Contructor is private and cannot be accessed from this scope", this.name, this.lineNumber);
 
-        if(constructor.parameters.size() != args.size())
-            throw new SemanticException("Contructor parameter count mismatch", this.name, this.lineNumber);
 
         for(int i = 0; i < args.size(); i++){
             NodoExp arg = args.get(i);

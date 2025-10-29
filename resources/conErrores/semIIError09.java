@@ -1,4 +1,4 @@
-///[Error:"asd"|6]
+///[Error:if|5]
 
 class A {
     public boolean m1(){

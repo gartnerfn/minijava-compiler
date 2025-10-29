@@ -7,10 +7,9 @@ public class Constructor extends Routine{
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
 
-        if(visibilityModifier.equals("private"))
-            this.isPublic = false;
-        else
-            this.isPublic = true;
+        this.isPublic = !visibilityModifier.equals("private");
+
+
     }
 
     public void isWellDeclared(){

@@ -35,9 +35,6 @@ public class NodoLlamadaMetodo extends NodoReferencia{
         if(!method.isPublic && method.declaredIn != symbolTable.currentEntity)
             throw new SemanticException("Method is private and cannot be accessed from this scope", this.name, this.lineNumber);
 
-        if(method.parameters.size() != args.size())
-            throw new SemanticException("Method parameter count mismatch", this.name, this.lineNumber);
-
         for(int i = 0; i < args.size(); i++){
             NodoExp arg = args.get(i);
             Parameter param = method.parameterList.get(i);

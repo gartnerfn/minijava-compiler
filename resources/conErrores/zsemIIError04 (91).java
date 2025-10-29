@@ -1,4 +1,4 @@
-//[Error:+|5]
+//[Error:if|5]
 
 class A {
     void m1(int a){
