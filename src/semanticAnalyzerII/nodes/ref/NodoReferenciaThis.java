@@ -11,7 +11,7 @@ public class NodoReferenciaThis extends NodoReferencia{
     }
 
     public Type check() {
-//        if(symbolTable.getCurrentInvocable().isStaticMethod())
+//        if(symbolTable.currentRoutine)
 //            throw new SemanticException("Error semantico en linea " + token.getLineNumber() + ": no se puede usar 'this' en un metodo estatico", token.getLexeme(), token.getLineNumber());
 
         Type thisType = new ReferenceType(new Token("classId", value, lineNumber));

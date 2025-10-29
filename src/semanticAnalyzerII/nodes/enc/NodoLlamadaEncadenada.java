@@ -51,4 +51,15 @@ public class NodoLlamadaEncadenada extends NodoEncadenado{
 
         return method.returnType;
     }
+
+    public boolean isAssignable(){
+        if(nextInTheChain != null)
+            return nextInTheChain.isAssignable();
+
+        return false;
+    }
+
+    public boolean canBeStatement(){
+        return true;
+    }
 }

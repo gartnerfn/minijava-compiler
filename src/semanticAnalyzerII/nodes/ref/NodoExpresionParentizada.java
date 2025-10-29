@@ -20,6 +20,9 @@ public class NodoExpresionParentizada extends NodoReferencia{
     }
 
     public boolean isAssignable() {
+        if(nextInTheChain != null)
+            return nextInTheChain.isAssignable();
+
         return exp.isAssignable();
     }
 

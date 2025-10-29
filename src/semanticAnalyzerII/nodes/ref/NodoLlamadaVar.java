@@ -28,6 +28,9 @@ public class NodoLlamadaVar extends NodoReferencia{
     }
 
     public boolean isAssignable() {
+        if(nextInTheChain != null)
+            return nextInTheChain.isAssignable();
+
         return true;
     }
 }

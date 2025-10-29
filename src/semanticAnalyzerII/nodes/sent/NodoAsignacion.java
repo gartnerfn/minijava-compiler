@@ -27,14 +27,6 @@ public class NodoAsignacion extends NodoExp {
         Type leftType = leftSide.check();
         Type rightType = rightSide.check();
 
-        Variable leftVar = symbolTable.existsVar(leftSide.name);
-
-        if(leftVar == null)
-            throw new SemanticException("La variable '" + leftSide.name + "' no ha sido declarada", leftSide.name, lineNumber);
-
-        if(leftVar instanceof Attribute && !((Attribute) leftVar).isPublic)
-            throw new SemanticException("No se puede asignar a un atributo privado '" + leftSide.name + "'", leftSide.name, lineNumber);
-
         if (!rightType.conformsTo(leftType))
             throw new SemanticException("Tipos incompatibles en la asignación, " + rightType.name + " no conforma con " + leftType.name, value, lineNumber);
 

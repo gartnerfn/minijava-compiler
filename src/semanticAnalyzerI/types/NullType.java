@@ -10,10 +10,10 @@ public class NullType extends Type{
     }
 
     public boolean isCompatible(Type type){
-        return (type instanceof ReferenceType);
+        return type instanceof NullType || type instanceof ReferenceType;
     }
 
     public boolean conformsTo(Type type){
-        return (type instanceof ReferenceType);
+        return type instanceof NullType || type instanceof ReferenceType;
     }
 }

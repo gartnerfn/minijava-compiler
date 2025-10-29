@@ -15,4 +15,6 @@ public abstract class NodoEncadenado {
     }
 
     public abstract Type check(Type previousType);
+    public abstract boolean isAssignable();
+    public abstract boolean canBeStatement();
 }

@@ -31,4 +31,15 @@ public class NodoVarEncadenada extends NodoEncadenado{
 
         return attr.type;
     }
+
+    public boolean isAssignable(){
+        if(nextInTheChain != null)
+            return nextInTheChain.isAssignable();
+
+        return true;
+    }
+
+    public boolean canBeStatement(){
+        return false;
+    }
 }
