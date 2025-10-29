@@ -13,10 +13,17 @@ public class NodoExpresionParentizada extends NodoReferencia{
     public Type check() {
         Type type = exp.check();
 
-//        if(optionalChaining != null){
-//            return optionalChaining.check(type);
-//        }
+        if(nextInTheChain != null)
+            return nextInTheChain.check(type);
 
         return type;
+    }
+
+    public boolean isAssignable() {
+        return exp.isAssignable();
+    }
+
+    public boolean canBeStatement(){
+        return exp.canBeStatement();
     }
 }

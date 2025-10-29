@@ -1,7 +1,6 @@
 package semanticAnalyzerII.nodes.sent;
 
 import semanticAnalyzerI.entities.Attribute;
-import semanticAnalyzerI.entities.Parameter;
 import semanticAnalyzerI.entities.Variable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
@@ -22,7 +21,7 @@ public class NodoAsignacion extends NodoExp {
     }
 
     public Type check(){
-        if(!leftSide.checkAssignable())
+        if(!leftSide.isAssignable())
             throw new SemanticException("El lado izquierdo de la asignación no es asignable", value, lineNumber);
 
         Type leftType = leftSide.check();
@@ -42,7 +41,11 @@ public class NodoAsignacion extends NodoExp {
         return leftType;
     }
 
-    public boolean checkAssignable(){
+    public boolean isAssignable(){
+        return false;
+    }
+
+    public boolean canBeStatement(){
         return true;
     }
 }

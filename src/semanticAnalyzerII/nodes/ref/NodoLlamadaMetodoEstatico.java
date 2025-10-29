@@ -1,5 +1,6 @@
 package semanticAnalyzerII.nodes.ref;
 
+import semanticAnalyzerI.entities.Entity;
 import semanticAnalyzerI.entities.Method;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
@@ -21,9 +22,28 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
     }
 
     public Type check(){
-//        if(((Method) symbolTable.currentRoutine).isStatic && !method.isStatic)
+        Entity entity = symbolTable.existsEntity(this.classId.lexeme());
+
+        if(entity == null)
+            throw new SemanticException("Class does not exist", this.classId.lexeme(), this.classId.lineNumber());
+
+        Method method = entity.existsMethod(this.methodId.lexeme(), args.size());
+
+        if(method == null)
+            throw new SemanticException("Static method does not exist", this.methodId.lexeme(), this.methodId.lineNumber());
+
+        if(!method.isStatic)
+            throw new SemanticException("Method is not static", this.methodId.lexeme(), this.methodId.lineNumber());
+
+//        if(!((Method) symbolTable.currentRoutine).isStatic)
 //            throw new SemanticException("Cannot call non-static method from static context", this.name, this.lineNumber);
 
-        return null;
+
+
+        return method.returnType;
+    }
+
+   public boolean canBeStatement(){
+        return true;
     }
 }

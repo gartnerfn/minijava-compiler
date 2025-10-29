@@ -12,5 +12,8 @@ public abstract class NodoExp {
     public Type type;
 
     public abstract Type check();
-    public abstract boolean checkAssignable();
+    public abstract boolean isAssignable();
+    public boolean canBeStatement(){
+        return false;
+    }
 }

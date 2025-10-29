@@ -2,7 +2,7 @@
 
 abstract class A {
     boolean b = true;
-    A a = new A();
+    A a;
 
     public boolean m2(){
         return true;

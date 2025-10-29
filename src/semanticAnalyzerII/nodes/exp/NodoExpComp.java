@@ -3,7 +3,6 @@ package semanticAnalyzerII.nodes.exp;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.BooleanType;
 import semanticAnalyzerI.types.IntType;
-import semanticAnalyzerI.types.NullType;
 import semanticAnalyzerI.types.Type;
 import src.Token;
 
@@ -40,7 +39,7 @@ public class NodoExpComp extends NodoExp{
         return resultType;
     }
 
-    public boolean checkAssignable() {
+    public boolean isAssignable() {
         return false;
     }
 

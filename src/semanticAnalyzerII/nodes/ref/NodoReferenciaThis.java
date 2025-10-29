@@ -15,14 +15,11 @@ public class NodoReferenciaThis extends NodoReferencia{
 //            throw new SemanticException("Error semantico en linea " + token.getLineNumber() + ": no se puede usar 'this' en un metodo estatico", token.getLexeme(), token.getLineNumber());
 
         Type thisType = new ReferenceType(new Token("classId", value, lineNumber));
-//        if(optChaining != null) {
-//            return optChaining.check(thisType);
-//        }
-        return thisType;
-    }
 
-    public boolean isStatement(){
-        return false;
+        if(nextInTheChain != null)
+            return nextInTheChain.check(thisType);
+
+        return thisType;
     }
 
 }

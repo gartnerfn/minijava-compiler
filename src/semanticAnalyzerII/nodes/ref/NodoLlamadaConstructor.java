@@ -22,7 +22,7 @@ public class NodoLlamadaConstructor extends NodoReferencia{
     }
 
     public Type check() {
-        Entity entity = symbolTable.getEntity(this.name);
+        Entity entity = symbolTable.existsEntity(this.name);
         if(entity == null)
             throw new SemanticException("Class does not exist", this.name, this.lineNumber);
 
@@ -48,6 +48,13 @@ public class NodoLlamadaConstructor extends NodoReferencia{
                 throw new SemanticException("Constructor parameter type mismatch", this.name, this.lineNumber);
         }
 
+        if(nextInTheChain != null)
+            return nextInTheChain.check(new ReferenceType(new Token("classId", this.name, this.lineNumber)));
+
         return new ReferenceType(new Token("classId", this.name, this.lineNumber));
+    }
+
+    public boolean canBeStatement(){
+        return true;
     }
 }

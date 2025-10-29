@@ -26,10 +26,6 @@ public class NodoExpBasica extends NodoExpComp{
         return this.type;
     }
 
-    public boolean checkAssignable(){
-        return this.type instanceof ReferenceType;
-    }
-
     public Type getExpectedType(){
         switch (unaryOperator.token()) {
             case "+", "-", "++", "--" -> {
@@ -39,5 +35,9 @@ public class NodoExpBasica extends NodoExpComp{
                 return new BooleanType();
             }
         }
+    }
+
+    public boolean canBeStatement(){
+        return unaryOperator != null && (unaryOperator.lexeme().equals("++") || unaryOperator.lexeme().equals("--"));
     }
 }

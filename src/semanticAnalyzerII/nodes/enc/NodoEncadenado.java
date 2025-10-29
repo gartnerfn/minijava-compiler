@@ -1,8 +1,11 @@
 package semanticAnalyzerII.nodes.enc;
 
+import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.types.Type;
 
 public abstract class NodoEncadenado {
+    public SymbolTable symbolTable = SymbolTable.getInstance();
+
     public String name;
     public int lineNumber;
     public NodoEncadenado nextInTheChain;
@@ -11,6 +14,5 @@ public abstract class NodoEncadenado {
         this.nextInTheChain = nextInTheChain;
     }
 
-    public abstract Type check();
-    public abstract Type checkAssignable(Type baseType);
+    public abstract Type check(Type previousType);
 }

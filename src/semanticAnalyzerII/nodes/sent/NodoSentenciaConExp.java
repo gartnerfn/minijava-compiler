@@ -14,10 +14,10 @@ public class NodoSentenciaConExp extends NodoSentencia{
         this.exp = exp;
     }
 
-    public void check(){
-        exp.check();
-
-        if(!exp.checkAssignable())
+    public void check() {
+        if (!exp.canBeStatement())
             throw new SemanticException("La expresion no es una asignacion ni un llamado a una funcion", name, lineNumber);
+
+        exp.check();
     }
 }

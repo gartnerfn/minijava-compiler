@@ -1,6 +1,7 @@
 package semanticAnalyzerII.nodes.lit;
 
 import semanticAnalyzerI.types.Type;
+import semanticAnalyzerII.nodes.enc.NodoEncadenado;
 import semanticAnalyzerII.nodes.exp.NodoExp;
 import semanticAnalyzerII.nodes.exp.NodoOperando;
 import src.Token;
@@ -14,9 +15,5 @@ public class NodoLit extends NodoOperando {
 
     public Type check(){
         return this.type;
-    }
-
-    public boolean checkAssignable() {
-        return false;
     }
 }

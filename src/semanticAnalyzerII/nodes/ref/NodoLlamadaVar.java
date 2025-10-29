@@ -21,13 +21,13 @@ public class NodoLlamadaVar extends NodoReferencia{
         if(variable instanceof Attribute && !((Attribute) variable).isPublic && ((Attribute) variable).declaredIn != symbolTable.currentEntity)
             throw new SemanticException("Variable '" + name + "' es privada y no puede ser accedida desde este ámbito", name, lineNumber);
 
-//        if (nextInTheChain != null)
-//            return nextInTheChain.checkAssignable(type);
+        if (nextInTheChain != null)
+            return nextInTheChain.check(variable.type);
 
         return variable.type;
     }
 
-    public boolean checkAssignable() {
+    public boolean isAssignable() {
         return true;
     }
 }

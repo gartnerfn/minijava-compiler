@@ -29,7 +29,7 @@ public class ReferenceType extends Type{
         if (this.name.equals(type.name))
             return true;
 
-        Entity thisEntity = symbolTable.getEntity(this.name);
+        Entity thisEntity = symbolTable.existsEntity(this.name);
 
         while (thisEntity.hasParentInheritance() || thisEntity.hasParentImplementation()) {
             String parentInheritance = thisEntity.getParentInheritance();
@@ -39,7 +39,7 @@ public class ReferenceType extends Type{
             if (parent.equals(type.name))
                 return true;
 
-            thisEntity = symbolTable.getEntity(parent);
+            thisEntity = symbolTable.existsEntity(parent);
         }
 
         return false;

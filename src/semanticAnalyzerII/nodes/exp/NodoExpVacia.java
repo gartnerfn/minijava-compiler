@@ -1,7 +1,5 @@
 package semanticAnalyzerII.nodes.exp;
 
-import semanticAnalyzerI.exceptions.SemanticException;
-import semanticAnalyzerI.types.BooleanType;
 import semanticAnalyzerI.types.Type;
 import semanticAnalyzerI.types.VoidType;
 

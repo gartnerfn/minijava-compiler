@@ -41,6 +41,13 @@ public class NodoLlamadaMetodo extends NodoReferencia{
                 throw new SemanticException("Method parameter type mismatch", this.name, this.lineNumber);
         }
 
+        if(nextInTheChain != null)
+            return nextInTheChain.check(method.returnType);
+
         return method.returnType;
+    }
+
+    public boolean canBeStatement(){
+        return true;
     }
 }

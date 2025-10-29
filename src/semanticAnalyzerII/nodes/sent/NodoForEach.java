@@ -1,5 +1,0 @@
-package semanticAnalyzerII.nodes.sent;
-
-public class NodoForEach extends NodoFor{
-    public void check(){}
-}

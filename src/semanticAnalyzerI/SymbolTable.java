@@ -5,6 +5,8 @@ import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.predefined.Object;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.entities.predefined.String;
+import semanticAnalyzerII.nodes.exp.NodoExp;
+import semanticAnalyzerII.nodes.exp.NodoExpComp;
 import semanticAnalyzerII.nodes.sent.NodoVarLocal;
 
 import java.util.ArrayDeque;
@@ -77,7 +79,7 @@ public class SymbolTable {
         return symbolTable;
     }
 
-    public Entity getEntity(java.lang.String name){
+    public Entity existsEntity(java.lang.String name){
         Class c = getClass(name);
 
         if(c != null)

@@ -69,7 +69,7 @@ public class Entity {
                 if(attr != null )
                     return attr;
 
-                ent = symbolTable.getEntity(parent);
+                ent = symbolTable.existsEntity(parent);
             }
         }
 
