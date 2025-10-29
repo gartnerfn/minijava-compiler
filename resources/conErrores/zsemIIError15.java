@@ -1,16 +1,20 @@
+///[Error:a|7]
+
 class A {
     public int a;
 
-    private A(){
-        this.a = 4;
+    public static void m1(){
+        var b = a;
     }
 
-    public A m2(int x){
-        return new A();
+    private void m2(){
+
     }
 }
 
-class B extends A {
+class B  {
+    public int b;
+
     public void metodo(int x){
 
     }

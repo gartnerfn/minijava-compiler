@@ -19,7 +19,7 @@ public class NodoWhile extends NodoSentencia{
 
     public void check(){
         if(!cond.check().isCompatible(new BooleanType()))
-            throw new SemanticException("La condición del while no es de tipo booleano.", cond.value, cond.lineNumber);
+            throw new SemanticException("La condición del while no es de tipo booleano", this.name, this.lineNumber);
 
         body.check();
     }

@@ -1,5 +1,6 @@
 package semanticAnalyzerII.nodes.exp;
 
+import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.*;
 import src.Token;
 
@@ -19,7 +20,7 @@ public class NodoExpBasica extends NodoExpComp{
         Type expectedType = getExpectedType();
 
         if (!operandType.conformsTo(expectedType))
-            throw new semanticAnalyzerI.exceptions.SemanticException("El tipo " + operandType + " del operando " + operand.name + " no conforma con el tipo esperado " + expectedType + " para el operador " + unaryOperator.lexeme(), unaryOperator.lexeme(), unaryOperator.lineNumber());
+            throw new SemanticException("El tipo " + operandType.name + " no conforma con el tipo esperado " + expectedType.name + " para el operador " + unaryOperator.lexeme(), unaryOperator.lexeme(), unaryOperator.lineNumber());
 
         this.type = operandType;
 

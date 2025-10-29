@@ -1,10 +1,13 @@
 class A {
-    private A(){
+    public int a;
 
+    private A(){
+        this.a = 4;
     }
 
-    public A m2(int x){
-        return new A();
+    public void m2(int x){
+        var a = (((true)));
+        var b = !a;
     }
 }
 

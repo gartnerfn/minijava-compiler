@@ -1,4 +1,4 @@
-///[Error:4|6]
+///[Error:while|5]
 
 class A {
     public boolean m1(){

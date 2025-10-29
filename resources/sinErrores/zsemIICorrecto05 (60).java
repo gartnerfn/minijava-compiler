@@ -1,5 +1,3 @@
-//[Error:g|17]
-
 class A {
     public int g;
 
