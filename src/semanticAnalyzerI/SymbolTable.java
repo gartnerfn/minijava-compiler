@@ -5,14 +5,9 @@ import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.predefined.Object;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.entities.predefined.String;
-import semanticAnalyzerII.nodes.exp.NodoExp;
-import semanticAnalyzerII.nodes.exp.NodoExpComp;
 import semanticAnalyzerII.nodes.sent.NodoVarLocal;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SymbolTable {
     private static SymbolTable symbolTable = null;
@@ -22,6 +17,7 @@ public class SymbolTable {
 
     public Entity currentEntity;
     public Routine currentRoutine;
+    public List<java.lang.String> instructions;
 
     private SymbolTable(){}
 
@@ -152,6 +148,163 @@ public class SymbolTable {
         for (Class cl : classes.values())
             cl.check();
     }
+
+    private void generateInit(){
+        instructions.add(".CODE");
+        instructions.add("PUSH lblMain@Init");
+        instructions.add("CALL");
+        instructions.add("HALT");
+    }
+
+    private void generateHeapRoutines(){
+        instructions.add("simple_heap_init:");
+        instructions.add("RET 0");
+
+        instructions.add("simple_malloc:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOADHL");
+        instructions.add("DUP");
+        instructions.add("PUSH 1");
+        instructions.add("ADD");
+        instructions.add("STORE 4");
+        instructions.add("LOAD 3");
+        instructions.add("ADD");
+        instructions.add("STOREHL");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+    }
+
+    private void generateDefaultMethods() {
+        //Object class
+        //static void debugPrint(int i)
+        instructions.add("; Object class");
+        instructions.add("Object_debugPrint:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("IPRINT");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //System class
+        //static int read()
+        instructions.add("; System class");
+        instructions.add("System_read:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("READ");
+        instructions.add("STORE 3");
+        instructions.add("STOREFP");
+        instructions.add("RET 0");
+
+        //static void printB(boolean b)
+        instructions.add("System_printB:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("BPRINT");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void printC(char c)
+        instructions.add("System_printC:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("CPRINT");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void printI(int i)
+        instructions.add("System_printI:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("IPRINT");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void printS(String s)
+        instructions.add("System_printS:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("SPRINT");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void println()
+        instructions.add("System_println:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("PRNLN");
+        instructions.add("STOREFP");
+        instructions.add("RET 0");
+
+        //static void printBln(boolean b)
+        instructions.add("System_printBln:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("BPRINT");
+        instructions.add("PRNLN");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void printCln(char c)
+        instructions.add("System_printCln:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("CPRINT");
+        instructions.add("PRNLN");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void printIln(int i)
+        instructions.add("System_printIln:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("IPRINT");
+        instructions.add("PRNLN");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+
+        //static void printSln(String s)
+        instructions.add("System_printSln:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOAD 3");
+        instructions.add("SPRINT");
+        instructions.add("PRNLN");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
+    }
+
+    public void generate(){
+        generateInit();
+        generateHeapRoutines();
+        generateDefaultMethods();
+
+        for (Class cl : classes.values())
+            cl.generate();
+    }
+
+
 
     public void printTable() {
         System.out.println("===== TABLA DE SIMBOLOS =====");

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import src.Main;
+import src.MainSem;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -21,10 +21,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TesterDeCasosSinErrores {
 
     private static final String msgExito = "[SinErrores]";
-    private static final String testFilesDirectoryPath = "resources/sinErrores/";
+    private static final String testFilesDirectoryPath = "resources/semanticAnalyzerII/sinErrores/";
 
     //TODO: el tipo de esta variable init tiene que ser la clase que tiene el main
-    private static final Main init = new Main();
+    private static final MainSem init = new MainSem();
    
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
