@@ -222,4 +222,9 @@ public class Class extends Entity{
 
         isConsolidated = true;
     }
+
+    public void generate(){
+//        for (Method method : methods.values())
+//            method.generate();
+    }
 }

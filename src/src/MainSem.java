@@ -1,33 +1,25 @@
 package src;
 
-import lexicalAnalyzer.exceptions.LexicalException;
 import lexicalAnalyzer.LexicalAnalyzer;
+import lexicalAnalyzer.exceptions.LexicalException;
 import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.exceptions.SemanticException;
-import syntaxAnalyzer.exceptions.SyntaxException;
-import syntaxAnalyzer.SyntaxAnalyzer;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
+import syntaxAnalyzer.SyntaxAnalyzer;
+import syntaxAnalyzer.exceptions.SyntaxException;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class Main {
+public class MainSem {
     public static void main(String[] args) {
         SourceManager sourceManager = new SourceManagerImpl();
-        String inFilePath = args[0];
-        String outFilePath = args[1];
-        Path outFile = outFilePath != null ? Path.of(outFilePath) : Path.of("out.txt");
+        String filePath = args[0];
         SymbolTable symbolTable = SymbolTable.getInstance();
         LexicalAnalyzer lexicalAnalyser = null;
 
         try {
-            sourceManager.open(inFilePath);
+            sourceManager.open(filePath);
             lexicalAnalyser = new LexicalAnalyzer(sourceManager);
             new SyntaxAnalyzer(lexicalAnalyser);
 
@@ -41,12 +33,9 @@ public class Main {
 //            symbolTable.printTable();
 
             symbolTable.check();
-            symbolTable.generate();
 
             if(lexicalExceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");
-
-            Files.write(outFile, symbolTable.instructions, StandardCharsets.UTF_8);
 
             symbolTable.deleteInstance();
         } catch (java.io.IOException e) {

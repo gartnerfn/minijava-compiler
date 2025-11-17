@@ -17,7 +17,7 @@ public class SymbolTable {
 
     public Entity currentEntity;
     public Routine currentRoutine;
-    public List<java.lang.String> instructions;
+    public List<java.lang.String> instructions = new ArrayList<>();
 
     private SymbolTable(){}
 
