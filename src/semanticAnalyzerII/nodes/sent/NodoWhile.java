@@ -32,6 +32,6 @@ public class NodoWhile extends NodoSentencia{
     }
 
     public boolean guaranteeReturn(){
-        return body.guaranteeReturn();
+        return false;
     }
 }

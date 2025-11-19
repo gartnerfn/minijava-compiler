@@ -16,4 +16,8 @@ public class NodoLit extends NodoOperando {
     public Type check(){
         return this.type;
     }
+
+    public void generate(){
+
+    }
 }

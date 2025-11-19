@@ -4,6 +4,7 @@ import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
 import semanticAnalyzerII.nodes.exp.NodoExpComp;
 import semanticAnalyzerII.nodes.exp.NodoExpVacia;
+import semanticAnalyzerII.nodes.ref.NodoLlamadaVar;
 import src.Token;
 
 public class Attribute extends Variable{
@@ -21,6 +22,10 @@ public class Attribute extends Variable{
         super(tkn, type);
         this.declaredIn = declaredIn;
         this.isPublic = !visibilityModifier.equals("private");
+
+        if(init instanceof NodoLlamadaVar && symbolTable.existsVar(init.name) == null)
+            throw new SemanticException("La variable a la que se hace referencia no existe ", init.name, init.lineNumber);
+
         this.init = init;
     }
 
@@ -33,7 +38,7 @@ public class Attribute extends Variable{
             Type initType = init.check();
 
             if (!initType.conformsTo(type))
-                throw new SemanticException("Inicialización incompatible con el tipo de atributo " + name, assignOp.lexeme(), assignOp.lineNumber());
+                throw new SemanticException("Inicialización incompatible con el tipo de atributo" + name, assignOp.lexeme(), assignOp.lineNumber());
         }
     }
 }

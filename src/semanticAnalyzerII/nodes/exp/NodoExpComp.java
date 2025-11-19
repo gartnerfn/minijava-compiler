@@ -25,7 +25,6 @@ public class NodoExpComp extends NodoExp{
         Type leftType = leftSide.check();
         Type rightType = rightSide.check();
 
-
         Type expectedTypes = getExpectedTypes();
         Type resultType = getResultType();
 
@@ -38,6 +37,13 @@ public class NodoExpComp extends NodoExp{
 
 
         return resultType;
+    }
+
+    public void generate(){
+//        Type leftType = leftSide.generate();
+//        Type rightType = rightSide.generate();
+
+//        || | && | == | != | < | > | <= | >= | + | - | * | / | %
     }
 
     public boolean isAssignable() {

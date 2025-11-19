@@ -47,6 +47,9 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
         if(!method.isStatic)
             throw new SemanticException("Method is not static", this.methodId.lexeme(), this.methodId.lineNumber());
 
+        if (nextInTheChain != null)
+            return nextInTheChain.check(method.returnType);
+
         return method.returnType;
     }
 

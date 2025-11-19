@@ -2,7 +2,6 @@ package semanticAnalyzerII.nodes.ref;
 
 import semanticAnalyzerI.entities.Constructor;
 import semanticAnalyzerI.entities.Entity;
-import semanticAnalyzerI.entities.Method;
 import semanticAnalyzerI.entities.Parameter;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.ReferenceType;

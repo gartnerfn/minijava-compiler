@@ -4,14 +4,14 @@ import semanticAnalyzerI.entities.Variable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.NullType;
 import semanticAnalyzerI.types.VoidType;
-import semanticAnalyzerII.nodes.exp.NodoExp;
+import semanticAnalyzerII.nodes.exp.NodoExpComp;
 import src.Token;
 
 public class NodoVarLocal extends Variable {
-    NodoExp exp;
+    NodoExpComp exp;
     Token assignOp;
 
-    public NodoVarLocal(Token tkn, NodoExp exp, Token assignOp) {
+    public NodoVarLocal(Token tkn, NodoExpComp exp, Token assignOp) {
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
 

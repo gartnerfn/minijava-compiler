@@ -462,7 +462,7 @@ public class SyntaxAnalyzer {
         match("methodVarId");
         Token assignOp = currentToken;
         match("=");
-        NodoExp exp = expresionCompuesta();
+        NodoExpComp exp = expresionCompuesta();
         return new NodoVarLocal(tkn, exp, assignOp);
     }
 

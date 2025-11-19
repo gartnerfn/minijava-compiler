@@ -27,6 +27,9 @@ public class NodoExpresionParentizada extends NodoReferencia{
     }
 
     public boolean canBeStatement(){
+        if(nextInTheChain != null)
+            return nextInTheChain.canBeStatement();
+
         return exp.canBeStatement();
     }
 }

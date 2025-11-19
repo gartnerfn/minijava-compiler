@@ -1,7 +1,7 @@
-//[Error:metodo|8]
+//[SinErrores]
 
 class A {
-    public int metodo(){
+    public static int metodo(){
         while(true){
             return 1;
         }
@@ -10,16 +10,15 @@ class A {
     }
 }
 
-
-
-
 class Init{
     static void main()
     {
-
+        A.metodo();
     }
 
-
 }
+
+
+
 
 
