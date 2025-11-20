@@ -5,23 +5,19 @@ class A {
     public int x;
 
     public A(int a){
-        x = 1;
         var b = 1;
     }
 
     public A(String a, int b){
     }
 
-    public int m1(){
-        return 3;
+    public void m1(){
     }
 
-    public int m1(int c){
+    public void m1(int c){
         var e = 3;
         var h = 3;
         var o = 3;
-
-        return h;
     }
 
     public static void m2(int y){
@@ -33,20 +29,17 @@ class B extends A {
     public int x;
     public int z;
 
-    public B(int a){
-        x = a;
-    }
-
-    public int m1(){
-        return x;
+    public void m1(){
+        var f = 4;
     }
 }
 
 class Init{
     static void main()
     {
-        var b = new B(5);
-        debugPrint(b.m1());
+        var a = new A(5);
+        a = null;
+        a.m1();
     }
 }
 

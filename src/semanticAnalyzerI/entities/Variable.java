@@ -44,7 +44,5 @@ public abstract class Variable extends NodoSentencia {
         return false;
     }
 
-    public void generate(){
-
-    }
+    public void generate(){}
 }

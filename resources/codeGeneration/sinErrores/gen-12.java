@@ -1,10 +1,10 @@
-///123&exitosamente
+///-10&exitosamente
 
 
 class Init{
     static void main()
     {
-        var a = 123;
+        var a = 2 - 123 * 10 / 10 + 1 % 11;
         debugPrint(a);
     }
 }

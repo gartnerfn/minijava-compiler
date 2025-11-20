@@ -27,6 +27,27 @@ public class NodoExpBasica extends NodoExpComp{
         return this.type;
     }
 
+    public void generate(){
+        operand.generate();
+
+        switch (unaryOperator.lexeme()) {
+            case "!":
+                System.out.println("entre");
+                symbolTable.addInstruction("NOT");
+                break;
+            case "++":
+                symbolTable.addInstruction("PUSH 1");
+                symbolTable.addInstruction("ADD");
+                break;
+            case "-":
+                symbolTable.addInstruction("NEG");
+                break;
+            case"--":
+                symbolTable.addInstruction("DIV");
+                break;
+        }
+    }
+
     public Type getExpectedType(){
         switch (unaryOperator.token()) {
             case "+", "-", "++", "--" -> {

@@ -44,10 +44,50 @@ public class NodoExpComp extends NodoExp{
     }
 
     public void generate(){
-//        Type leftType = leftSide.generate();
-//        Type rightType = rightSide.generate();
+        leftSide.generate();
+        rightSide.generate();
 
-//        || | && | == | != | < | > | <= | >= | + | - | * | / | %
+        switch (value) {
+            case "+":
+                symbolTable.addInstruction("ADD");
+                break;
+            case "-":
+                symbolTable.addInstruction("SUB");
+                break;
+            case "*":
+                symbolTable.addInstruction("MUL");
+                break;
+            case"/":
+                symbolTable.addInstruction("DIV");
+                break;
+            case "%":
+                symbolTable.addInstruction("MOD");
+                break;
+            case "&&":
+                symbolTable.addInstruction("AND");
+                break;
+            case "||":
+                symbolTable.addInstruction("OR");
+                break;
+            case "==":
+                symbolTable.addInstruction("EQ");
+                break;
+            case "!=":
+                symbolTable.addInstruction("NE");
+                break;
+            case "<":
+                symbolTable.addInstruction("LT");
+                break;
+            case ">":
+                symbolTable.addInstruction("GT");
+                break;
+            case "<=":
+                symbolTable.addInstruction("LE");
+                break;
+            case ">=":
+                symbolTable.addInstruction("GE");
+                break;
+        }
     }
 
     public Type getExpectedTypes() {

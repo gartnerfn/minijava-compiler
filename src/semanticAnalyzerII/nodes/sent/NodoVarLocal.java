@@ -40,6 +40,8 @@ public class NodoVarLocal extends Variable {
     }
 
     public void generate(){
-
+        symbolTable.addInstruction("RMEM 1");
+        exp.generate();
+        symbolTable.addInstruction("STORE " + offset);
     }
 }
