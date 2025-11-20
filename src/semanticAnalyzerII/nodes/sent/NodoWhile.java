@@ -34,4 +34,8 @@ public class NodoWhile extends NodoSentencia{
     public boolean guaranteeReturn(){
         return false;
     }
+
+    public void generate(){
+
+    }
 }

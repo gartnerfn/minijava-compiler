@@ -1,4 +1,5 @@
 package semanticAnalyzerI.entities.predefined;
+import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.Constructor;
 import semanticAnalyzerI.entities.Method;
@@ -7,13 +8,13 @@ import semanticAnalyzerI.types.*;
 import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
 import src.Token;
 
-import java.io.IOException;
-
 public class System extends Class {
+    SymbolTable symbolTable = SymbolTable.getInstance();
+
     public System(){
         super(new Token("classId", "System", 0));
 
-        addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
+        createConstructor();
 
         Method read = new Method(new Token("methodVarId", "read", 0), new IntType(), "static", "", this);
         read.addBlock(new NodoBloqueNulo());
@@ -67,47 +68,106 @@ public class System extends Class {
     public void isWellDeclared() {}
     public void check(){}
 
-    public static int read() {
-        try {
-            return java.lang.System.in.read();
-        } catch (IOException e) {
-            throw new RuntimeException("Error al leer de la entrada estándar", e);
-        }
-    }
+    public void generate(){
+        symbolTable.addInstruction.add(".DATA");
+        symbolTable.addInstruction.add("lblVT_" + this.name + ": NOP");
 
-    public static void printB(boolean b) {
-        java.lang.System.out.print(b);
-    }
+        symbolTable.addInstruction.add(".CODE");
 
-    public static void printC(char c) {
-        java.lang.System.out.print(c);
-    }
+        for (Constructor constructor : constructors.values())
+            constructor.generate();
 
-    public static void printI(int i) {
-        java.lang.System.out.print(i);
-    }
+        symbolTable.addInstruction("lblMethod_read0@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("READ");
+        symbolTable.addInstruction("STORE 3");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 0");
 
-    public static void printS(String s) {
-        java.lang.System.out.print(s);
-    }
+        symbolTable.addInstruction("lblMethod_printB1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("BPRINT");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
 
-    public static void println() {
-        java.lang.System.out.println();
-    }
+        symbolTable.addInstruction("lblMethod_printC1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("CPRINT");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
 
-    public static void printBln(boolean b) {
-        java.lang.System.out.println(b);
-    }
+        symbolTable.addInstruction("lblMethod_printI1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("IPRINT");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
 
-    public static void printCln(char c) {
-        java.lang.System.out.println(c);
-    }
+        symbolTable.addInstruction("lblMethod_printS1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("SPRINT");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
 
-    public static void printIln(int i) {
-        java.lang.System.out.println(i);
-    }
+        symbolTable.addInstruction("lblMethod_println0@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("PRNLN");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 0");
 
-    public static void printSln(String s) {
-        java.lang.System.out.println(s);
+        symbolTable.addInstruction("lblMethod_printBln1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("BPRINT");
+        symbolTable.addInstruction("PRNLN");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
+
+        symbolTable.addInstruction("lblMethod_printCln1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("CPRINT");
+        symbolTable.addInstruction("PRNLN");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
+
+        symbolTable.addInstruction("lblMethod_printIln1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("IPRINT");
+        symbolTable.addInstruction("PRNLN");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
+
+        symbolTable.addInstruction("lblMethod_printSln1@System:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("SPRINT");
+        symbolTable.addInstruction("PRNLN");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
     }
 }

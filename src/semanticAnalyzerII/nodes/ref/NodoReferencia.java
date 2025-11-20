@@ -17,4 +17,8 @@ public abstract class NodoReferencia extends NodoOperando {
 
         return false;
     }
+
+    public void generate(){
+
+    }
 }

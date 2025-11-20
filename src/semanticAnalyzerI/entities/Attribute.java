@@ -24,7 +24,7 @@ public class Attribute extends Variable{
         this.isPublic = !visibilityModifier.equals("private");
 
         if(init instanceof NodoLlamadaVar && symbolTable.existsVar(init.name) == null)
-            throw new SemanticException("La variable a la que se hace referencia no existe ", init.name, init.lineNumber);
+            throw new SemanticException("La variable a la que se hace referencia no existe", init.name, init.lineNumber);
 
         this.init = init;
     }

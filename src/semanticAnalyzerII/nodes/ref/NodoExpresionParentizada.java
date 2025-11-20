@@ -32,4 +32,8 @@ public class NodoExpresionParentizada extends NodoReferencia{
 
         return exp.canBeStatement();
     }
+
+    public void generate(){
+
+    }
 }

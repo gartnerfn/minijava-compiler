@@ -13,6 +13,8 @@ import java.util.List;
 public class NodoLlamadaMetodoEstatico extends NodoReferencia{
     private Token classId;
     private Token methodId;
+    private Entity entity;
+    private Method method;
 
     List<NodoExp> args;
 
@@ -23,12 +25,12 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
     }
 
     public Type check(){
-        Entity entity = symbolTable.existsEntity(this.classId.lexeme());
+        entity = symbolTable.existsEntity(this.classId.lexeme());
 
         if(entity == null)
             throw new SemanticException("Class does not exist", this.classId.lexeme(), this.classId.lineNumber());
 
-        Method method = entity.existsMethod(this.methodId.lexeme(), args.size());
+        method = entity.existsMethod(this.methodId.lexeme(), args.size());
 
         if(method == null)
             throw new SemanticException("Static method does not exist", this.methodId.lexeme(), this.methodId.lineNumber());
@@ -53,10 +55,18 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
         return method.returnType;
     }
 
-   public boolean canBeStatement(){
+    public boolean canBeStatement(){
        if(nextInTheChain != null)
            return nextInTheChain.canBeStatement();
 
         return true;
     }
+
+    public void generate(){
+        for(NodoExp arg : args)
+            arg.generate();
+
+        symbolTable.callMethod(method.name + method.parameters.size(), entity.name);
+    }
+
 }

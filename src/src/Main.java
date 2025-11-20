@@ -9,9 +9,6 @@ import syntaxAnalyzer.SyntaxAnalyzer;
 import sourceManager.SourceManager;
 import sourceManager.SourceManagerImpl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,7 +43,7 @@ public class Main {
             if(lexicalExceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");
 
-            Files.write(outFile, symbolTable.instructions, StandardCharsets.UTF_8);
+            Files.write(outFile, symbolTable.addInstruction, StandardCharsets.UTF_8);
 
             symbolTable.deleteInstance();
         } catch (java.io.IOException e) {
@@ -68,7 +65,7 @@ public class Main {
             for(LexicalException exception : lexicalExceptions)
                 System.out.println(exception.getMessage());
 
-            symbolTable.printTable();
+//            symbolTable.printTable();
             System.out.println(smE.getMessage());
         } finally {
             try {

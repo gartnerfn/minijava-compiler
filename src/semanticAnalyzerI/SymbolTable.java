@@ -17,7 +17,7 @@ public class SymbolTable {
 
     public Entity currentEntity;
     public Routine currentRoutine;
-    public List<java.lang.String> instructions = new ArrayList<>();
+    public List<java.lang.String> addInstruction = new ArrayList<>();
 
     private SymbolTable(){}
 
@@ -39,6 +39,13 @@ public class SymbolTable {
 
             if (currentRoutine != null && currentRoutine.existsParameter(localVar.name) != null)
                 throw new SemanticException("Variable local '" + localVar.name + "' ya declarada como parámetro del método '" + currentRoutine.name + "'", localVar.name, localVar.lineNumber);
+
+            if(currentRoutine != null){
+                localVar.offset = currentRoutine.localVarOffset;
+                currentRoutine.localVarOffset--;
+
+                System.out.println("Local variable " + localVar.name + " offset: " + localVar.offset);
+            }
 
             currentBlock.put(localVar.name, localVar);
         }
@@ -115,9 +122,9 @@ public class SymbolTable {
     }
 
     public void initializePredefined(){
-        classes.put("Object", new Object());
-        classes.put("System", new semanticAnalyzerI.entities.predefined.System());
-        classes.put("String", new String());
+        addClass(new Object());
+        addClass(new semanticAnalyzerI.entities.predefined.System());
+        addClass(new String());
     }
 
     public void isWellDeclared(){
@@ -150,161 +157,48 @@ public class SymbolTable {
     }
 
     private void generateInit(){
-        instructions.add(".CODE");
-        instructions.add("PUSH lblMain@Init");
-        instructions.add("CALL");
-        instructions.add("HALT");
+        addInstruction.add(".CODE");
+        addInstruction.add("PUSH lblMethod_main0@Init");
+        addInstruction.add("CALL");
+        addInstruction.add("HALT");
     }
 
     private void generateHeapRoutines(){
-        instructions.add("simple_heap_init:");
-        instructions.add("RET 0");
+        addInstruction.add("simple_heap_init:");
+        addInstruction.add("RET 0");
 
-        instructions.add("simple_malloc:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOADHL");
-        instructions.add("DUP");
-        instructions.add("PUSH 1");
-        instructions.add("ADD");
-        instructions.add("STORE 4");
-        instructions.add("LOAD 3");
-        instructions.add("ADD");
-        instructions.add("STOREHL");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-    }
-
-    private void generateDefaultMethods() {
-        //Object class
-        //static void debugPrint(int i)
-        instructions.add("; Object class");
-        instructions.add("Object_debugPrint:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("IPRINT");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //System class
-        //static int read()
-        instructions.add("; System class");
-        instructions.add("System_read:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("READ");
-        instructions.add("STORE 3");
-        instructions.add("STOREFP");
-        instructions.add("RET 0");
-
-        //static void printB(boolean b)
-        instructions.add("System_printB:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("BPRINT");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void printC(char c)
-        instructions.add("System_printC:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("CPRINT");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void printI(int i)
-        instructions.add("System_printI:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("IPRINT");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void printS(String s)
-        instructions.add("System_printS:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("SPRINT");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void println()
-        instructions.add("System_println:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("PRNLN");
-        instructions.add("STOREFP");
-        instructions.add("RET 0");
-
-        //static void printBln(boolean b)
-        instructions.add("System_printBln:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("BPRINT");
-        instructions.add("PRNLN");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void printCln(char c)
-        instructions.add("System_printCln:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("CPRINT");
-        instructions.add("PRNLN");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void printIln(int i)
-        instructions.add("System_printIln:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("IPRINT");
-        instructions.add("PRNLN");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
-
-        //static void printSln(String s)
-        instructions.add("System_printSln:");
-        instructions.add("LOADFP");
-        instructions.add("LOADSP");
-        instructions.add("STOREFP");
-        instructions.add("LOAD 3");
-        instructions.add("SPRINT");
-        instructions.add("PRNLN");
-        instructions.add("STOREFP");
-        instructions.add("RET 1");
+        addInstruction.add("simple_malloc:");
+        addInstruction.add("LOADFP");
+        addInstruction.add("LOADSP");
+        addInstruction.add("STOREFP");
+        addInstruction.add("LOADHL");
+        addInstruction.add("DUP");
+        addInstruction.add("PUSH 1");
+        addInstruction.add("ADD");
+        addInstruction.add("STORE 4");
+        addInstruction.add("LOAD 3");
+        addInstruction.add("ADD");
+        addInstruction.add("STOREHL");
+        addInstruction.add("STOREFP");
+        addInstruction.add("RET 1");
     }
 
     public void generate(){
         generateInit();
         generateHeapRoutines();
-        generateDefaultMethods();
 
         for (Class cl : classes.values())
             cl.generate();
     }
 
+    public void addInstruction(java.lang.String instruction){
+        addInstruction.add(instruction);
+    }
 
+    public void callMethod(java.lang.String methodName, java.lang.String className){
+        addInstruction.add("PUSH lblMethod_" + methodName + "@" + className);
+        addInstruction.add("CALL");
+    }
 
     public void printTable() {
         System.out.println("===== TABLA DE SIMBOLOS =====");

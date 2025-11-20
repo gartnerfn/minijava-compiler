@@ -12,6 +12,7 @@ import java.util.List;
 
 public class NodoLlamadaMetodo extends NodoReferencia{
     List<NodoExp> args;
+    private Method method;
 
     public NodoLlamadaMetodo(Token tkn, List<NodoExp> args){
         this.name = tkn.lexeme();
@@ -20,7 +21,7 @@ public class NodoLlamadaMetodo extends NodoReferencia{
     }
 
     public Type check(){
-        Method method = symbolTable.currentEntity.existsMethod(this.name, args.size());
+        method = symbolTable.currentEntity.existsMethod(this.name, args.size());
 
         if(method == null)
             throw new SemanticException("Method does not exist", this.name, this.lineNumber);
@@ -57,5 +58,12 @@ public class NodoLlamadaMetodo extends NodoReferencia{
             return nextInTheChain.canBeStatement();
 
         return true;
+    }
+
+    public void generate(){
+        for(NodoExp arg : args)
+            arg.generate();
+
+        symbolTable.callMethod(method.name + method.parameters.size(), method.declaredIn.name);
     }
 }

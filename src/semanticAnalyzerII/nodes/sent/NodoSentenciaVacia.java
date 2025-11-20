@@ -13,4 +13,5 @@ public class NodoSentenciaVacia extends NodoSentencia{
     public boolean guaranteeReturn(){
         return false;
     }
+    public void generate(){}
 }

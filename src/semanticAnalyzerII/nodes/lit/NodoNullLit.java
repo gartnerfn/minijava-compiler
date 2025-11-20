@@ -7,5 +7,9 @@ public class NodoNullLit extends NodoLit{
     public NodoNullLit(Token tkn){
         super(tkn, new NullType());
     }
+
+    public void generate(){
+        symbolTable.addInstruction("PUSH 0");
+    }
 }
 

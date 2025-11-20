@@ -16,4 +16,5 @@ public abstract class NodoExp {
     public boolean canBeStatement(){
         return false;
     }
+    public abstract void generate();
 }

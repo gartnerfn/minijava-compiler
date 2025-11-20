@@ -8,7 +8,7 @@ public class String extends Class{
     public String(){
         super(new src.Token("classId", "String", 0));
 
-        addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
+        createConstructor();
     }
 
     public void isWellDeclared() {}

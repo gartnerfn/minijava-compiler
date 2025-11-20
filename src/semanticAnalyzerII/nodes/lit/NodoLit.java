@@ -1,12 +1,10 @@
 package semanticAnalyzerII.nodes.lit;
 
 import semanticAnalyzerI.types.Type;
-import semanticAnalyzerII.nodes.enc.NodoEncadenado;
-import semanticAnalyzerII.nodes.exp.NodoExp;
 import semanticAnalyzerII.nodes.exp.NodoOperando;
 import src.Token;
 
-public class NodoLit extends NodoOperando {
+public abstract class NodoLit extends NodoOperando {
     public NodoLit(Token tkn, Type type){
         this.value = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
@@ -17,7 +15,5 @@ public class NodoLit extends NodoOperando {
         return this.type;
     }
 
-    public void generate(){
-
-    }
+    public abstract void generate();
 }

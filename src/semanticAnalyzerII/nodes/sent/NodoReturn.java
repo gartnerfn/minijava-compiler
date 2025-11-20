@@ -36,4 +36,8 @@ public class NodoReturn extends NodoSentencia{
     public boolean guaranteeReturn(){
         return true;
     }
+
+    public void generate(){
+
+    }
 }

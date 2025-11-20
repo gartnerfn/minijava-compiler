@@ -26,4 +26,7 @@ public class NodoReferenciaThis extends NodoReferencia{
         return thisType;
     }
 
+    public void generate(){
+
+    }
 }

@@ -39,15 +39,15 @@ public class NodoExpComp extends NodoExp{
         return resultType;
     }
 
+    public boolean isAssignable() {
+        return false;
+    }
+
     public void generate(){
 //        Type leftType = leftSide.generate();
 //        Type rightType = rightSide.generate();
 
 //        || | && | == | != | < | > | <= | >= | + | - | * | / | %
-    }
-
-    public boolean isAssignable() {
-        return false;
     }
 
     public Type getExpectedTypes() {

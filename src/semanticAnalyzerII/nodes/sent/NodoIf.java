@@ -39,4 +39,8 @@ public class NodoIf extends NodoSentencia{
     public boolean guaranteeReturn(){
         return thenBody.guaranteeReturn() && elseBody.guaranteeReturn();
     }
+
+    public void generate(){
+
+    }
 }

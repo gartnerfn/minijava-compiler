@@ -8,7 +8,6 @@ import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
 import src.Token;
 
 public class Method extends Routine{
-
     public boolean isAbstract;
     public boolean isFinal;
     public boolean isStatic;
@@ -26,6 +25,10 @@ public class Method extends Routine{
         this.isFinal = false;
         this.isStatic = false;
 
+        INITIAL_PARAMETER_OFFSET = 4; // 0 = 1vl, 1 = ed, 2 = pr, 3 = this
+        parameterCount = 0;
+        localVarOffset = 0;
+
         switch(typeModifier){
             case "abstract":
                 isAbstract = true;
@@ -35,6 +38,7 @@ public class Method extends Routine{
                 break;
             case "static":
                 isStatic = true;
+                INITIAL_PARAMETER_OFFSET--; // If the method is static it does not have "this" reference
                 break;
         }
 
@@ -67,5 +71,17 @@ public class Method extends Routine{
 
         if(!(returnType instanceof VoidType) && !block.guaranteeReturn())
             throw new SemanticException("Missing return statement in routine '" + name + "'", name, lineNumber);
+    }
+
+    public void generate(){
+        symbolTable.addInstruction("lblMethod_" + this.name + this.parameters.size() + "@" + this.declaredIn.name + ":");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+
+        super.generate();
+
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET " + parameters.size());
     }
 }

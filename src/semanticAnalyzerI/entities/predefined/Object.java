@@ -1,5 +1,6 @@
 package semanticAnalyzerI.entities.predefined;
 
+import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.Constructor;
 import semanticAnalyzerI.entities.Method;
@@ -10,13 +11,13 @@ import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
 import src.Token;
 
 public class Object extends Class {
+    SymbolTable symbolTable = SymbolTable.getInstance();
 
     public Object(){
         super(new Token("classId", "Object", 0));
         this.ancestorInheritance = null;
-        isConsolidated = true;
 
-        addConstructor(new Constructor(new Token("classId", this.name, 0), ""));
+        createConstructor();
 
         Method debugPrint = new Method(new Token("methodVarId", "debugPrint", 0), new VoidType(), "static", "", this);
         debugPrint.addBlock(new NodoBloqueNulo());
@@ -30,10 +31,29 @@ public class Object extends Class {
     }
 
     public void isWellDeclared() {}
-    public void consolidate(){}
+    public void consolidate(){
+        calculateOffsets(null);
+        printOffsets();
+        isConsolidated = true;
+    }
     public void check(){}
 
-    static void debugPrint(int i){
-        java.lang.System.out.println(i);
+    public void generate(){
+        symbolTable.addInstruction.add(".DATA");
+        symbolTable.addInstruction.add("lblVT_" + this.name + ": NOP");
+
+        symbolTable.addInstruction.add(".CODE");
+
+        for (Constructor constructor : constructors.values())
+            constructor.generate();
+
+        symbolTable.addInstruction("lblMethod_debugPrint1@Object:");
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("LOAD 3");
+        symbolTable.addInstruction("IPRINT");
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET 1");
     }
 }

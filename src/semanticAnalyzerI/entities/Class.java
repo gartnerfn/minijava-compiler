@@ -8,6 +8,9 @@ public class Class extends Entity{
     public boolean isFinal;
     public boolean isStatic;
 
+    public int methodOffset;
+    public int attributeOffset;
+
     public Class(Token tkn){
         super(tkn);
 
@@ -16,6 +19,9 @@ public class Class extends Entity{
         this.isStatic = false;
 
         this.ancestorInheritance = "Object";
+
+        methodOffset = 0;
+        attributeOffset = 1; // 0 = VTable reference
     }
 
     public Class(Token tkn, String typeModifier){
@@ -61,11 +67,40 @@ public class Class extends Entity{
         return !constructors.isEmpty();
     }
 
-    private void createConstructor(){
+    public void createConstructor(){
         Constructor constructor = new Constructor(new Token("classId", this.name, 0), "");
         constructor.addBlock(new NodoBloque());
 
         addConstructor(constructor);
+    }
+
+    public void calculateOffsets(Class ancestorInheritanceClass){
+        if(ancestorInheritanceClass != null){
+            attributeOffset = ancestorInheritanceClass.attributeOffset;
+            methodOffset = ancestorInheritanceClass.methodOffset;
+        }
+
+        for(Attribute attribute : attributes.values()){
+            attribute.offset = attributeOffset;
+            attributeOffset++;
+        }
+
+        for(Method method : methods.values()){
+            method.offset = methodOffset;
+            methodOffset++;
+        }
+    }
+
+    public void printOffsets(){
+        System.out.println("Starting offsets for class " + this.name + " -> Method offset: " + methodOffset + ", Attribute offset: " + attributeOffset);
+
+        for(Attribute attribute : attributes.values()){
+            System.out.println("Attribute " + attribute.name + attribute.declaredIn.name + " offset: " + attribute.offset);
+        }
+
+        for(Method method : methods.values()){
+            System.out.println("Method " + method.name+"|"+method.parameters.size() + " offset: " + method.offset);
+        }
     }
 
     public void isWellDeclared(){
@@ -114,8 +149,9 @@ public class Class extends Entity{
                 throw new SemanticException("La interfaz que se implementa no existe.", ancestorImplementation, lineNumber);
         }
 
-        for(Attribute attribute : attributes.values())
+        for(Attribute attribute : attributes.values()){
             attribute.isWellDeclared();
+        }
 
         for(Method method : methods.values()){
             if(!this.isAbstract && method.isAbstract)
@@ -137,6 +173,8 @@ public class Class extends Entity{
 
         if(!ancestorInheritanceClass.isConsolidated)
             ancestorInheritanceClass.consolidate();
+
+        calculateOffsets(ancestorInheritanceClass);
 
         for (Attribute attribute : ancestorInheritanceClass.attributes.values()) {
             addInheritedAttribute(attribute, ancestorInheritance);
@@ -175,6 +213,8 @@ public class Class extends Entity{
                 } else if(method.isStatic) {
                     throw new SemanticException("No se puede redefinir un metodo estatico.", thisMethod.name, thisMethod.lineNumber);
                 }
+
+                thisMethod.offset = method.offset;
             }
         }
 
@@ -220,11 +260,22 @@ public class Class extends Entity{
             }
         }
 
+        printOffsets();
+
         isConsolidated = true;
     }
 
-    public void generate(){
-//        for (Method method : methods.values())
-//            method.generate();
+    public void generate() {
+        symbolTable.addInstruction.add(".DATA");
+        symbolTable.addInstruction.add("lblVT_" + this.name + ": NOP");
+
+        symbolTable.addInstruction.add(".CODE");
+
+        for (Constructor constructor : constructors.values())
+            constructor.generate();
+
+        for (Method method : methods.values())
+            if (method.declaredIn == this)
+                method.generate();
     }
 }

@@ -57,4 +57,8 @@ public class NodoLlamadaConstructor extends NodoReferencia{
 
         return true;
     }
+
+    public void generate(){
+
+    }
 }

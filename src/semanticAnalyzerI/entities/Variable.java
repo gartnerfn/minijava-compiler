@@ -14,6 +14,8 @@ public abstract class Variable extends NodoSentencia {
     public int lineNumber;
     public Type type;
 
+    public int offset;
+
     public Variable(){}
 
     public Variable(Token tkn, Type type){
@@ -40,5 +42,9 @@ public abstract class Variable extends NodoSentencia {
 
     public boolean guaranteeReturn(){
         return false;
+    }
+
+    public void generate(){
+
     }
 }

@@ -13,4 +13,5 @@ public abstract class NodoSentencia {
 
     public abstract void check();
     public abstract boolean guaranteeReturn();
+    public abstract void generate();
 }

@@ -37,4 +37,8 @@ public class NodoLlamadaVar extends NodoReferencia{
 
         return true;
     }
+
+    public void generate(){
+
+    }
 }

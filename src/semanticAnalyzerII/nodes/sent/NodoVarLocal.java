@@ -38,4 +38,8 @@ public class NodoVarLocal extends Variable {
 
         symbolTable.addLocalVar(this);
     }
+
+    public void generate(){
+
+    }
 }

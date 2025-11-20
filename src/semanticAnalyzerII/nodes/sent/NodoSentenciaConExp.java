@@ -33,4 +33,8 @@ public class NodoSentenciaConExp extends NodoSentencia{
     public boolean guaranteeReturn(){
         return false;
     }
+
+    public void generate(){
+        exp.generate();
+    }
 }

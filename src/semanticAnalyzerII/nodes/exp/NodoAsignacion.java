@@ -36,4 +36,11 @@ public class NodoAsignacion extends NodoExp {
     public boolean canBeStatement(){
         return true;
     }
+
+    public void generate(){
+        leftSide.generate();
+        rightSide.generate();
+
+
+    }
 }

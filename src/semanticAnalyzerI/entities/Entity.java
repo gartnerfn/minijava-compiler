@@ -22,7 +22,7 @@ public class Entity {
     public String ancestorImplementation;
 
     public Map<String, Attribute> attributes = new LinkedHashMap<>();
-    public HashMap<String, Method> methods = new HashMap<>();
+    public Map<String, Method> methods = new LinkedHashMap<>();
     public HashMap<String, Constructor> constructors = new HashMap<>();
 
     public Entity(Token tkn){
@@ -117,6 +117,8 @@ public class Entity {
         methods.put(method.name + method.parameters.size(), method);
     }
 
+
+
     public void check(){
         symbolTable.currentEntity = this;
 
@@ -132,7 +134,5 @@ public class Entity {
             if(method.declaredIn == this)
                 method.check();
         }
-
-
     }
 }
