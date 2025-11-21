@@ -1,21 +1,23 @@
-///12&exitosamente
+///5&exitosamente
 
 class A {
-    public static int m1(){
-        return 1;
+    int x;
+
+    public A(){
+        x = 5;
+    }
+
+    public void m1(){
+        debugPrint(this.x);
     }
 }
 
 class Init{
-    int x;
-
-    public Init {
-        x = 5
-    }
 
     static void main()
     {
-        debugPrint(this.x);
+        var a = new A();
+        a.m1();
     }
 }
 

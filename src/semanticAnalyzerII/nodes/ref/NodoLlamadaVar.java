@@ -1,6 +1,5 @@
 package semanticAnalyzerII.nodes.ref;
 
-import org.w3c.dom.Attr;
 import semanticAnalyzerI.entities.Attribute;
 import semanticAnalyzerI.entities.Method;
 import semanticAnalyzerI.entities.Parameter;

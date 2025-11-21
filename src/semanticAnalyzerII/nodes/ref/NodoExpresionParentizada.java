@@ -36,8 +36,6 @@ public class NodoExpresionParentizada extends NodoReferencia{
     public void generate(){
         exp.generate();
 
-        // POP?
-
         if(nextInTheChain != null)
             nextInTheChain.generate();
     }

@@ -4,7 +4,7 @@ import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
 import src.Token;
 
-public class NodoAsignacion extends NodoExp {
+public class NodoAsignacion extends NodoExpComp {
     NodoExpComp leftSide;
     NodoExpComp rightSide;
 
@@ -38,8 +38,12 @@ public class NodoAsignacion extends NodoExp {
     }
 
     public void generate(){
+        rightSide.generate();
+
+        if(!isLeftSide)
+            symbolTable.addInstruction("DUP");
+
         leftSide.isLeftSide = true;
         leftSide.generate();
-        rightSide.generate();
     }
 }

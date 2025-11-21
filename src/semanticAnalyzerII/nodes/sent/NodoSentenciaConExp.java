@@ -1,6 +1,7 @@
 package semanticAnalyzerII.nodes.sent;
 
 import semanticAnalyzerI.exceptions.SemanticException;
+import semanticAnalyzerII.nodes.exp.NodoAsignacion;
 import semanticAnalyzerII.nodes.exp.NodoExp;
 import src.Token;
 
@@ -36,6 +37,9 @@ public class NodoSentenciaConExp extends NodoSentencia{
 
     public void generate(){
         exp.generate();
-//        symbolTable.addInstruction("POP");
+
+        //TODO
+        if(exp instanceof NodoAsignacion)
+            symbolTable.addInstruction("POP");
     }
 }
