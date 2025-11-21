@@ -11,6 +11,8 @@ public class NodoVarLocal extends Variable {
     NodoExpComp exp;
     Token assignOp;
 
+    public int offset;
+
     public NodoVarLocal(Token tkn, NodoExpComp exp, Token assignOp) {
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();

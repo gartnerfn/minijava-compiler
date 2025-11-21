@@ -19,4 +19,5 @@ public abstract class NodoEncadenado {
     public abstract boolean isAssignable();
     public abstract boolean canBeStatement();
     public abstract void generate();
+    public abstract void generate(boolean isLeftSide);
 }

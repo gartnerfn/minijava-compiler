@@ -10,8 +10,6 @@ public class NodoExpComp extends NodoExp{
     NodoExpComp leftSide;
     NodoExpBasica rightSide;
 
-    public boolean isLeftSide = false;
-
     public NodoExpComp(){}
 
     public NodoExpComp(NodoExpComp leftSide, Token operator, NodoExpBasica rightSide){
@@ -46,6 +44,10 @@ public class NodoExpComp extends NodoExp{
 
     public boolean isAssignable() {
         return false;
+    }
+
+    public void generate(boolean isLeftSide) {
+        generate();
     }
 
     public void generate(){

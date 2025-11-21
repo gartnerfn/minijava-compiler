@@ -15,7 +15,6 @@ class A extends B { // Clase en el medio de la herencia sin mets dinamicos
         var entero = 1;
         var bo = false;
 
-        System.printSln("Test B");
         entero = claseB.m1();
         System.printIln(entero);
         System.println();
@@ -27,7 +26,6 @@ class A extends B { // Clase en el medio de la herencia sin mets dinamicos
         System.printIln(entero);
         System.println();System.println();
 
-        System.printSln("Test A");
         entero = claseA.m1();
         System.printIln(entero);
         System.println();
@@ -36,7 +34,6 @@ class A extends B { // Clase en el medio de la herencia sin mets dinamicos
         System.println();
         System.println();System.println();
 
-        System.printSln("Test C");
         System.printIln(claseC.m1());
         entero = claseC.m2();
         System.printIln(entero);

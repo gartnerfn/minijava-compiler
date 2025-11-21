@@ -43,7 +43,6 @@ public class NodoAsignacion extends NodoExpComp {
 //        if(!isLeftSide)
 //            symbolTable.addInstruction("DUP");
 
-        leftSide.isLeftSide = true;
-        leftSide.generate();
+        leftSide.generate(true);
     }
 }

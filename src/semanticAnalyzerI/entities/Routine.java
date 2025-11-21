@@ -95,9 +95,5 @@ public abstract class Routine {
 
         block.generate();
 
-        if(!localVars.isEmpty())
-            symbolTable.addInstruction("FMEM " + localVars.size());
-
-        symbolTable.addInstruction("STOREFP");
     }
 }

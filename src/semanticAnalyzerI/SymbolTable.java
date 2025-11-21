@@ -161,7 +161,7 @@ public class SymbolTable {
 
     private void generateInit(){
         instructions.add(".CODE");
-        instructions.add("PUSH lblMethod_main0@Init");
+        instructions.add("PUSH main");
         instructions.add("CALL");
         instructions.add("HALT");
     }

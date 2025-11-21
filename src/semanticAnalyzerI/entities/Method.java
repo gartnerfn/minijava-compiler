@@ -77,12 +77,25 @@ public class Method extends Routine{
     }
 
     public void generate(){
+        String label = getLabel();
+
+        if(name.equals("main") && isStatic){
+            label = "main";
+        }
+
         symbolTable.currentRoutine = this;
 
-        symbolTable.addInstruction(getLabel() + ":");
+        symbolTable.addInstruction(label + ":");
         super.generate();
+        symbolTable.addInstruction("NOP");
+        symbolTable.addInstruction("end_method_" + this.name + this.parameters.size() + "@" + this.declaredIn.name + ":");
+        if(!localVars.isEmpty())
+            symbolTable.addInstruction("FMEM " + localVars.size());
 
+        symbolTable.addInstruction("STOREFP");
         symbolTable.addInstruction("RET " + (isStatic ? parameters.size() : (parameters.size() + 1)));
+
+
 
     }
 }

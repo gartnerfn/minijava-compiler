@@ -79,11 +79,6 @@ public class Class extends Entity{
     }
 
     public void calculateOffsets(Class ancestorInheritanceClass){
-        if(ancestorInheritanceClass != null){
-            attributeOffset = ancestorInheritanceClass.attributeOffset;
-            methodOffset = ancestorInheritanceClass.methodOffset;
-        }
-
         for(Attribute attribute : attributes.values()){
             attributeOffsets.put(attribute.name + '|' + this.name, attributeOffset);
             attributeOffset++;
@@ -291,6 +286,8 @@ public class Class extends Entity{
                     .sorted(Comparator.comparingInt(m -> methodOffsets.get(m.name + m.parameters.size())))
                     .map(Method::getLabel)
                     .toList();
+
+            System.out.println(labels);
 
             if(!labels.isEmpty())
                 symbolTable.addInstruction("DW " + String.join(", ", labels));

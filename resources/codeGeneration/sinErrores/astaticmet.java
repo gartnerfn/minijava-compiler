@@ -1,4 +1,4 @@
-//0&1&2&3&4&5&6&7&8&9&exitosamente
+//0&0&1&0&0&exitosamente
 class A {
 
     static void main(){
@@ -10,7 +10,7 @@ class A {
     }
 
     static void m0(){
-        System.printSln("m0 estat de A");
+        System.printSln("0");
     }
 
 
@@ -22,7 +22,7 @@ class B extends A {
 
 
     static void m1(){
-        System.printSln("m1 estat de B");
+        System.printSln("1");
     }
 
 }

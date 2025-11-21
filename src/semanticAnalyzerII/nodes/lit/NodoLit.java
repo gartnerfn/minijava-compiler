@@ -19,4 +19,8 @@ public abstract class NodoLit extends NodoOperando {
     public boolean isOperandWithCall(){
         return false;
     }
+
+    public void generate(boolean isLeftSide){
+        generate();
+    }
 }

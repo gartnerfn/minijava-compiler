@@ -33,11 +33,17 @@ public class NodoReferenciaThis extends NodoReferencia{
 
         return thisType;
     }
-
-    public void generate(){
+    public void generate() {
         symbolTable.addInstruction("LOAD 3");
 
         if(nextInTheChain != null)
             nextInTheChain.generate();
+    }
+
+    public void generate(boolean isLeftSide){
+        symbolTable.addInstruction("LOAD 3");
+
+        if(nextInTheChain != null)
+            nextInTheChain.generate(isLeftSide);
     }
 }

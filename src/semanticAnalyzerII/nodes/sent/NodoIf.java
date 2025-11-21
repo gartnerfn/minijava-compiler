@@ -5,6 +5,7 @@ import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.BooleanType;
 import semanticAnalyzerI.types.Type;
 import semanticAnalyzerII.nodes.exp.NodoExp;
+import semanticAnalyzerII.nodes.ref.NodoReferencia;
 import src.Token;
 
 public class NodoIf extends NodoSentencia{
@@ -52,17 +53,37 @@ public class NodoIf extends NodoSentencia{
         if(!(elseBody instanceof NodoSentenciaVacia)){
             symbolTable.addInstruction("BF " + elseLabel);
             thenBody.generate();
-            symbolTable.addInstruction("JUMP " + endIfLabel);
+
+            boolean thenReturns = bodyReturns(thenBody);
+            boolean elseReturn = bodyReturns(elseBody);
+
+            if(!thenReturns || !elseReturn) {
+                symbolTable.addInstruction("JUMP " + endIfLabel);
+            }
 
             symbolTable.addInstruction(elseLabel + ":");
             elseBody.generate();
-            symbolTable.addInstruction(endIfLabel+":");
 
-
+            if(!thenReturns || !elseReturn) {
+                symbolTable.addInstruction(endIfLabel+":");
+            }
         }else {
             symbolTable.addInstruction("BF " + endIfLabel);
             thenBody.generate();
             symbolTable.addInstruction(endIfLabel + ":");
         }
+    }
+
+    private boolean bodyReturns(NodoSentencia body) {
+        if (body instanceof NodoReturn) {
+            return true;
+        } else if (body instanceof NodoBloque) {
+            NodoBloque block = (NodoBloque) body;
+            if (!block.sentences.isEmpty()) {
+                NodoSentencia lastSentence = block.sentences.get(block.sentences.size() - 1);
+                return bodyReturns(lastSentence);
+            }
+        }
+        return false;
     }
 }

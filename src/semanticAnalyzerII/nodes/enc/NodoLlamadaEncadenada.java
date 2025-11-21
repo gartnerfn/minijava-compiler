@@ -109,4 +109,42 @@ public class NodoLlamadaEncadenada extends NodoEncadenado{
         if (nextInTheChain != null)
             nextInTheChain.generate();
     }
+
+    public void generate(boolean isLeftSide) {
+
+        if (method.isStatic) {
+            symbolTable.addInstruction("POP");
+
+            if (!(method.returnType instanceof VoidType))
+                symbolTable.addInstruction("RMEM 1");
+
+            for (NodoExp arg : args)
+                arg.generate();
+
+            symbolTable.callStaticMethod(method);
+        } else {
+
+            int offset = ((semanticAnalyzerI.entities.Class)entity).getMethodOffset(method);
+            if(!(method.returnType instanceof VoidType)) {
+                symbolTable.addInstruction("RMEM 1");
+                symbolTable.addInstruction("SWAP");
+            }
+            for(NodoExp arg : args) {
+                arg.generate();
+                symbolTable.addInstruction("SWAP");
+            }
+
+            symbolTable.addInstruction("DUP");
+            symbolTable.addInstruction("LOADREF 0 ");
+            symbolTable.addInstruction("LOADREF " + offset);
+
+            symbolTable.callMethod(method);
+
+
+        }
+
+        if(nextInTheChain != null) {
+            nextInTheChain.generate(isLeftSide);
+        }
+    }
 }

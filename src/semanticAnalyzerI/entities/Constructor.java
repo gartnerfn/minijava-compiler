@@ -24,6 +24,10 @@ public class Constructor extends Routine{
 
         super.generate();
 
+        if(!localVars.isEmpty())
+            symbolTable.addInstruction("FMEM " + localVars.size());
+
+        symbolTable.addInstruction("STOREFP");
         symbolTable.addInstruction("RET " + (parameters.size() + 1));
 
     }

@@ -33,47 +33,52 @@ public class NodoExpBasica extends NodoExpComp{
         return operand.isOperandWithCall();
     }
 
-    public void generate(){
-        operand.generate();
-        boolean isVarCall = false;
-        int offset = 0;
+    public void generate() {
+        generate(false);
+    }
 
-        if(operand instanceof NodoLlamadaVar){
-            isVarCall = true;
-            offset = symbolTable.currentRoutine.getOffset(operand.name);
-        }
+    public void generate(boolean isLeftSide){
+            operand.generate(isLeftSide);
+            boolean isVarCall = false;
+            int offset = 0;
 
-        switch (unaryOperator.lexeme()) {
-            case "!":
-                System.out.println("entre");
-                symbolTable.addInstruction("NOT");
-                break;
-            case "++":
-                if(isVarCall){
-                    symbolTable.addInstruction("PUSH 1");
-                    symbolTable.addInstruction("ADD");
-                    symbolTable.addInstruction("STORE " + offset);
-                    symbolTable.addInstruction("LOAD " + offset);
-                } else {
-                    symbolTable.addInstruction("PUSH 1");
-                    symbolTable.addInstruction("ADD");
-                }
-                break;
-            case "-":
-                symbolTable.addInstruction("NEG");
-                break;
-            case"--":
-                if(isVarCall){
-                    symbolTable.addInstruction("PUSH 1");
-                    symbolTable.addInstruction("SUB");
-                    symbolTable.addInstruction("STORE " + offset);
-                    symbolTable.addInstruction("LOAD " + offset);
-                } else {
-                    symbolTable.addInstruction("PUSH 1");
-                    symbolTable.addInstruction("ADD");
-                }
-                break;
-        }
+            if(operand instanceof NodoLlamadaVar){
+                isVarCall = true;
+                offset = symbolTable.currentRoutine.getOffset(operand.name);
+            }
+
+            switch (unaryOperator.lexeme()) {
+                case "!":
+                    System.out.println("entre");
+                    symbolTable.addInstruction("NOT");
+                    break;
+                case "++":
+                    if(isVarCall){
+                        symbolTable.addInstruction("PUSH 1");
+                        symbolTable.addInstruction("ADD");
+                        symbolTable.addInstruction("STORE " + offset);
+                        symbolTable.addInstruction("LOAD " + offset);
+                    } else {
+                        symbolTable.addInstruction("PUSH 1");
+                        symbolTable.addInstruction("ADD");
+                    }
+                    break;
+                case "-":
+                    symbolTable.addInstruction("NEG");
+                    break;
+                case"--":
+                    if(isVarCall){
+                        symbolTable.addInstruction("PUSH 1");
+                        symbolTable.addInstruction("SUB");
+                        symbolTable.addInstruction("STORE " + offset);
+                        symbolTable.addInstruction("LOAD " + offset);
+                    } else {
+                        symbolTable.addInstruction("PUSH 1");
+                        symbolTable.addInstruction("ADD");
+                    }
+                    break;
+            }
+
     }
 
     public Type getExpectedType(){

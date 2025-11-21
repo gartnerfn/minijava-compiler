@@ -43,5 +43,8 @@ public class NodoReturn extends NodoSentencia{
         int offset = symbolTable.currentRoutine.parameters.size() + symbolTable.currentRoutine.INITIAL_PARAMETER_OFFSET;
 
         symbolTable.addInstruction("STORE " + offset);
+
+        String methodEndLabel = "end_method_" + symbolTable.currentRoutine.name + symbolTable.currentRoutine.parameters.size() + "@" + symbolTable.currentRoutine.declaredIn.name;
+        symbolTable.addInstruction("JUMP " + methodEndLabel);
     }
 }

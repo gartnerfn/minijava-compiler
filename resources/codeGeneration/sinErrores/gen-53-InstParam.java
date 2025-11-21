@@ -31,6 +31,7 @@ class Init{
     static void main()
 
     {
+        var x = new B();
         debugPrint(x.mz(new A()));
     }
 }

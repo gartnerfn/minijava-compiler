@@ -43,7 +43,10 @@ public class NodoLlamadaVar extends NodoReferencia{
     }
 
     public void generate(){
-        System.out.println("DEBUG VarCallNode: Generando código para variable '" + name + "'");
+        generate(false);
+    }
+
+    public void generate(boolean isLeftSide){
 
        if(variable instanceof Attribute){
               int offset = symbolTable.currentClass.getAttributeOffset((Attribute) variable);
@@ -68,7 +71,7 @@ public class NodoLlamadaVar extends NodoReferencia{
        }
 
         if(nextInTheChain != null)
-            nextInTheChain.generate();
+            nextInTheChain.generate(isLeftSide);
     }
 
     public boolean isOperandWithCall() {

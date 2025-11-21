@@ -7,18 +7,21 @@ import semanticAnalyzerI.types.Type;
 import src.Token;
 
 public class NodoVarEncadenada extends NodoEncadenado{
+    Entity entity;
+    Attribute attr;
+
     public NodoVarEncadenada(Token tkn){
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
     }
 
     public Type check(Type previousType){
-        Entity entity = symbolTable.existsEntity(previousType.name);
+        entity = symbolTable.existsEntity(previousType.name);
 
         if(entity == null)
             throw new SemanticException("Tipo '" + previousType.name + "' no es una clase válida", this.name, this.lineNumber);
 
-        Attribute attr = entity.existsAttribute(name);
+        attr = entity.existsAttribute(name);
 
         if(attr == null)
             throw new SemanticException("Variable '" + name + "' no declarada en la clase " + previousType.name, name, lineNumber);
@@ -54,7 +57,27 @@ public class NodoVarEncadenada extends NodoEncadenado{
     }
 
     public void generate(){
+        int offset = ((semanticAnalyzerI.entities.Class)entity).getAttributeOffset(attr);
+        symbolTable.addInstruction("LOADREF " + offset);
+
         if(nextInTheChain != null)
             nextInTheChain.generate();
     }
+
+    public void generate(boolean isLeftSide) {
+        int offset = ((semanticAnalyzerI.entities.Class)entity).getAttributeOffset(attr);
+
+        if(nextInTheChain != null) {
+            symbolTable.addInstruction("LOADREF " + offset);
+            nextInTheChain.generate(isLeftSide);
+        } else {
+            if(isLeftSide) {
+                symbolTable.addInstruction("SWAP");
+                symbolTable.addInstruction("STOREREF " +offset);
+            }else
+                symbolTable.addInstruction("LOADREF " + offset);
+
+        }
+    }
+
 }
