@@ -5,6 +5,7 @@ import semanticAnalyzerI.entities.Class;
 import semanticAnalyzerI.entities.predefined.Object;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.entities.predefined.String;
+import semanticAnalyzerII.nodes.sent.NodoBloque;
 import semanticAnalyzerII.nodes.sent.NodoVarLocal;
 
 import java.util.*;
@@ -16,6 +17,7 @@ public class SymbolTable {
     private final Deque<Map<java.lang.String, NodoVarLocal>> blockStack = new ArrayDeque<>();
 
     public Class currentClass;
+    public NodoBloque currentBlock;
     public Entity currentEntity;
     public Routine currentRoutine;
     public List<java.lang.String> addInstruction = new ArrayList<>();
@@ -201,8 +203,12 @@ public class SymbolTable {
         addInstruction.add("CALL");
     }
 
-    public void callMethod(Method method){
+    public void callStaticMethod(Method method){
         addInstruction.add("PUSH lblMethod_" + method.name + method.parameters.size() + "@" + method.declaredIn.name);
+        addInstruction.add("CALL");
+    }
+
+    public void callMethod(Method method){
         addInstruction.add("CALL");
     }
 

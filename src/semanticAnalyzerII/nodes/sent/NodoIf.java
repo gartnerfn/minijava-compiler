@@ -12,6 +12,8 @@ public class NodoIf extends NodoSentencia{
     NodoSentencia thenBody;
     NodoSentencia elseBody;
 
+    private static int labelCounter = 0;
+
     public NodoIf(Token tkn, NodoExp cond, NodoSentencia thenBody, NodoSentencia elseBody) {
         this.name = tkn.lexeme();
         this.lineNumber = tkn.lineNumber();
@@ -41,6 +43,19 @@ public class NodoIf extends NodoSentencia{
     }
 
     public void generate(){
+        int currentLabel = labelCounter++;
+        String elseLabel = "else_" + currentLabel;
+        String endIfLabel = "end_if_" + currentLabel;
 
+        cond.generate();
+
+        symbolTable.addInstruction("BF " + elseLabel);
+        thenBody.generate();
+        symbolTable.addInstruction("JUMP " + endIfLabel);
+
+        symbolTable.addInstruction(elseLabel + ":");
+        elseBody.generate();
+
+        symbolTable.addInstruction(endIfLabel+":");
     }
 }

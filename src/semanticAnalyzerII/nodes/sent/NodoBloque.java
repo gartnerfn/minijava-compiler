@@ -8,6 +8,8 @@ import java.util.List;
 public class NodoBloque extends NodoSentencia{
     public List<NodoSentencia> sentences = new ArrayList<>();
 
+    public int localVarsCount = 0;
+
     public String getName(){
         return name;
     }
@@ -43,7 +45,11 @@ public class NodoBloque extends NodoSentencia{
     }
 
     public void generate(){
+        symbolTable.currentBlock = this;
+
         for(NodoSentencia sentence : sentences)
             sentence.generate();
+
+//        symbolTable.addInstruction("FMEM " + localVarsCount);
     }
 }

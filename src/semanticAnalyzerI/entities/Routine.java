@@ -76,7 +76,7 @@ public abstract class Routine {
         for(Parameter parameter : parameters.values()){
             parameter.isWellDeclared();
 
-            int offset = INITIAL_PARAMETER_OFFSET + parameters.size() - parameterCount;
+            int offset = INITIAL_PARAMETER_OFFSET + parameters.size() - parameterCount - 1;
             parameterCount++;
 
             parametersOffset.put(parameter.name, offset);
@@ -92,6 +92,16 @@ public abstract class Routine {
     }
 
     public void generate(){
+        symbolTable.addInstruction("LOADFP");
+        symbolTable.addInstruction("LOADSP");
+        symbolTable.addInstruction("STOREFP");
+
         block.generate();
+
+        if(!localVars.isEmpty())
+            symbolTable.addInstruction("FMEM " + localVars.size());
+
+        symbolTable.addInstruction("STOREFP");
+        symbolTable.addInstruction("RET " + parameters.size());
     }
 }

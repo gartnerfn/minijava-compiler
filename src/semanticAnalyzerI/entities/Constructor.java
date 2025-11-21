@@ -21,14 +21,7 @@ public class Constructor extends Routine{
         symbolTable.currentRoutine = this;
 
         symbolTable.addInstruction("lblConstructor" + parameters.size() + "@" +  this.name + ":");
-        symbolTable.addInstruction("LOADFP");
-        symbolTable.addInstruction("LOADSP");
-        symbolTable.addInstruction("STOREFP");
 
         super.generate();
-
-        symbolTable.addInstruction("FMEM " + Math.abs(localVars.size()));
-        symbolTable.addInstruction("STOREFP");
-        symbolTable.addInstruction("RET " + (parameters.size()));
     }
 }

@@ -76,14 +76,6 @@ public class Method extends Routine{
         symbolTable.currentRoutine = this;
 
         symbolTable.addInstruction("lblMethod_" + this.name + this.parameters.size() + "@" + this.declaredIn.name + ":");
-        symbolTable.addInstruction("LOADFP");
-        symbolTable.addInstruction("LOADSP");
-        symbolTable.addInstruction("STOREFP");
-
         super.generate();
-
-        symbolTable.addInstruction("FMEM " + Math.abs(localVarsOffset.size()));
-        symbolTable.addInstruction("STOREFP");
-        symbolTable.addInstruction("RET " + parameters.size());
     }
 }

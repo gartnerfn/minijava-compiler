@@ -38,6 +38,10 @@ public class NodoReturn extends NodoSentencia{
     }
 
     public void generate(){
+        returnExp.generate();
 
+        int offset = symbolTable.currentRoutine.parameters.size() + symbolTable.currentRoutine.INITIAL_PARAMETER_OFFSET;
+
+        symbolTable.addInstruction("STORE " + offset);
     }
 }

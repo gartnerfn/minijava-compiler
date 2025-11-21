@@ -61,9 +61,31 @@ public class NodoLlamadaMetodo extends NodoReferencia{
     }
 
     public void generate(){
-        for(NodoExp arg : args)
-            arg.generate();
+        int offset = symbolTable.currentClass.getMethodOffset(method);
 
-        symbolTable.callMethod(method);
+        if(!(method.returnType instanceof VoidType))
+            symbolTable.addInstruction("RMEM 1");
+
+        if(method.isStatic){
+            for(NodoExp arg : args)
+                arg.generate();
+
+            symbolTable.callStaticMethod(method);
+        } else {
+            //        symbolTable.addInstruction("LOAD 3"); // Cargar this
+            //        symbolTable.addInstruction("DUP");
+            //        symbolTable.addInstruction("LOADREF 0");
+            //        symbolTable.addInstruction("LOADREF " + offset);
+            //        symbolTable.addInstruction("SWAP");
+
+            for(NodoExp arg : args)
+                arg.generate();
+
+            symbolTable.callMethod(method);
+        }
+
+
+        if(nextInTheChain != null)
+            nextInTheChain.generate();
     }
 }

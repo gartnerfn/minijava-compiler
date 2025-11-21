@@ -5,6 +5,7 @@ import semanticAnalyzerI.entities.Method;
 import semanticAnalyzerI.entities.Parameter;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
+import semanticAnalyzerI.types.VoidType;
 import semanticAnalyzerII.nodes.exp.NodoExp;
 import src.Token;
 
@@ -63,10 +64,16 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
     }
 
     public void generate(){
+        if(!(method.returnType instanceof VoidType))
+            symbolTable.addInstruction("RMEM 1");
+
         for(NodoExp arg : args)
             arg.generate();
 
-        symbolTable.callMethod(method);
+        symbolTable.callStaticMethod(method);
+
+        if(nextInTheChain != null)
+            nextInTheChain.generate();
     }
 
 }

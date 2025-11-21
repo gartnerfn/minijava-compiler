@@ -41,24 +41,14 @@ public class NodoWhile extends NodoSentencia{
         String startLabel = "WHILE_START_" + currentLabel;
         String endLabel = "WHILE_END_" + currentLabel;
 
-        System.out.println("DEBUG WhileNode: Generando while #" + currentLabel);
-        System.out.println("  -> startWhileLabel: " + startLabel);
-        System.out.println("  -> endWhileLabel: " + endLabel);
-
-        System.out.println("  -> Generando etiqueta " + startLabel + ":");
         symbolTable.addInstruction(startLabel+":");
 
         cond.generate();
 
-        System.out.println("  -> Generando BF a " + endLabel);
         symbolTable.addInstruction("BF "+endLabel);
 
         body.generate();
 
-        System.out.println("  -> Generando JUMP a " + startLabel);
-        symbolTable.addInstruction("JUMP "+startLabel);
-
-        System.out.println("  -> Generando etiqueta " + endLabel + ":");
         symbolTable.addInstruction(endLabel+":");
     }
 }
