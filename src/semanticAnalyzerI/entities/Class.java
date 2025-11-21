@@ -4,6 +4,9 @@ import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerII.nodes.sent.NodoBloque;
 import src.Token;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Class extends Entity{
     public boolean isFinal;
     public boolean isStatic;
@@ -280,11 +283,33 @@ public class Class extends Entity{
         isConsolidated = true;
     }
 
+    public String getLabel(){
+        return "lblVT_" + this.name;
+    }
+
     public void generate() {
         symbolTable.currentClass = this;
 
         symbolTable.addInstruction.add(".DATA");
-        symbolTable.addInstruction.add("lblVT_" + this.name + ": NOP");
+        symbolTable.addInstruction.add(getLabel() + ":");
+
+        if(methods.isEmpty()){
+            symbolTable.addInstruction.add("NOP");
+        } else {
+            List<String> labels = new ArrayList<>();
+
+            for (Method method : methods.values()){
+                if(!method.isStatic)
+                    labels.add(method.getLabel());
+            }
+
+            if(!labels.isEmpty())
+                symbolTable.addInstruction.add("DW " + String.join(", ", labels));
+            else
+                symbolTable.addInstruction.add("NOP");
+
+            System.out.println("  -> VT generada con " + labels.size() + " métodos en" + this.name);
+        }
 
         symbolTable.addInstruction.add(".CODE");
 

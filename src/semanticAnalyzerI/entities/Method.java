@@ -72,10 +72,14 @@ public class Method extends Routine{
             throw new SemanticException("Missing return statement in routine '" + name + "'", name, lineNumber);
     }
 
+    public String getLabel(){
+        return "lblMethod_" + this.name + this.parameters.size() + "@" + this.declaredIn.name;
+    }
+
     public void generate(){
         symbolTable.currentRoutine = this;
 
-        symbolTable.addInstruction("lblMethod_" + this.name + this.parameters.size() + "@" + this.declaredIn.name + ":");
+        symbolTable.addInstruction(getLabel() + ":");
         super.generate();
     }
 }

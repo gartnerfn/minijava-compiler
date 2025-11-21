@@ -50,6 +50,10 @@ public class Entity {
         return constructors.get(constructorName + parameterCount);
     }
 
+    public int getCIRSize(){
+        return attributes.size() + 1;
+    }
+
     public void inheritsFrom(Token ancestor){
         ancestorInheritance = ancestor.lexeme();
     }

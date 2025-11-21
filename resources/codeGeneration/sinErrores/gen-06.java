@@ -24,8 +24,8 @@ class Init{
         var a = new A();
         debugPrint(1234);
 
-//        a.m1(5);
-//        a.m1(10, "hello");
+        a.m1(5);
+        a.m1(10, "hello");
     }
 }
 

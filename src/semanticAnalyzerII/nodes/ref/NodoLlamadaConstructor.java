@@ -60,8 +60,22 @@ public class NodoLlamadaConstructor extends NodoReferencia{
     }
 
     public void generate(){
-        for(NodoExp arg : args)
+        semanticAnalyzerI.entities.Class cl = symbolTable.existsClass(constructor.name);
+
+        symbolTable.addInstruction("PUSH " + cl.getCIRSize());
+        symbolTable.addInstruction("PUSH simple_malloc");
+        symbolTable.addInstruction("CALL");
+
+        symbolTable.addInstruction("DUP");
+        symbolTable.addInstruction("PUSH "+ cl.getLabel());
+        symbolTable.addInstruction("STOREREF 0");
+
+        symbolTable.addInstruction("DUP");
+
+        for(NodoExp arg : args){
             arg.generate();
+            symbolTable.addInstruction("SWAP");
+        }
 
         symbolTable.callConstructor(constructor);
 
