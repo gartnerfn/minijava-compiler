@@ -82,8 +82,8 @@ public class Class extends Entity{
         for(Attribute attribute : attributes.values()){
             if(attribute.declaredIn == this){
                 System.out.println("Asignando offsets en " + this.name + " empezando en " + attributeOffset);
-            attributeOffsets.put(attribute.name + '|' + this.name, attributeOffset);
-            attributeOffset++;
+                attributeOffsets.put(attribute.name + '|' + this.name, attributeOffset);
+                attributeOffset++;
             }
 
         }
@@ -182,8 +182,12 @@ public class Class extends Entity{
             ancestorInheritanceClass.consolidate();
 
         for (Attribute attribute : ancestorInheritanceClass.attributes.values()) {
+            System.out.println(ancestorInheritanceClass.attributes.size());
             addInheritedAttribute(attribute, ancestorInheritance);
-            attributeOffsets.put(attribute.name + '|' + ancestorInheritanceClass.name, ancestorInheritanceClass.getAttributeOffset(attribute));
+
+            for(int offset : ancestorInheritanceClass.attributeOffsets.values()){
+                attributeOffsets.put(attribute.name + '|' + ancestorInheritanceClass.name, offset);
+            }
         }
 
 

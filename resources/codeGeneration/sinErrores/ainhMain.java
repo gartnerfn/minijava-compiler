@@ -42,7 +42,6 @@ class Main{
 
 }
 
-
 class A {
 
     public int a;

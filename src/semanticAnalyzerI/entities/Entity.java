@@ -22,7 +22,7 @@ public class Entity {
     public String ancestorImplementation;
 
     public Map<String, Attribute> attributes = new LinkedHashMap<>();
-    public Map<String, Integer> attributeOffsets = new LinkedHashMap<>();
+    public Map<String, Integer> attributeOffsets;
 
     public Map<String, Method> methods = new LinkedHashMap<>();
     public Map<String, Integer> methodOffsets = new LinkedHashMap<>();
@@ -35,6 +35,7 @@ public class Entity {
         this.lineNumber = tkn.lineNumber();
 
         this.isConsolidated = false;
+        attributeOffsets = new LinkedHashMap<>();
     }
 
     public void addConstructor(Constructor constructor){

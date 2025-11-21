@@ -18,8 +18,8 @@ public class Main {
     public static void main(String[] args) {
         SourceManager sourceManager = new SourceManagerImpl();
         String inFilePath = args[0];
-        String outFilePath = args[1];
-        Path outFile = outFilePath != null ? Path.of(outFilePath) : Path.of("out.txt");
+        String outFilePath = (args.length >= 2) ? args[1] : "out.txt";
+        Path outFile = Path.of(outFilePath);
         SymbolTable symbolTable = SymbolTable.getInstance();
         LexicalAnalyzer lexicalAnalyser = null;
 
