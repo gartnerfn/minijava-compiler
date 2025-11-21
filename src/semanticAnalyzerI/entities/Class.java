@@ -80,8 +80,12 @@ public class Class extends Entity{
 
     public void calculateOffsets(Class ancestorInheritanceClass){
         for(Attribute attribute : attributes.values()){
+            if(attribute.declaredIn == this){
+                System.out.println("Asignando offsets en " + this.name + " empezando en " + attributeOffset);
             attributeOffsets.put(attribute.name + '|' + this.name, attributeOffset);
             attributeOffset++;
+            }
+
         }
 
         for(Method method : methods.values()){
@@ -170,17 +174,20 @@ public class Class extends Entity{
         }
     }
 
+
     public void consolidate(){
         Class ancestorInheritanceClass = symbolTable.existsClass(ancestorInheritance);
 
         if(!ancestorInheritanceClass.isConsolidated)
             ancestorInheritanceClass.consolidate();
 
-        calculateOffsets(ancestorInheritanceClass);
-
         for (Attribute attribute : ancestorInheritanceClass.attributes.values()) {
             addInheritedAttribute(attribute, ancestorInheritance);
+            attributeOffsets.put(attribute.name + '|' + ancestorInheritanceClass.name, ancestorInheritanceClass.getAttributeOffset(attribute));
         }
+
+
+
 
         for (Method method : ancestorInheritanceClass.methods.values()) {
             Method thisMethod = existsMethod(method.name, method.parameters.size());
@@ -222,6 +229,12 @@ public class Class extends Entity{
                 setMethodOffset(thisMethod, ancestorInheritanceClass.getMethodOffset(method));
             }
         }
+
+        this.attributeOffset = ancestorInheritanceClass.attributeOffset;
+
+        calculateOffsets(ancestorInheritanceClass);
+
+
 
         if(ancestorImplementation != null){
             Interface ancestorImplementationInterface = symbolTable.existsInterface(ancestorImplementation);
@@ -287,7 +300,6 @@ public class Class extends Entity{
                     .map(Method::getLabel)
                     .toList();
 
-            System.out.println(labels);
 
             if(!labels.isEmpty())
                 symbolTable.addInstruction("DW " + String.join(", ", labels));

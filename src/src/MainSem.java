@@ -30,7 +30,7 @@ public class MainSem {
 
             symbolTable.isWellDeclared();
             symbolTable.consolidate();
-//            symbolTable.printTable();
+            symbolTable.printTable();
 
             symbolTable.check();
 

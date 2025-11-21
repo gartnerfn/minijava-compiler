@@ -3,6 +3,14 @@
 class Main{
 
     static void main(){
+        System.println();
+        var c = new C();
+        c.a = 5;
+        c.m1();
+        c.m0();
+        System.printSln(c.c);
+
+
         var a = new A();
         System.printIln(a.a);
         a.a=5;
@@ -29,12 +37,6 @@ class Main{
         System.printIln(b.a);
         b.m1();
 
-        System.println();
-        var c = new C();
-        c.a = 5;
-        c.m1();
-        c.m0();
-        System.printSln(c.c);
 
     }
 
