@@ -57,9 +57,6 @@ public abstract class Routine {
     }
 
     public void addLocalVar(NodoVarLocal localVar){
-        if(localVars.containsKey(localVar.name))
-            throw new SemanticException("Duplicated local variable.", localVar.name, localVar.lineNumber);
-
         localVarsOffset.put(localVar.name, -1 * (localVars.size()));
         localVars.put(localVar.name, localVar);
     }

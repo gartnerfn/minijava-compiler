@@ -49,6 +49,8 @@ public class NodoWhile extends NodoSentencia{
 
         body.generate();
 
+        symbolTable.addInstruction("JUMP "+startLabel);
+
         symbolTable.addInstruction(endLabel+":");
     }
 }

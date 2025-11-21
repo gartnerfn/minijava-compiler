@@ -34,6 +34,6 @@ public class NodoExpresionParentizada extends NodoReferencia{
     }
 
     public void generate(){
-
+        exp.generate();
     }
 }
