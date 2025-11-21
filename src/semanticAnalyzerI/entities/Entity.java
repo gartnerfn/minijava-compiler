@@ -22,8 +22,13 @@ public class Entity {
     public String ancestorImplementation;
 
     public Map<String, Attribute> attributes = new LinkedHashMap<>();
+    public Map<String, Integer> attributeOffsets = new LinkedHashMap<>();
+
     public Map<String, Method> methods = new LinkedHashMap<>();
+    public Map<String, Integer> methodOffsets = new LinkedHashMap<>();
+
     public HashMap<String, Constructor> constructors = new HashMap<>();
+
 
     public Entity(Token tkn){
         this.name = tkn.lexeme();

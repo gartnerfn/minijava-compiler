@@ -15,6 +15,7 @@ public class SymbolTable {
     private final HashMap<java.lang.String, Interface> interfaces = new HashMap<>();
     private final Deque<Map<java.lang.String, NodoVarLocal>> blockStack = new ArrayDeque<>();
 
+    public Class currentClass;
     public Entity currentEntity;
     public Routine currentRoutine;
     public List<java.lang.String> addInstruction = new ArrayList<>();
@@ -40,12 +41,8 @@ public class SymbolTable {
             if (currentRoutine != null && currentRoutine.existsParameter(localVar.name) != null)
                 throw new SemanticException("Variable local '" + localVar.name + "' ya declarada como parámetro del método '" + currentRoutine.name + "'", localVar.name, localVar.lineNumber);
 
-            if(currentRoutine != null){
-                localVar.offset = currentRoutine.localVarOffset;
-                currentRoutine.localVarOffset--;
-
-                System.out.println("Local variable " + localVar.name + " offset: " + localVar.offset);
-            }
+            if(currentRoutine != null)
+                currentRoutine.addLocalVar(localVar);
 
             currentBlock.put(localVar.name, localVar);
         }
@@ -184,6 +181,10 @@ public class SymbolTable {
     }
 
     public void generate(){
+        currentEntity = null;
+        currentClass = null;
+        currentRoutine = null;
+
         generateInit();
         generateHeapRoutines();
 
@@ -195,8 +196,13 @@ public class SymbolTable {
         addInstruction.add(instruction);
     }
 
-    public void callMethod(java.lang.String methodName, java.lang.String className){
-        addInstruction.add("PUSH lblMethod_" + methodName + "@" + className);
+    public void callConstructor(Constructor constructor){
+        addInstruction.add("PUSH lblConstructor" + constructor.parameters.size() + "@" + constructor.name);
+        addInstruction.add("CALL");
+    }
+
+    public void callMethod(Method method){
+        addInstruction.add("PUSH lblMethod_" + method.name + method.parameters.size() + "@" + method.declaredIn.name);
         addInstruction.add("CALL");
     }
 

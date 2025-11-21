@@ -62,4 +62,9 @@ public class NodoLlamadaEncadenada extends NodoEncadenado{
 
         return true;
     }
+
+    public void generate(){
+        if(nextInTheChain != null)
+            nextInTheChain.generate();
+    }
 }

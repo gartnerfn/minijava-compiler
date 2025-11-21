@@ -4,6 +4,7 @@ import semanticAnalyzerI.SymbolTable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerII.nodes.sent.NodoBloque;
 import semanticAnalyzerII.nodes.sent.NodoBloqueNulo;
+import semanticAnalyzerII.nodes.sent.NodoVarLocal;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,15 +22,16 @@ public abstract class Routine {
     public int lineNumber;
 
     public Map<String, Parameter> parameters = new LinkedHashMap<>();
+    public Map<String, Integer> parametersOffset = new LinkedHashMap<>();
     public List<Parameter> parameterList = new ArrayList<>();
-    public NodoBloque block;
 
-    public int offset;
+    public Map<String, NodoVarLocal> localVars = new LinkedHashMap<>();
+    public Map<String, Integer> localVarsOffset = new LinkedHashMap<>();
+
+    public NodoBloque block;
 
     public int INITIAL_PARAMETER_OFFSET;
     public int parameterCount;
-
-    public int localVarOffset;
 
     public void addParameter(Parameter parameter){
         if(parameters.containsKey(parameter.name))
@@ -39,8 +41,31 @@ public abstract class Routine {
         parameterList.add(parameter);
     }
 
+    public int getOffset(String name){
+        if(parametersOffset.containsKey(name))
+            return parametersOffset.get(name);
+        else
+            return localVarsOffset.get(name);
+    }
+
+    public int getParameterOffset(String name){
+        return parametersOffset.get(name);
+    }
+
     public Parameter existsParameter(String name){
         return parameters.get(name);
+    }
+
+    public void addLocalVar(NodoVarLocal localVar){
+        if(localVars.containsKey(localVar.name))
+            throw new SemanticException("Duplicated local variable.", localVar.name, localVar.lineNumber);
+
+        localVarsOffset.put(localVar.name, -1 * (localVars.size()));
+        localVars.put(localVar.name, localVar);
+    }
+
+    public int getLocalVarOffset(String name){
+        return localVarsOffset.get(name);
     }
 
     public void addBlock(NodoBloque block){
@@ -53,9 +78,10 @@ public abstract class Routine {
 
             int offset = INITIAL_PARAMETER_OFFSET + parameters.size() - parameterCount;
             parameterCount++;
-            parameter.offset = offset;
 
-            System.out.println("Parameter " + parameter.name + " offset: " + parameter.offset);
+            parametersOffset.put(parameter.name, offset);
+
+            System.out.println("Parameter " + parameter.name + " offset: " + offset);
         }
     }
 

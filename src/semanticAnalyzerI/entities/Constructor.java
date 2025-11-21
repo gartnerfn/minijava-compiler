@@ -9,7 +9,6 @@ public class Constructor extends Routine{
 
         INITIAL_PARAMETER_OFFSET = 4; // 0 = 1vl, 1 = ed, 2 = pr, 3 = this
         parameterCount = 0;
-        localVarOffset = 0;
 
         this.isPublic = !visibilityModifier.equals("private");
     }
@@ -19,6 +18,8 @@ public class Constructor extends Routine{
     }
 
     public void generate(){
+        symbolTable.currentRoutine = this;
+
         symbolTable.addInstruction("lblConstructor" + parameters.size() + "@" +  this.name + ":");
         symbolTable.addInstruction("LOADFP");
         symbolTable.addInstruction("LOADSP");
@@ -26,8 +27,8 @@ public class Constructor extends Routine{
 
         super.generate();
 
+        symbolTable.addInstruction("FMEM " + Math.abs(localVars.size()));
         symbolTable.addInstruction("STOREFP");
-        //TODO: cantidad de parametros, no 1
-        symbolTable.addInstruction("RET 1");
+        symbolTable.addInstruction("RET " + (parameters.size()));
     }
 }

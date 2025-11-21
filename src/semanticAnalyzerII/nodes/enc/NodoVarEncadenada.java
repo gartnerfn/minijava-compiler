@@ -45,4 +45,9 @@ public class NodoVarEncadenada extends NodoEncadenado{
 
         return false;
     }
+
+    public void generate(){
+        if(nextInTheChain != null)
+            nextInTheChain.generate();
+    }
 }

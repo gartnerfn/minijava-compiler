@@ -42,6 +42,6 @@ public class NodoVarLocal extends Variable {
     public void generate(){
         symbolTable.addInstruction("RMEM 1");
         exp.generate();
-        symbolTable.addInstruction("STORE " + offset);
+        symbolTable.addInstruction("STORE " + symbolTable.currentRoutine.getLocalVarOffset(this.name));
     }
 }

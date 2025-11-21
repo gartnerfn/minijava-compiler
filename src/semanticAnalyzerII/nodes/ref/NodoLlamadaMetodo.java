@@ -11,8 +11,8 @@ import src.Token;
 import java.util.List;
 
 public class NodoLlamadaMetodo extends NodoReferencia{
-    List<NodoExp> args;
     private Method method;
+    List<NodoExp> args;
 
     public NodoLlamadaMetodo(Token tkn, List<NodoExp> args){
         this.name = tkn.lexeme();
@@ -64,6 +64,6 @@ public class NodoLlamadaMetodo extends NodoReferencia{
         for(NodoExp arg : args)
             arg.generate();
 
-        symbolTable.callMethod(method.name + method.parameters.size(), method.declaredIn.name);
+        symbolTable.callMethod(method);
     }
 }

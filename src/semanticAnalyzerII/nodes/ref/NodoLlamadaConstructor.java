@@ -12,6 +12,7 @@ import src.Token;
 import java.util.List;
 
 public class NodoLlamadaConstructor extends NodoReferencia{
+    private Constructor constructor;
     private List<NodoExp> args;
 
     public NodoLlamadaConstructor(Token classId, List<NodoExp> args) {
@@ -25,7 +26,7 @@ public class NodoLlamadaConstructor extends NodoReferencia{
         if(entity == null)
             throw new SemanticException("Class does not exist", this.name, this.lineNumber);
 
-        Constructor constructor = entity.existsConstructor(this.name, args.size());
+        constructor = entity.existsConstructor(this.name, args.size());
 
         if(constructor == null)
             throw new SemanticException("Contructor does not exist", this.name, this.lineNumber);
@@ -59,6 +60,9 @@ public class NodoLlamadaConstructor extends NodoReferencia{
     }
 
     public void generate(){
+        for(NodoExp arg : args)
+            arg.generate();
 
+        symbolTable.callConstructor(constructor);
     }
 }

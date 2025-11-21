@@ -81,25 +81,38 @@ public class Class extends Entity{
         }
 
         for(Attribute attribute : attributes.values()){
-            attribute.offset = attributeOffset;
+            System.out.println("Attributo " + attribute.name + "|" + this.name + " offset: " + attributeOffset);
+            attributeOffsets.put(attribute.name + '|' + this.name, attributeOffset);
             attributeOffset++;
         }
 
         for(Method method : methods.values()){
-            method.offset = methodOffset;
+            methodOffsets.put(method.name + method.parameters.size(), methodOffset);
             methodOffset++;
         }
+    }
+
+    public int getAttributeOffset(Attribute attribute){
+        return attributeOffsets.get(attribute.name + "|" + attribute.declaredIn.name);
+    }
+
+    public int getMethodOffset(Method method){
+        return methodOffsets.get(method.name + method.parameters.size());
+    }
+
+    public void setMethodOffset(Method method, int methodOffset){
+        methodOffsets.put(method.name + method.parameters.size(), methodOffset);
     }
 
     public void printOffsets(){
         System.out.println("Starting offsets for class " + this.name + " -> Method offset: " + methodOffset + ", Attribute offset: " + attributeOffset);
 
         for(Attribute attribute : attributes.values()){
-            System.out.println("Attribute " + attribute.name + attribute.declaredIn.name + " offset: " + attribute.offset);
+            System.out.println("Attribute " + attribute.name + attribute.declaredIn.name + " offset: " + attributeOffsets.get(attribute.name + '|' + this.name));
         }
 
         for(Method method : methods.values()){
-            System.out.println("Method " + method.name+"|"+method.parameters.size() + " offset: " + method.offset);
+            System.out.println("Method " + method.name+"|"+method.parameters.size() + " offset: " + methodOffsets.get(method.name + method.parameters.size()));
         }
     }
 
@@ -186,8 +199,10 @@ public class Class extends Entity{
             if (thisMethod == null) {
                 if(method.isAbstract && !this.isAbstract){
                     throw new SemanticException("La clase " + this.name + " no implementa todos los metodos heredados.", method.name, method.lineNumber);
-                } else
+                } else{
                     addMethod(method);
+                    setMethodOffset(method, ancestorInheritanceClass.getMethodOffset(method));
+                }
             } else {
                 if(method.isFinal){
                     throw new SemanticException("El metodo heredado es final y no puede ser redefinido.", thisMethod.name, thisMethod.lineNumber);
@@ -214,7 +229,7 @@ public class Class extends Entity{
                     throw new SemanticException("No se puede redefinir un metodo estatico.", thisMethod.name, thisMethod.lineNumber);
                 }
 
-                thisMethod.offset = method.offset;
+                setMethodOffset(thisMethod, ancestorInheritanceClass.getMethodOffset(method));
             }
         }
 
@@ -266,6 +281,8 @@ public class Class extends Entity{
     }
 
     public void generate() {
+        symbolTable.currentClass = this;
+
         symbolTable.addInstruction.add(".DATA");
         symbolTable.addInstruction.add("lblVT_" + this.name + ": NOP");
 

@@ -27,7 +27,6 @@ public class Method extends Routine{
 
         INITIAL_PARAMETER_OFFSET = 4; // 0 = 1vl, 1 = ed, 2 = pr, 3 = this
         parameterCount = 0;
-        localVarOffset = 0;
 
         switch(typeModifier){
             case "abstract":
@@ -74,6 +73,8 @@ public class Method extends Routine{
     }
 
     public void generate(){
+        symbolTable.currentRoutine = this;
+
         symbolTable.addInstruction("lblMethod_" + this.name + this.parameters.size() + "@" + this.declaredIn.name + ":");
         symbolTable.addInstruction("LOADFP");
         symbolTable.addInstruction("LOADSP");
@@ -81,6 +82,7 @@ public class Method extends Routine{
 
         super.generate();
 
+        symbolTable.addInstruction("FMEM " + Math.abs(localVarsOffset.size()));
         symbolTable.addInstruction("STOREFP");
         symbolTable.addInstruction("RET " + parameters.size());
     }

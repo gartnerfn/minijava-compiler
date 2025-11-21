@@ -1,7 +1,9 @@
 package semanticAnalyzerII.nodes.exp;
 
+import semanticAnalyzerI.entities.Variable;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.*;
+import semanticAnalyzerII.nodes.ref.NodoLlamadaVar;
 import src.Token;
 
 public class NodoExpBasica extends NodoExpComp{
@@ -29,6 +31,13 @@ public class NodoExpBasica extends NodoExpComp{
 
     public void generate(){
         operand.generate();
+        boolean isVarCall = false;
+        int offset = 0;
+
+        if(operand instanceof NodoLlamadaVar){
+            isVarCall = true;
+            offset = symbolTable.currentRoutine.getOffset(operand.name);
+        }
 
         switch (unaryOperator.lexeme()) {
             case "!":
@@ -36,14 +45,29 @@ public class NodoExpBasica extends NodoExpComp{
                 symbolTable.addInstruction("NOT");
                 break;
             case "++":
-                symbolTable.addInstruction("PUSH 1");
-                symbolTable.addInstruction("ADD");
+                if(isVarCall){
+                    symbolTable.addInstruction("PUSH 1");
+                    symbolTable.addInstruction("ADD");
+                    symbolTable.addInstruction("STORE " + offset);
+                    symbolTable.addInstruction("LOAD " + offset);
+                } else {
+                    symbolTable.addInstruction("PUSH 1");
+                    symbolTable.addInstruction("ADD");
+                }
                 break;
             case "-":
                 symbolTable.addInstruction("NEG");
                 break;
             case"--":
-                symbolTable.addInstruction("DIV");
+                if(isVarCall){
+                    symbolTable.addInstruction("PUSH 1");
+                    symbolTable.addInstruction("SUB");
+                    symbolTable.addInstruction("STORE " + offset);
+                    symbolTable.addInstruction("LOAD " + offset);
+                } else {
+                    symbolTable.addInstruction("PUSH 1");
+                    symbolTable.addInstruction("ADD");
+                }
                 break;
         }
     }

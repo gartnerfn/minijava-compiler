@@ -45,8 +45,5 @@ public class NodoBloque extends NodoSentencia{
     public void generate(){
         for(NodoSentencia sentence : sentences)
             sentence.generate();
-
-        //TODO
-        symbolTable.addInstruction("FMEM 0");
     }
 }

@@ -66,7 +66,7 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
         for(NodoExp arg : args)
             arg.generate();
 
-        symbolTable.callMethod(method.name + method.parameters.size(), entity.name);
+        symbolTable.callMethod(method);
     }
 
 }
