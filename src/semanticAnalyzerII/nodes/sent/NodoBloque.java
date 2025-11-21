@@ -49,7 +49,5 @@ public class NodoBloque extends NodoSentencia{
 
         for(NodoSentencia sentence : sentences)
             sentence.generate();
-
-//        symbolTable.addInstruction("FMEM " + localVarsCount);
     }
 }

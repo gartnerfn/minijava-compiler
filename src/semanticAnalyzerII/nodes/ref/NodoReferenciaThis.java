@@ -27,6 +27,9 @@ public class NodoReferenciaThis extends NodoReferencia{
     }
 
     public void generate(){
+        symbolTable.addInstruction("LOAD 3");
 
+        if(nextInTheChain != null)
+            nextInTheChain.generate();
     }
 }

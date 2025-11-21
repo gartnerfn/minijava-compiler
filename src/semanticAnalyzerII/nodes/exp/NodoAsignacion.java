@@ -38,9 +38,8 @@ public class NodoAsignacion extends NodoExp {
     }
 
     public void generate(){
+        leftSide.isLeftSide = true;
         leftSide.generate();
         rightSide.generate();
-
-
     }
 }

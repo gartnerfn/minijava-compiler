@@ -46,8 +46,6 @@ public class NodoLlamadaVar extends NodoReferencia{
     public void generate(){
         System.out.println("DEBUG VarCallNode: Generando código para variable '" + name + "'");
 
-        boolean isLeftSide = false;
-
        if(variable instanceof Attribute){
               int offset = symbolTable.currentClass.getAttributeOffset((Attribute) variable);
            System.out.println("  -> Cargando atributo '" + name + "' de la clase '" + ((Attribute) variable).declaredIn.name + "'");

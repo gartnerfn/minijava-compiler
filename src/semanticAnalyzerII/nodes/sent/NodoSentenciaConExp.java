@@ -36,6 +36,6 @@ public class NodoSentenciaConExp extends NodoSentencia{
 
     public void generate(){
         exp.generate();
-        symbolTable.addInstruction("POP");
+//        symbolTable.addInstruction("POP");
     }
 }

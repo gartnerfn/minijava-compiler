@@ -2,14 +2,14 @@
 
 class A {
     public static int m1(){
-        return 1;
+        return 5;
     }
 }
 
 class Init{
     static void main()
     {
-        A.m1();
+        debugPrint(A.m1());
     }
 }
 

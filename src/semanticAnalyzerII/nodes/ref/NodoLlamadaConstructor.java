@@ -64,5 +64,8 @@ public class NodoLlamadaConstructor extends NodoReferencia{
             arg.generate();
 
         symbolTable.callConstructor(constructor);
+
+        if(nextInTheChain != null)
+            nextInTheChain.generate();
     }
 }

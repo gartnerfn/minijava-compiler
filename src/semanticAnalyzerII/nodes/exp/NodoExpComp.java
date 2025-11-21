@@ -10,6 +10,8 @@ public class NodoExpComp extends NodoExp{
     NodoExpComp leftSide;
     NodoExpBasica rightSide;
 
+    public boolean isLeftSide = false;
+
     public NodoExpComp(){}
 
     public NodoExpComp(NodoExpComp leftSide, Token operator, NodoExpBasica rightSide){
