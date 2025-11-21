@@ -16,4 +16,7 @@ public abstract class NodoLit extends NodoOperando {
     }
 
     public abstract void generate();
+    public boolean isOperandWithCall(){
+        return false;
+    }
 }

@@ -23,5 +23,8 @@ public class Constructor extends Routine{
         symbolTable.addInstruction("lblConstructor" + parameters.size() + "@" +  this.name + ":");
 
         super.generate();
+
+        symbolTable.addInstruction("RET " + (parameters.size() + 1));
+
     }
 }

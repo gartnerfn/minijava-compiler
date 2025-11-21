@@ -56,6 +56,14 @@ public class NodoLlamadaMetodoEstatico extends NodoReferencia{
         return method.returnType;
     }
 
+    public boolean isOperandWithCall() {
+        if(nextInTheChain != null) {
+            return nextInTheChain.isOperandWithCall();
+        }
+        return true;
+    }
+
+
     public boolean canBeStatement(){
        if(nextInTheChain != null)
            return nextInTheChain.canBeStatement();

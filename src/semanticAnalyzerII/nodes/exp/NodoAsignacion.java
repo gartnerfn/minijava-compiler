@@ -40,8 +40,8 @@ public class NodoAsignacion extends NodoExpComp {
     public void generate(){
         rightSide.generate();
 
-        if(!isLeftSide)
-            symbolTable.addInstruction("DUP");
+//        if(!isLeftSide)
+//            symbolTable.addInstruction("DUP");
 
         leftSide.isLeftSide = true;
         leftSide.generate();

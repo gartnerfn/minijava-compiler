@@ -33,16 +33,15 @@ public class Object extends Class {
     public void isWellDeclared() {}
     public void consolidate(){
         calculateOffsets(null);
-        printOffsets();
         isConsolidated = true;
     }
     public void check(){}
 
     public void generate(){
-        symbolTable.addInstruction.add(".DATA");
-        symbolTable.addInstruction.add("lblVT_" + this.name + ": NOP");
+        symbolTable.addInstruction(".DATA");
+        symbolTable.addInstruction("lblVT_" + this.name + ": DW 0");
 
-        symbolTable.addInstruction.add(".CODE");
+        symbolTable.addInstruction(".CODE");
 
         for (Constructor constructor : constructors.values())
             constructor.generate();

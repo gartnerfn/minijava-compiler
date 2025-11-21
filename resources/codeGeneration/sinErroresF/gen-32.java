@@ -5,19 +5,19 @@ class A {
 
     public A(){
         x = 5;
+        debugPrint(x);
     }
 
     public void m1(){
-        debugPrint(this.x);
+
     }
 }
 
 class Init{
-
     static void main()
     {
         var a = new A();
-        a.m1();
+//        a.m1();
     }
 }
 

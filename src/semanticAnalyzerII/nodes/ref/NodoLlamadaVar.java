@@ -70,4 +70,12 @@ public class NodoLlamadaVar extends NodoReferencia{
         if(nextInTheChain != null)
             nextInTheChain.generate();
     }
+
+    public boolean isOperandWithCall() {
+        if(nextInTheChain != null) {
+            return nextInTheChain.isOperandWithCall();
+        }
+        return false;
+    }
+
 }

@@ -13,6 +13,7 @@ public abstract class NodoExp {
 
     public abstract Type check();
     public abstract boolean isAssignable();
+    public abstract boolean isOperandWithCall();
     public boolean canBeStatement(){
         return false;
     }

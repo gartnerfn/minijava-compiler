@@ -1,0 +1,30 @@
+//3&3&6&6&exitosamente
+
+class A {
+
+    public int i;
+
+    static void main(){
+        var x = new A();
+
+        x.m1().m2();
+        System.printIln(3);
+        System.printIln(x.i);
+
+        x.m1().m2();
+
+        System.printIln(6);
+        System.printIln(x.i);
+    }
+
+    A m1(){
+        i = i + 1;
+        return this;
+    }
+
+    A m2() {
+        i = i + 2;
+        return this;
+    }
+
+}

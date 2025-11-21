@@ -14,6 +14,7 @@ public abstract class NodoEncadenado {
         this.nextInTheChain = nextInTheChain;
     }
 
+    public abstract boolean isOperandWithCall();
     public abstract Type check(Type previousType);
     public abstract boolean isAssignable();
     public abstract boolean canBeStatement();

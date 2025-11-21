@@ -60,9 +60,15 @@ public class NodoLlamadaMetodo extends NodoReferencia{
         return true;
     }
 
-    public void generate(){
-        int offset = symbolTable.currentClass.getMethodOffset(method);
+    public boolean isOperandWithCall() {
+        if(nextInTheChain != null) {
+            return nextInTheChain.isOperandWithCall();
+        }
+        return true;
+    }
 
+
+    public void generate(){
         if(!(method.returnType instanceof VoidType))
             symbolTable.addInstruction("RMEM 1");
 
@@ -72,18 +78,26 @@ public class NodoLlamadaMetodo extends NodoReferencia{
 
             symbolTable.callStaticMethod(method);
         } else {
-            //        symbolTable.addInstruction("LOAD 3"); // Cargar this
-            //        symbolTable.addInstruction("DUP");
-            //        symbolTable.addInstruction("LOADREF 0");
-            //        symbolTable.addInstruction("LOADREF " + offset);
-            //        symbolTable.addInstruction("SWAP");
+            int offset = symbolTable.currentClass.getMethodOffset(method);
 
-            for(NodoExp arg : args)
+            symbolTable.addInstruction("LOAD 3");
+
+            if(!(method.returnType instanceof VoidType)){
+                symbolTable.addInstruction("RMEM 1");
+                symbolTable.addInstruction("SWAP");
+            }
+
+            for(NodoExp arg : args){
                 arg.generate();
+                symbolTable.addInstruction("SWAP");
+            }
+
+            symbolTable.addInstruction("DUP");
+            symbolTable.addInstruction("LOADREF 0");
+            symbolTable.addInstruction("LOADREF " + offset);
 
             symbolTable.callMethod(method);
         }
-
 
         if(nextInTheChain != null)
             nextInTheChain.generate();

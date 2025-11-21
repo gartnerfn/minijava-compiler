@@ -81,5 +81,8 @@ public class Method extends Routine{
 
         symbolTable.addInstruction(getLabel() + ":");
         super.generate();
+
+        symbolTable.addInstruction("RET " + (isStatic ? parameters.size() : (parameters.size() + 1)));
+
     }
 }

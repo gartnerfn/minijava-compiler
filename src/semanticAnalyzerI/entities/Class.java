@@ -5,6 +5,7 @@ import semanticAnalyzerII.nodes.sent.NodoBloque;
 import src.Token;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Class extends Entity{
@@ -84,14 +85,16 @@ public class Class extends Entity{
         }
 
         for(Attribute attribute : attributes.values()){
-            System.out.println("Attributo " + attribute.name + "|" + this.name + " offset: " + attributeOffset);
             attributeOffsets.put(attribute.name + '|' + this.name, attributeOffset);
             attributeOffset++;
         }
 
         for(Method method : methods.values()){
-            methodOffsets.put(method.name + method.parameters.size(), methodOffset);
-            methodOffset++;
+            if(!method.isStatic){
+                System.out.println("poniendo " + method.getLabel() + " en offset " + methodOffset);
+                methodOffsets.put(method.name + method.parameters.size(), methodOffset);
+                methodOffset++;
+            }
         }
     }
 
@@ -105,18 +108,6 @@ public class Class extends Entity{
 
     public void setMethodOffset(Method method, int methodOffset){
         methodOffsets.put(method.name + method.parameters.size(), methodOffset);
-    }
-
-    public void printOffsets(){
-        System.out.println("Starting offsets for class " + this.name + " -> Method offset: " + methodOffset + ", Attribute offset: " + attributeOffset);
-
-        for(Attribute attribute : attributes.values()){
-            System.out.println("Attribute " + attribute.name + attribute.declaredIn.name + " offset: " + attributeOffsets.get(attribute.name + '|' + this.name));
-        }
-
-        for(Method method : methods.values()){
-            System.out.println("Method " + method.name+"|"+method.parameters.size() + " offset: " + methodOffsets.get(method.name + method.parameters.size()));
-        }
     }
 
     public void isWellDeclared(){
@@ -204,7 +195,8 @@ public class Class extends Entity{
                     throw new SemanticException("La clase " + this.name + " no implementa todos los metodos heredados.", method.name, method.lineNumber);
                 } else{
                     addMethod(method);
-                    setMethodOffset(method, ancestorInheritanceClass.getMethodOffset(method));
+                    if(!method.isStatic)
+                        setMethodOffset(method, ancestorInheritanceClass.getMethodOffset(method));
                 }
             } else {
                 if(method.isFinal){
@@ -278,8 +270,6 @@ public class Class extends Entity{
             }
         }
 
-        printOffsets();
-
         isConsolidated = true;
     }
 
@@ -290,28 +280,27 @@ public class Class extends Entity{
     public void generate() {
         symbolTable.currentClass = this;
 
-        symbolTable.addInstruction.add(".DATA");
-        symbolTable.addInstruction.add(getLabel() + ":");
+        symbolTable.addInstruction(".DATA");
+        symbolTable.addInstruction(getLabel() + ":");
 
         if(methods.isEmpty()){
-            symbolTable.addInstruction.add("NOP");
+            symbolTable.addInstruction("DW 0");
         } else {
-            List<String> labels = new ArrayList<>();
-
-            for (Method method : methods.values()){
-                if(!method.isStatic)
-                    labels.add(method.getLabel());
-            }
+            List<String> labels = methods.values().stream()
+                    .filter(m -> !m.isStatic)
+                    .sorted(Comparator.comparingInt(m -> methodOffsets.get(m.name + m.parameters.size())))
+                    .map(Method::getLabel)
+                    .toList();
 
             if(!labels.isEmpty())
-                symbolTable.addInstruction.add("DW " + String.join(", ", labels));
+                symbolTable.addInstruction("DW " + String.join(", ", labels));
             else
-                symbolTable.addInstruction.add("NOP");
+                symbolTable.addInstruction("DW 0");
 
             System.out.println("  -> VT generada con " + labels.size() + " métodos en" + this.name);
         }
 
-        symbolTable.addInstruction.add(".CODE");
+        symbolTable.addInstruction(".CODE");
 
         for (Constructor constructor : constructors.values())
             constructor.generate();

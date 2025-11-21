@@ -49,13 +49,20 @@ public class NodoIf extends NodoSentencia{
 
         cond.generate();
 
-        symbolTable.addInstruction("BF " + elseLabel);
-        thenBody.generate();
-        symbolTable.addInstruction("JUMP " + endIfLabel);
+        if(!(elseBody instanceof NodoSentenciaVacia)){
+            symbolTable.addInstruction("BF " + elseLabel);
+            thenBody.generate();
+            symbolTable.addInstruction("JUMP " + endIfLabel);
 
-        symbolTable.addInstruction(elseLabel + ":");
-        elseBody.generate();
+            symbolTable.addInstruction(elseLabel + ":");
+            elseBody.generate();
+            symbolTable.addInstruction(endIfLabel+":");
 
-        symbolTable.addInstruction(endIfLabel+":");
+
+        }else {
+            symbolTable.addInstruction("BF " + endIfLabel);
+            thenBody.generate();
+            symbolTable.addInstruction(endIfLabel + ":");
+        }
     }
 }

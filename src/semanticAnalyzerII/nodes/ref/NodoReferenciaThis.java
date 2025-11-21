@@ -13,6 +13,14 @@ public class NodoReferenciaThis extends NodoReferencia{
         this.lineNumber = thisTkn.lineNumber();
     }
 
+    public boolean isOperandWithCall() {
+        if(nextInTheChain != null) {
+            return nextInTheChain.isOperandWithCall();
+        }
+        return false;
+    }
+
+
     public Type check() {
         if(symbolTable.currentRoutine instanceof Method &&
                 ((Method)symbolTable.currentRoutine).isStatic)

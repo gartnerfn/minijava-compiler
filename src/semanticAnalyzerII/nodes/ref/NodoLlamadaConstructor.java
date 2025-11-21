@@ -52,6 +52,13 @@ public class NodoLlamadaConstructor extends NodoReferencia{
         return new ReferenceType(new Token("classId", this.name, this.lineNumber));
     }
 
+    public boolean isOperandWithCall() {
+        if(nextInTheChain != null) {
+            return nextInTheChain.isOperandWithCall();
+        }
+        return true;
+    }
+
     public boolean canBeStatement(){
         if(nextInTheChain != null)
             return nextInTheChain.canBeStatement();
@@ -62,14 +69,13 @@ public class NodoLlamadaConstructor extends NodoReferencia{
     public void generate(){
         semanticAnalyzerI.entities.Class cl = symbolTable.existsClass(constructor.name);
 
+        symbolTable.addInstruction("RMEM 1");
         symbolTable.addInstruction("PUSH " + cl.getCIRSize());
         symbolTable.addInstruction("PUSH simple_malloc");
         symbolTable.addInstruction("CALL");
-
         symbolTable.addInstruction("DUP");
         symbolTable.addInstruction("PUSH "+ cl.getLabel());
         symbolTable.addInstruction("STOREREF 0");
-
         symbolTable.addInstruction("DUP");
 
         for(NodoExp arg : args){

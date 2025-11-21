@@ -43,7 +43,7 @@ public class Main {
             if(lexicalExceptions.isEmpty())
                 System.out.print("\n" + "[SinErrores]");
 
-            Files.write(outFile, symbolTable.addInstruction, StandardCharsets.UTF_8);
+            Files.write(outFile, symbolTable.instructions, StandardCharsets.UTF_8);
 
             symbolTable.deleteInstance();
         } catch (java.io.IOException e) {

@@ -1,13 +1,16 @@
 package semanticAnalyzerII.nodes.sent;
 
 import semanticAnalyzerI.exceptions.SemanticException;
+import semanticAnalyzerI.types.VoidType;
 import semanticAnalyzerII.nodes.exp.NodoAsignacion;
 import semanticAnalyzerII.nodes.exp.NodoExp;
 import src.Token;
+import semanticAnalyzerI.types.Type;
 
 public class NodoSentenciaConExp extends NodoSentencia{
     NodoExp exp;
     Token semicolon;
+    Type expType;
 
     public NodoSentenciaConExp(Token tkn, NodoExp exp, Token semicolon) {
         this.name = tkn.lexeme();
@@ -25,7 +28,7 @@ public class NodoSentenciaConExp extends NodoSentencia{
     }
 
     public void check() {
-        exp.check();
+        expType = exp.check();
 
         if (!exp.canBeStatement())
             throw new SemanticException("La expresion no puede ser una sentencia", semicolon.lexeme(), semicolon.lineNumber());
@@ -38,8 +41,7 @@ public class NodoSentenciaConExp extends NodoSentencia{
     public void generate(){
         exp.generate();
 
-        //TODO
-        if(exp instanceof NodoAsignacion)
+        if(exp.isOperandWithCall() && !(expType instanceof VoidType))
             symbolTable.addInstruction("POP");
     }
 }

@@ -29,6 +29,10 @@ public class NodoExpBasica extends NodoExpComp{
         return this.type;
     }
 
+    public boolean isOperandWithCall(){
+        return operand.isOperandWithCall();
+    }
+
     public void generate(){
         operand.generate();
         boolean isVarCall = false;

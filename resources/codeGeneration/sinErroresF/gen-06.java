@@ -5,9 +5,9 @@ class A {
 
     }
 
-    public void m1(int a, String b){
-
-    }
+//    public void m1(int a, String b){
+//
+//    }
 }
 
 class Init{
@@ -15,9 +15,9 @@ class Init{
 
     }
 
-    public Init(int a, int b){
-
-    }
+//    public Init(int a, int b){
+//
+//    }
 
     static void main()
     { 
@@ -25,7 +25,7 @@ class Init{
         debugPrint(1234);
 
         a.m1(5);
-        a.m1(10, "hello");
+//        a.m1(10, "hello");
     }
 }
 

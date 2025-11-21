@@ -20,9 +20,13 @@ public class SymbolTable {
     public NodoBloque currentBlock;
     public Entity currentEntity;
     public Routine currentRoutine;
-    public List<java.lang.String> addInstruction = new ArrayList<>();
+    public List<java.lang.String> instructions = new ArrayList<>();
+    private HashMap<java.lang.String, java.lang.String> stringLiteralLabels = new HashMap<>();
+    private int stringLiteralCounter = 0;
 
-    private SymbolTable(){}
+    private SymbolTable(){
+        stringLiteralLabels = new HashMap<>();
+    }
 
     public void openBlock() {
         blockStack.push(new HashMap<>());
@@ -156,30 +160,30 @@ public class SymbolTable {
     }
 
     private void generateInit(){
-        addInstruction.add(".CODE");
-        addInstruction.add("PUSH lblMethod_main0@Init");
-        addInstruction.add("CALL");
-        addInstruction.add("HALT");
+        instructions.add(".CODE");
+        instructions.add("PUSH lblMethod_main0@Init");
+        instructions.add("CALL");
+        instructions.add("HALT");
     }
 
     private void generateHeapRoutines(){
-        addInstruction.add("simple_heap_init:");
-        addInstruction.add("RET 0");
+        instructions.add("simple_heap_init:");
+        instructions.add("RET 0");
 
-        addInstruction.add("simple_malloc:");
-        addInstruction.add("LOADFP");
-        addInstruction.add("LOADSP");
-        addInstruction.add("STOREFP");
-        addInstruction.add("LOADHL");
-        addInstruction.add("DUP");
-        addInstruction.add("PUSH 1");
-        addInstruction.add("ADD");
-        addInstruction.add("STORE 4");
-        addInstruction.add("LOAD 3");
-        addInstruction.add("ADD");
-        addInstruction.add("STOREHL");
-        addInstruction.add("STOREFP");
-        addInstruction.add("RET 1");
+        instructions.add("simple_malloc:");
+        instructions.add("LOADFP");
+        instructions.add("LOADSP");
+        instructions.add("STOREFP");
+        instructions.add("LOADHL");
+        instructions.add("DUP");
+        instructions.add("PUSH 1");
+        instructions.add("ADD");
+        instructions.add("STORE 4");
+        instructions.add("LOAD 3");
+        instructions.add("ADD");
+        instructions.add("STOREHL");
+        instructions.add("STOREFP");
+        instructions.add("RET 1");
     }
 
     public void generate(){
@@ -192,24 +196,51 @@ public class SymbolTable {
 
         for (Class cl : classes.values())
             cl.generate();
+
+        generateStringLiterals();
     }
 
     public void addInstruction(java.lang.String instruction){
-        addInstruction.add(instruction);
+        instructions.add(instruction);
     }
 
     public void callConstructor(Constructor constructor){
-        addInstruction.add("PUSH lblConstructor" + constructor.parameters.size() + "@" + constructor.name);
-        addInstruction.add("CALL");
+        instructions.add("PUSH lblConstructor" + constructor.parameters.size() + "@" + constructor.name);
+        instructions.add("CALL");
+    }
+
+    public java.lang.String getOrCreateStringLiteralLabel(java.lang.String lexeme) {
+        if(stringLiteralLabels.containsKey(lexeme))
+            return stringLiteralLabels.get(lexeme);
+        java.lang.String label = "str_" + stringLiteralCounter;
+        stringLiteralCounter++;
+        stringLiteralLabels.put(lexeme, label);
+        return label;
+    }
+
+    private void generateStringLiterals() {
+        if(!stringLiteralLabels.isEmpty()) {
+            instructions.add(".DATA");
+            for (var entry : stringLiteralLabels.entrySet()) {
+                java.lang.String lexeme = entry.getKey();
+                java.lang.String label = entry.getValue();
+
+                java.lang.String cleanValue = lexeme;
+                if(lexeme.startsWith("\"") && lexeme.endsWith("\"") && lexeme.length() >= 2) {
+                    cleanValue = lexeme.substring(1, lexeme.length() - 1);
+                }
+                instructions.add(label + ": DW \"" + cleanValue + "\", 0");
+            }
+        }
     }
 
     public void callStaticMethod(Method method){
-        addInstruction.add("PUSH lblMethod_" + method.name + method.parameters.size() + "@" + method.declaredIn.name);
-        addInstruction.add("CALL");
+        instructions.add("PUSH lblMethod_" + method.name + method.parameters.size() + "@" + method.declaredIn.name);
+        instructions.add("CALL");
     }
 
     public void callMethod(Method method){
-        addInstruction.add("CALL");
+        instructions.add("CALL");
     }
 
     public void printTable() {

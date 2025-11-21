@@ -5,12 +5,15 @@ import semanticAnalyzerI.entities.Method;
 import semanticAnalyzerI.entities.Parameter;
 import semanticAnalyzerI.exceptions.SemanticException;
 import semanticAnalyzerI.types.Type;
+import semanticAnalyzerI.types.VoidType;
 import semanticAnalyzerII.nodes.exp.NodoExp;
 import src.Token;
 
 import java.util.List;
 
 public class NodoLlamadaEncadenada extends NodoEncadenado{
+    Entity entity;
+    Method method;
     List<NodoExp> args;
 
     public NodoLlamadaEncadenada(Token tkn, List<NodoExp> args){
@@ -20,11 +23,11 @@ public class NodoLlamadaEncadenada extends NodoEncadenado{
     }
 
     public Type check(Type previousType){
-        Entity entity = symbolTable.existsEntity(previousType.name);
+        entity = symbolTable.existsEntity(previousType.name);
         if(entity == null)
             throw new SemanticException("Class " + previousType.name + " does not exist", this.name, this.lineNumber);
 
-        Method method = symbolTable.existsEntity(previousType.name).existsMethod(name, args.size());
+        method = symbolTable.existsEntity(previousType.name).existsMethod(name, args.size());
 
         if(method == null)
             throw new SemanticException("Method " + this.name + " does not exist in class " + previousType.name, this.name, this.lineNumber);
@@ -63,8 +66,47 @@ public class NodoLlamadaEncadenada extends NodoEncadenado{
         return true;
     }
 
-    public void generate(){
+    public boolean isOperandWithCall(){
         if(nextInTheChain != null)
+            return nextInTheChain.isOperandWithCall();
+
+        return true;
+    }
+
+
+    public void generate(){
+        if (method.isStatic) {
+            symbolTable.addInstruction("POP");
+
+            if (!(method.returnType instanceof VoidType))
+                symbolTable.addInstruction("RMEM 1");
+
+            for (NodoExp arg : args)
+                arg.generate();
+
+            symbolTable.callStaticMethod(method);
+        } else {
+
+        int offset = ((semanticAnalyzerI.entities.Class)entity).getMethodOffset(method);
+        if(!(method.returnType instanceof VoidType)) {
+            symbolTable.addInstruction("RMEM 1");
+            symbolTable.addInstruction("SWAP");
+        }
+        for(NodoExp arg : args) {
+            arg.generate();
+            symbolTable.addInstruction("SWAP");
+        }
+
+        symbolTable.addInstruction("DUP");
+        symbolTable.addInstruction("LOADREF 0 ");
+        symbolTable.addInstruction("LOADREF " + offset);
+
+        symbolTable.callMethod(method);
+
+
+        }
+
+        if (nextInTheChain != null)
             nextInTheChain.generate();
     }
 }

@@ -19,6 +19,14 @@ public class NodoExpresionParentizada extends NodoReferencia{
         return type;
     }
 
+    public boolean isOperandWithCall() {
+        if(nextInTheChain != null) {
+            return nextInTheChain.isOperandWithCall();
+        }
+        return false;
+    }
+
+
     public boolean isAssignable() {
         if(nextInTheChain != null)
             return nextInTheChain.isAssignable();

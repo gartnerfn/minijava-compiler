@@ -40,6 +40,9 @@ public class NodoExpComp extends NodoExp{
 
         return resultType;
     }
+    public boolean isOperandWithCall(){
+        return false;
+    }
 
     public boolean isAssignable() {
         return false;
